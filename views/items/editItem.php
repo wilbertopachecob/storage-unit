@@ -99,6 +99,7 @@ if (isset($_GET['id'])):
             <form method="post" enctype="multipart/form-data" action="<?=$_SERVER['PHP_SELF']?>?script=editItem&id=<?=$item[0]['id']?>">
                 <?php
     if (isset($item[0]['img'])):
+        //echo gettype($item[0]['img']);
     ?>
     <div style="position: relative;" class="image-del-container">
                 <i class="fas fa-times-circle float-right delete_img" title="Delete image"></i>
@@ -113,8 +114,11 @@ endif;
                 <div class="input-group mb-3">
                     <div class="custom-file">
                         <!-- Checking if the item has an image to update the DB-->
+                        <?php 
+                        if(isset($item[0]['img'])):
+                        ?>
                         <input type="hidden" name="imagen" value="<?=$item[0]['img']?>" />
-                        
+                        <?php endif; ?>
                         <input type="file" class="custom-file-input" name="img" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
                         <label style="overflow: hidden;" class="custom-file-label" for="inputGroupFile03">Choose file</label>
                     </div>

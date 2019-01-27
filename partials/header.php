@@ -6,6 +6,9 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+    <?php
+if (isloggedIn()):
+?>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Items
@@ -16,9 +19,6 @@
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF']?>?script=addItem">Add Item</a>
         </div>
       </li>
-      <?php
-if (isloggedIn()):
-?>
       <li class="nav-item">
       <a class="nav-link">
           Total items

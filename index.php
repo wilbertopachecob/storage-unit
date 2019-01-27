@@ -32,9 +32,9 @@ endif;
 </head>
 <body>
   <?php
-$script = $_GET['script'] ?? 'default';
-if($script == 'default'):
-?>
+  $script = $_GET['script'] ?? 'default';
+  if($script == 'default'):
+  ?>
   <img class="bg" src="/storageUnit/public/img/storage-unit.jpg" alt="background">
   <?php
   endif;
@@ -62,5 +62,6 @@ it cause some problems with fadeIn, hide('slow') and more  -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="/storageUnit/public/js/card.js"></script>
 <script src="/storageUnit/public/js/main.js"></script>
+<script src="/storageUnit/public/js/upload-image-preview.js"></script>
 </body>
 </html>

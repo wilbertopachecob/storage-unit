@@ -86,6 +86,9 @@ endif;
     <label style="overflow: hidden;" class="custom-file-label" for="inputGroupFile03">Choose file</label>
   </div>
 </div>
+<div class="form-group">
+    <img scr="" style="display:none" class="img-thumbnail" id="imagePreview" />
+  </div>
   <button class="btn btn-primary" type="submit" name="btn_submit">
       Add
   </button>
