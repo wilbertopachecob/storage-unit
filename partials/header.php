@@ -41,9 +41,15 @@ if (!isloggedIn()):
       </li>
       <?php endif;?>
     </ul>
+    <?php
+if (isloggedIn()):
+?>
     <form class="form-inline my-2 my-lg-0" method="POST" action="<?=$_SERVER['PHP_SELF']?>?script=search">
       <input name="searchTerm" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
+<?php 
+endif;
+?>    
   </div>
 </nav>

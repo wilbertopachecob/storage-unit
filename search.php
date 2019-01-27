@@ -18,6 +18,7 @@ $sql->execute(array(
     "%$searchTerm%"
 ));
 $items = $sql->fetchAll();
+if(count($items) > 0):
 ?>
 
 <div class="views">
@@ -25,8 +26,8 @@ $items = $sql->fetchAll();
     <div class="dropdown-divider"></div>
 </div>
 <div class="container pt-3 pb-3 cards">
-    <h1 class="text-center mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
-        Storage Unit List
+    <h1 class="mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
+        Search results:
     </h1>
     <div class="cards-container row">
         <?php
@@ -44,8 +45,8 @@ foreach ($items as $item):
             <h2 class="solid">View item</h2>
             </div> -->
             <?php 
-$item['img'] = $item['img'] ?? 'image-not-found.png';
-?>
+                $item['img'] = $item['img'] ?? 'image-not-found.png';
+            ?>
             <img src="/storageUnit/uploads/<?=$item['img']?>" class="card-img-top" alt="<?=$item['title']?>">
             <div class="card-body">
                 <h5 class="card-title" style="font-family: 'Rancho', serif; font-size:2em;">
@@ -80,3 +81,15 @@ $item['img'] = $item['img'] ?? 'image-not-found.png';
     </div>
 </div>
 </div>
+<?php
+else:
+?>
+<div class="col-sm-12">
+    <div class="jumbotron">
+    <h1 class="display-4">No results</h1>
+    <p class="lead">This search returns no result, try it again.</p>
+    </div>
+</div>
+<?php
+endif;
+?>
