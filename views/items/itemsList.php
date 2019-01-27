@@ -3,8 +3,9 @@
     <div class="dropdown-divider"></div>
 </div>
 <div class="container pt-3 pb-3 cards">
-    <h1 class="text-center mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">Storage
-        Unit List</h1>
+    <h1 class="text-center mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
+        Storage Unit List
+    </h1>
 
     <?php
 //$user_id = $_SESSION['user_id'];        
@@ -25,7 +26,7 @@ $items = Item::getAllItems(1);
 //Showing the cards
 //for ($j = 0; $j < count($arr3); $j++):
 ?>
-    <div class="row">
+    <div class="cards-container row">
         <?php
 foreach ($items as $item):
     if (strlen($item['description']) > 100):

@@ -22,6 +22,15 @@ class ItemController
         $this->items = $sql->fetchAll();
         return $this->items;
     }
+
+    public function getItemsAmountTotal(): int
+    {
+        $conexion = $this->connection->getConnection();
+        $sql = $conexion->prepare('SELECT qty FROM items WHERE user_id = :user_id ORDER BY id DESC');
+        $sql->bindParam(':user_id', $user_id);
+        $sql->execute();
+        return array_sum($sql->fetchAll());
+    }
 }
 
 //$controller = new ItemController();

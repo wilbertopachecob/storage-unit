@@ -17,6 +17,9 @@ function router($script)
         case 'signIn':
             include './views/login/signIn.php';
             break;
+        case 'search':
+            include './search.php';
+            break;
         case 'default':
             include 'home.php';
             break;

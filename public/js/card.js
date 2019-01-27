@@ -42,26 +42,25 @@ $(function () {
         //let grid = $('.cards').clone();
         //Then is grid view
         if ($(this).hasClass('fa-th-large')) {
-            $('.cards .card-group').show('slow');
+            $('.cards-container').show('slow');
             if ($('table.view-list').length) {
                 $('table.view-list').hide('slow');
             }
         }
             //Else is list
             else {
-                $('.cards .card-group').hide('slow');
+                $('.cards-container').hide('slow');
                 if ($('table.view-list').length) {
-                    console.log('in');
                     $('table.view-list').show('slow');
                 }
                 else {
-                    let cardArray = $('.cards').find('.card');
+                    let cardArray = $('.card');
                     let titles = [];
                     let qty = [];
                     let description = [];
                     let btnEdit = [];
                     let btnView = [];
-                    $.each(cardArray, function (index, value) {
+                    $.each(cardArray, function (index, value) {                      
                         titles.push($(value).find('.card-title').html());
                         qty.push($(value).find('.qty>span').html());
                         description.push($(value).find('.description').html());
