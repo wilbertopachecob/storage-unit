@@ -1,6 +1,0 @@
-Include login and register
-include user name
-star using use keyword for included files or scripts
-include a last modified file on items
-confirmation windows with JavaScript on delete items
-create a route file to handle routes
