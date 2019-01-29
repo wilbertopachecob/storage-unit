@@ -7,7 +7,6 @@ if (isset($_POST['btn_submit'])):
         $description = (isset($_POST['description']) && $_POST['description'] != '') ? $_POST['description'] : null;
         $qty = $_POST['qty'] ?? 1;
         if ($_FILES['img']['size'] != 0) {
-            echo 'inside files';
             $file_name = $_FILES['img']['name'];
             //Avoiding finle name collision with uniqid()
             $file_name = uniqid() . $file_name;
@@ -47,7 +46,10 @@ if (isset($_POST['btn_submit'])):
             //editItem($id, $title, $description, $qty, $img):bool
             $id = $_GET['id'];
             $user_id = $_SESSION['user_id'];
-            $item = Item::editItem($id, $title, $description, $qty, $user_id, $img);
+            $controller = new ItemController;
+            $item = new Item($title, $description, $qty, $user_id, $img);
+            $item->setDb(new Connection);          
+            $item = $controller->editItem($item, $id);
             if ($item) {
                 $messages[] = 'Item successfuly edited';
             }
@@ -90,7 +92,9 @@ endif
 if (isset($_GET['id'])):
     $item_id = $_GET['id'];
     //echo $_GET['id'];
-    $item = Item::getItemById($item_id);
+    $controller = new ItemController;
+    $conn = new Connection;
+    $item = $controller->getItemById($item_id, $conn);
     //echo var_dump($item);
     ?>
         <div class="col-md-3 offset-md-4">

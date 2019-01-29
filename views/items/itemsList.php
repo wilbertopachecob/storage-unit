@@ -8,8 +8,9 @@
     </h1>
 
     <?php
-//$user_id = $_SESSION['user_id'];        
-$items = Item::getAllItems(1);
+$controller = new ItemController;
+$conn = new Connection;       
+$items = $controller->getAllItems($_SESSION['user_id'], $conn);
 //Creating array of array with 3 elements to show 3 cards per card-group
 // $arr3 = [];
 // for ($i = 0; $i < count($items); $i += 3) {

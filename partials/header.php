@@ -20,10 +20,17 @@ if (isloggedIn()):
         </div>
       </li>
       <li class="nav-item">
+      <?php
+        $controller = new ItemController;
+        $conn = new Connection;
+        ?>
       <a class="nav-link">
           Total items
-      <span class="badge badge-primary"><?=count(Item::getAllItems($_SESSION['user_id']))?></span>
+      <span class="badge badge-primary"><?=$controller->getItemsAmountTotal(1, $conn)?></span>
 </a>
+      <?php
+      unsetVariables([$controller, $conn]);
+      ?>
       </li>
       <?php endif;?>
       <?php
@@ -48,8 +55,8 @@ if (isloggedIn()):
       <input name="searchTerm" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
-<?php 
+<?php
 endif;
-?>    
+?>
   </div>
 </nav>

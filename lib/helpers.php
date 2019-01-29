@@ -9,3 +9,9 @@ function isFileIncluded(string $fileA): bool
 
     return in_array($fileA, $files);
 }
+
+function unsetVariables(array $vars): void{
+    foreach($vars as $var){
+        unset($var);
+    }
+}

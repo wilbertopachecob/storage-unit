@@ -3,34 +3,40 @@
 require "./lib/db/Models/item.php";
 class ItemController
 {
-    private $user_id;
-    private $items = [];
-    private $connection;
-
-    public function __construct($conn, $user_id)
+    public function addItem(Item $item): bool
     {
-        $this->user_id = $user_id;
-        $this->connection = $conn;
+        return $item->add();
     }
 
-    public function getAllItems()
+    public function editItem(Item $item, int $id): bool
     {
-        $conexion = $this->connection->getConnection();
-        $sql = $conexion->prepare('SELECT * FROM items WHERE user_id = :user_id ORDER BY id DESC');
-        $sql->bindParam(':user_id', $user_id);
-        $sql->execute();
-        $this->items = $sql->fetchAll();
-        return $this->items;
+        return $item->edit($id);
     }
 
-    public function getItemsAmountTotal(): int
+    public function deleteItem(int $id, $conn): bool
     {
-        $conexion = $this->connection->getConnection();
-        $sql = $conexion->prepare('SELECT qty FROM items WHERE user_id = :user_id ORDER BY id DESC');
-        $sql->bindParam(':user_id', $user_id);
-        $sql->execute();
-        return array_sum($sql->fetchAll());
+        return Item::delete($id, $conn);
     }
+
+    public function getItemById(int $id, $conn): array
+    {
+        return Item::getItemById($id, $conn);
+    }
+
+    public function getItemByTitle(string $title, int $user_id, $conn): array
+    {
+        return Item::getItemByTitle($title, $user_id, $conn);
+    }
+
+    public function getAllItems(int $user_id, $conn): array
+    {
+        return Item::getAllItems($user_id, $conn);
+    }
+
+    public function getItemsAmountTotal(int $user_id, $conn): int
+    {
+        return Item::getItemsAmountTotal($user_id, $conn);
+    }
+
 }
 
-//$controller = new ItemController();

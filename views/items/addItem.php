@@ -37,7 +37,10 @@ if (isset($_POST['btn_submit'])):
             $img = $file_name ?? null;
             //addItem($title, $description, $qty, $img)
             $user_id = $_SESSION['user_id'];
-            $item = Item::addItem($title, $description, $qty, $user_id, $img);
+            $controller = new ItemController;
+            $item = new Item($title, $description, $qty, $user_id, $img);
+            $item->setDb(new Connection);
+            $item = $controller->addItem($item);
             if ($item) {
                 $messages[] = 'Item successfuly added';
             }

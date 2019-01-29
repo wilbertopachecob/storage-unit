@@ -1,14 +1,23 @@
 <?php
 session_start();
 //Evaluating signIn, signUp and signOut
+include './lib/helpers.php';
 include './lib/signsHandlers.php';
 include './lib/guards.php';
-include './lib/item.php';
+include './lib/db/Controllers/ItemController.php';
+if (!isFileIncluded('connection.php')) {
+  include 'lib/db/connection.php';
+}
+
+
 //Deleting an Item
 if (isset($_POST['btn_delete'])):
     $id = $_GET['id'];
     //deleteItem(int $id):bool
-    $item = Item::deleteItem($id);
+    $controller = new ItemController;
+    $conn = new Connection;
+    $item = $controller->deleteItem($id, $conn);
+    unsetVariables([$controller, $conn]);
     if ($item):
         $url = $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?script=itemsList';
         header("Location: http://$url");

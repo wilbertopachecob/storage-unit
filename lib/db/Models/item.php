@@ -1,8 +1,5 @@
 <?php
 declare (strict_types = 1);
-if (!isFileIncluded('connection.php')) {
-    include 'db/connection.php';
-}
 class Item
 {
     private $id;
@@ -11,6 +8,7 @@ class Item
     private $user_id;
     private $qty;
     private $img;
+    protected $db;
 
     public function __construct(string $title, string $description, int $qty, int $user_id, $img)
     {
@@ -21,51 +19,51 @@ class Item
         $this->img = $img;
     }
 
-    public static function addItem($title, $description, $qty, $user_id, $img):bool
+    public function setDb($db)
     {
-        $conn = new Connection();
-        $conexion = $conn->getConnection();
+        $this->db = $db;
+    }
+
+    public function add():bool
+    {
+        $conexion =  $this->db->getConnection();
         //Coverting the first letter to Uppercase
-        $description = ucfirst($description);
+        $description = ucfirst($this->description);
         $sql = $conexion->prepare("INSERT INTO items (title, description, qty, user_id, img) VALUES (:title, :description, :qty, :user_id , :img)");
-        $sql->bindParam(':title', $title);
-        $sql->bindParam(':description', $description);
-        $sql->bindParam(':qty', $qty);
-        $sql->bindParam(':user_id', $user_id);
-        $sql->bindParam(':img', $img);
+        $sql->bindParam(':title', $this->title);
+        $sql->bindParam(':description', $this->description);
+        $sql->bindParam(':qty', $this->qty);
+        $sql->bindParam(':user_id', $this->user_id);
+        $sql->bindParam(':img', $this->img);
         //execute return TRUE or FALSE after calling the DB server
         return $sql->execute();
 
     }
 
-    public static function editItem($id, $title, $description, $qty, $user_id, $img):bool
+    public function edit($id):bool
     {
-
-        $conn = new Connection();
-        $conexion = $conn->getConnection();
+        $conexion = $this->db->getConnection();
         $sql = $conexion->prepare("UPDATE items SET title = :title, description = :description, qty = :qty, user_id = :user_id, img = :img  WHERE id = :id");
-        $sql->bindParam(':title', $title);
-        $sql->bindParam(':description', $description);
-        $sql->bindParam(':qty', $qty);
-        $sql->bindParam(':user_id', $user_id);
-        $sql->bindParam(':img', $img);
+        $sql->bindParam(':title', $this->title);
+        $sql->bindParam(':description', $this->description);
+        $sql->bindParam(':qty', $this->qty);
+        $sql->bindParam(':user_id', $this->user_id);
+        $sql->bindParam(':img', $this->img);
         $sql->bindParam(':id', $id);
         //execute return TRUE or FALSE after calling the DB server
         return $sql->execute();
     }
 
-    public function deleteItem(int $id):bool
+    public static function delete(int $id, $conn):bool
     {
-        $conn = new Connection();
         $conexion = $conn->getConnection();
         $sql = $conexion->prepare('DELETE FROM items WHERE id = :id');
         $sql->bindParam(':id', $id);
         return $sql->execute();
     }
 
-    public static function getItemById(int $id)
+    public static function getItemById(int $id, $conn):array
     {
-        $conn = new Connection();
         $conexion = $conn->getConnection();
         $sql = $conexion->prepare('SELECT * FROM items WHERE id = :id');
         $sql->bindParam(':id', $id);
@@ -73,9 +71,8 @@ class Item
         return $sql->fetchAll();
     }
 
-    public function getItemByTitle(string $title, int $user_id)
+    public static function getItemByTitle(string $title, int $user_id, $conn):array
     {
-        $conn = new Connection();
         $conexion = $conn->getConnection();
         $sql = $conexion->prepare('SELECT * FROM items WHERE title = :title AND user_id = :user_id');
         $sql->bindParam(':title', $title);
@@ -84,9 +81,8 @@ class Item
         return $sql->fetchAll();
     }
 
-    public static function getAllItems($user_id)
+    public static function getAllItems(int $user_id, $conn):array
     {
-        $conn = new Connection();
         $conexion = $conn->getConnection();
         $sql = $conexion->prepare('SELECT * FROM items WHERE user_id = :user_id ORDER BY id DESC');
         $sql->bindParam(':user_id', $user_id);
@@ -94,10 +90,14 @@ class Item
         return $sql->fetchAll();
     }
 
+    public static function getItemsAmountTotal(int $user_id, $conn):int
+    {
+        $conexion = $conn->getConnection();
+        $sql = $conexion->prepare('SELECT qty FROM items WHERE user_id = :user_id');
+        $sql->bindParam(':user_id', $user_id);
+        $sql->execute();
+        //Returns a numeric array where the key represent the field returned from the DB
+        return array_sum($sql->fetchAll(PDO::FETCH_COLUMN));
+    }
+
 }
-
-// $item = new Item('maller', 'just a maller', 5, null);
-// echo var_dump($item->getItemById(1));
-// echo var_dump($item->editItem(1, 'maller', 'just a maller', 5, null)). PHP_EOL;
-// echo 'Element Added'.var_dump($item->addItem('saw saw', 'broken saw saw', 1, 'saw_saw.jpg')).PHP_EOL;
-
