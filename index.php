@@ -52,7 +52,7 @@ endif;
 include './partials/header.php';
 ?>
   <div class="container mt-4">
-    <div class="row">
+    <div class="row content">
       <div class="col-sm-12">
         <?php
 //phpinfo(32);
