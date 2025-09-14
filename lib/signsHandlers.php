@@ -4,7 +4,8 @@
 // }
 include 'db/Models/user.php';
 $errors = [];
-$URI = "Location: http://" . $_SERVER['HTTP_HOST'];
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$URI = "Location: http://" . $host;
 //I create this file to handle the redirections after the sings because you cant
 //send headers after the code
 //Handling singOut
@@ -20,13 +21,31 @@ if (isset($_GET['sign'])) {
         if (isset($_POST['btn_submit'])) {
             $password = $_POST['password'];
             $email = $_POST['email'];
+            
+            // Basic validation
+            if (empty($email) || empty($password)) {
+                $_SESSION['login_error'] = 'Please fill in all fields.';
+                header("Location: " . $URI . "/index.php?script=signIn");
+                exit;
+            }
+            
             $user = new User($email, $password, null);
             try {
-                $user->login();
-                header($URI."/index.php?script=itemsList");
-                exit;
+                $result = $user->login();
+                if ($result) {
+                    // Login successful
+                    $_SESSION['login_success'] = 'Welcome back!';
+                    header("Location: " . $URI . "/index.php?script=itemsList");
+                    exit;
+                } else {
+                    $_SESSION['login_error'] = 'Invalid email or password.';
+                    header("Location: " . $URI . "/index.php?script=signIn");
+                    exit;
+                }
             } catch (Exception $e) {
-                echo $e->getMessage();
+                $_SESSION['login_error'] = 'Login failed: ' . $e->getMessage();
+                header("Location: " . $URI . "/index.php?script=signIn");
+                exit;
             }
         }
     }
@@ -37,16 +56,44 @@ if (isset($_GET['sign'])) {
             $password = $_POST['password'];
             $email = $_POST['email'];
             $name = $_POST['name'];
+            
+            // Basic validation
+            if (empty($name) || empty($email) || empty($password)) {
+                $_SESSION['signup_error'] = 'Please fill in all fields.';
+                header("Location: " . $URI . "/index.php?script=signUp");
+                exit;
+            }
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['signup_error'] = 'Please enter a valid email address.';
+                header("Location: " . $URI . "/index.php?script=signUp");
+                exit;
+            }
+            
+            if (strlen($password) < 8) {
+                $_SESSION['signup_error'] = 'Password must be at least 8 characters long.';
+                header("Location: " . $URI . "/index.php?script=signUp");
+                exit;
+            }
+            
             $user = new User($email, $password, $name);
             try {
-                $user->addUser();
-                header($URI);
-                //If this function throw and exception the coder after
-                //this is never executed
+                $result = $user->addUser();
+                if ($result) {
+                    // Signup successful
+                    $_SESSION['signup_success'] = 'Account created successfully! Welcome!';
+                    header("Location: " . $URI . "/index.php?script=itemsList");
+                    exit;
+                } else {
+                    $_SESSION['signup_error'] = 'Failed to create account. Please try again.';
+                    header("Location: " . $URI . "/index.php?script=signUp");
+                    exit;
+                }
             } catch (Exception $e) {
-                $errors[] = $e->getMessage();
+                $_SESSION['signup_error'] = 'Signup failed: ' . $e->getMessage();
+                header("Location: " . $URI . "/index.php?script=signUp");
+                exit;
             }
-
         }
     }
 

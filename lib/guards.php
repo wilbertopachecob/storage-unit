@@ -12,17 +12,19 @@ function isloggedIn(): bool{
 function accesingFiles(): void{
     if(isset($_GET['script'])){
         $script = $_GET['script'];
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        
         $checkVars = array('itemsList', 'editItem', 'addItem');
         if(in_array($script, $checkVars)){
             if(!isloggedIn()){
-                header("Location: http://" . $_SERVER['HTTP_HOST']);
+                header("Location: http://" . $host . "/index.php");
                 exit;
             }
         }
         $checkVars = array('signUp', 'signIn');
         if(in_array($script, $checkVars)){
             if(isloggedIn()){ 
-                header("Location: http://" . $_SERVER['HTTP_HOST']);
+                header("Location: http://" . $host . "/index.php?script=itemsList");
                 exit;
             }
         }
