@@ -141,7 +141,13 @@ include __DIR__ . '/../header.php';
 </div>
 
 <!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initAutocomplete" async defer></script>
+<?php
+$googleMapsConfig = include __DIR__ . '/../../config/app/google_maps.php';
+$apiKey = $googleMapsConfig['api_key'];
+$libraries = implode(',', $googleMapsConfig['libraries']);
+$callback = $googleMapsConfig['callback'];
+?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= $apiKey ?>&libraries=<?= $libraries ?>&callback=<?= $callback ?>" async defer></script>
 
 <script>
 // Initialize Google Maps Autocomplete

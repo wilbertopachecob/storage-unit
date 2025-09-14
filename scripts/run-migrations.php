@@ -4,8 +4,12 @@
  * Applies database migrations
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/app/config.php';
 require_once __DIR__ . '/../config/app/constants.php';
+
+// Include the migration class directly
+require_once __DIR__ . '/../app/Database/Migrations/add_storage_unit_to_users.php';
 
 use StorageUnit\Database\Migrations\AddStorageUnitToUsers;
 
