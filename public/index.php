@@ -48,6 +48,16 @@ endif;
   <script src="js/touch-gestures.js?v=<?= time() ?>" defer></script>
   <script src="js/offline-manager.js?v=<?= time() ?>" defer></script>
   <script src="js/sw-update.js?v=<?= time() ?>" defer></script>
+  <script>
+    // Force cache refresh
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.update();
+        }
+      });
+    }
+  </script>
   <noscript>
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
   </noscript>
