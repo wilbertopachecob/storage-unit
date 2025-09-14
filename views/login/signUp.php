@@ -29,7 +29,8 @@
                     <?php unset($_SESSION['signup_success']); ?>
                 <?php endif; ?>
 
-                <form method="post" action="<?=$_SERVER['PHP_SELF']?>?sign=up" novalidate>
+                <form method="post" action="<?=$_SERVER['PHP_SELF']?>" novalidate>
+                    <input type="hidden" name="sign" value="up">
                     <div class="mb-4">
                         <label for="name" class="font-weight-bold">Full Name</label>
                         <div class="input-group">

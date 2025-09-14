@@ -2,8 +2,8 @@
 session_start();
 //Evaluating signIn, signUp and signOut
 include './lib/helpers.php';
-include './lib/signsHandlers.php';
 include './lib/guards.php';
+include './lib/signsHandlers.php';
 include './lib/db/Controllers/ItemController.php';
 if (!isFileIncluded('connection.php')) {
   include 'lib/db/connection.php';

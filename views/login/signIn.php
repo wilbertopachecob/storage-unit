@@ -29,7 +29,8 @@
                     <?php unset($_SESSION['login_success']); ?>
                 <?php endif; ?>
 
-                <form method="post" action="<?=$_SERVER['PHP_SELF']?>?sign=in" novalidate>
+                <form method="post" action="<?=$_SERVER['PHP_SELF']?>" novalidate>
+                    <input type="hidden" name="sign" value="in">
                     <div class="mb-4">
                         <label for="email" class="font-weight-bold">Email Address</label>
                         <div class="input-group">

@@ -21,11 +21,16 @@ function accesingFiles(): void{
                 exit;
             }
         }
+        
+        // Only redirect logged-in users away from sign-in/sign-up pages if they're not submitting forms
         $checkVars = array('signUp', 'signIn');
         if(in_array($script, $checkVars)){
-            if(isloggedIn()){ 
-                header("Location: http://" . $host . "/index.php?script=itemsList");
-                exit;
+            // Don't redirect if we're processing a login/signup form
+            if(!isset($_POST['btn_submit'])) {
+                if(isloggedIn()){ 
+                    header("Location: http://" . $host . "/index.php?script=itemsList");
+                    exit;
+                }
             }
         }
     }

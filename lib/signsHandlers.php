@@ -9,15 +9,18 @@ $URI = "Location: http://" . $host;
 //I create this file to handle the redirections after the sings because you cant
 //send headers after the code
 //Handling singOut
-if (isset($_GET['sign'])) {
-    if ($_GET['sign'] == 'out') {
+// Check for sign parameter in both GET and POST
+$signParam = $_GET['sign'] ?? $_POST['sign'] ?? null;
+
+if (isset($signParam)) {
+    if ($signParam == 'out') {
         USER::logout();
         header($URI);
         exit;
     }
 
 //Handling signIn
-    if ($_GET['sign'] == 'in') {
+    if ($signParam == 'in') {
         if (isset($_POST['btn_submit'])) {
             $password = $_POST['password'];
             $email = $_POST['email'];
@@ -33,8 +36,11 @@ if (isset($_GET['sign'])) {
             try {
                 $result = $user->login();
                 if ($result) {
-                    // Login successful
+                    // Login successful - clear any existing errors
+                    unset($_SESSION['login_error']);
                     $_SESSION['login_success'] = 'Welcome back!';
+                    
+                    // Redirect to items list
                     header("Location: " . $URI . "/index.php?script=itemsList");
                     exit;
                 } else {
@@ -51,7 +57,7 @@ if (isset($_GET['sign'])) {
     }
 
 //Handling signUp
-    if ($_GET['sign'] == 'up') {
+    if ($signParam == 'up') {
         if (isset($_POST['btn_submit'])) {
             $password = $_POST['password'];
             $email = $_POST['email'];
