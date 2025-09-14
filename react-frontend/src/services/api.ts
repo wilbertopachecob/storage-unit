@@ -3,7 +3,7 @@ import { ApiResponse, AnalyticsData, Item, Category, Location } from '../types';
 
 // Create axios instance with base configuration
 const api: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080/api',
+  baseURL: process.env.REACT_APP_API_URL || '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -33,9 +33,9 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      localStorage.removeItem('authToken');
-      window.location.href = '/signin.php';
+      // Handle unauthorized access - don't redirect immediately
+      // Let the component handle the error display
+      console.warn('API returned 401 - user may need to re-authenticate');
     }
     return Promise.reject(error);
   }
@@ -47,7 +47,11 @@ export const analyticsAPI = {
   getAnalytics: async (): Promise<AnalyticsData> => {
     try {
       const response = await api.get<ApiResponse<AnalyticsData>>('/analytics.php');
-      return response.data.data || (response.data as unknown as AnalyticsData);
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error(response.data.message || 'API returned success: false');
+      }
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch analytics data');
     }

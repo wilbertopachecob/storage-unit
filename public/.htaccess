@@ -9,6 +9,7 @@ RewriteRule ^analytics\.php$ analytics.php [L]
 # Allow JSON files
 RewriteRule ^manifest\.json$ - [L]
 RewriteRule ^asset-manifest\.json$ - [L]
+RewriteRule ^react-files\.json$ - [L]
 
 # Allow static files
 RewriteCond %{REQUEST_FILENAME} -f
