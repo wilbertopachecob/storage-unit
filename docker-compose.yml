@@ -5,6 +5,7 @@ services:
       - "8080:80"
     volumes:
       - ./uploads:/var/www/html/uploads
+      - .:/var/www/html
     depends_on:
       - db
     environment:
