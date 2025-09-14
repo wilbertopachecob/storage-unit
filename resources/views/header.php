@@ -78,6 +78,13 @@
               <i class="fas fa-chart-line" aria-hidden="true"></i> Analytics
             </a>
           </li>
+          
+          <!-- Profile Link -->
+          <li class="nav-item" role="none">
+            <a class="nav-link" href="/index.php?script=profile" role="menuitem">
+              <i class="fas fa-user-circle" aria-hidden="true"></i> Profile
+            </a>
+          </li>
         <?php endif; ?>
       </ul>
 
@@ -96,6 +103,36 @@
             </a>
           </li>
         <?php else: ?>
+          <!-- Storage Unit Display -->
+          <?php 
+            $currentUser = \StorageUnit\Models\User::getCurrentUser();
+            if ($currentUser && $currentUser->getStorageUnitName()): 
+          ?>
+          <li class="nav-item" role="none">
+            <span class="nav-link text-light" role="menuitem">
+              <i class="fas fa-warehouse" aria-hidden="true"></i> 
+              <span class="d-none d-md-inline">Storage: </span>
+              <strong><?= htmlspecialchars($currentUser->getStorageUnitName()) ?></strong>
+            </span>
+          </li>
+          <?php endif; ?>
+          
+          <!-- User Profile Picture -->
+          <li class="nav-item" role="none">
+            <span class="nav-link text-light d-flex align-items-center" role="menuitem">
+              <?php if ($currentUser && $currentUser->getProfilePicture()): ?>
+                <img src="/uploads/profiles/<?= htmlspecialchars($currentUser->getProfilePicture()) ?>" 
+                     alt="Profile Picture" 
+                     class="profile-picture">
+              <?php else: ?>
+                <div class="profile-picture-placeholder">
+                  <i class="fas fa-user"></i>
+                </div>
+              <?php endif; ?>
+              <span class="d-none d-md-inline ml-2"><?= htmlspecialchars($currentUser->getName()) ?></span>
+            </span>
+          </li>
+          
           <!-- Authenticated User Navigation -->
           <li class="nav-item" role="none">
             <a class="nav-link" href="/index.php?sign=out" role="menuitem">

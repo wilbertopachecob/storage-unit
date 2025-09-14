@@ -15,6 +15,12 @@ class User
     private $email;
     private $name;
     private $password;
+    private $storageUnitName;
+    private $storageUnitAddress;
+    private $storageUnitLatitude;
+    private $storageUnitLongitude;
+    private $storageUnitUpdatedAt;
+    private $profilePicture;
     private $createdAt;
     private $updatedAt;
 
@@ -29,6 +35,12 @@ class User
     public function getId() { return $this->id; }
     public function getEmail() { return $this->email; }
     public function getName() { return $this->name; }
+    public function getStorageUnitName() { return $this->storageUnitName; }
+    public function getStorageUnitAddress() { return $this->storageUnitAddress; }
+    public function getStorageUnitLatitude() { return $this->storageUnitLatitude; }
+    public function getStorageUnitLongitude() { return $this->storageUnitLongitude; }
+    public function getStorageUnitUpdatedAt() { return $this->storageUnitUpdatedAt; }
+    public function getProfilePicture() { return $this->profilePicture; }
     public function getCreatedAt() { return $this->createdAt; }
     public function getUpdatedAt() { return $this->updatedAt; }
 
@@ -36,6 +48,11 @@ class User
     public function setEmail($email) { $this->email = $email; }
     public function setName($name) { $this->name = $name; }
     public function setPassword($password) { $this->password = $password; }
+    public function setStorageUnitName($name) { $this->storageUnitName = $name; }
+    public function setStorageUnitAddress($address) { $this->storageUnitAddress = $address; }
+    public function setStorageUnitLatitude($latitude) { $this->storageUnitLatitude = $latitude; }
+    public function setStorageUnitLongitude($longitude) { $this->storageUnitLongitude = $longitude; }
+    public function setProfilePicture($picture) { $this->profilePicture = $picture; }
 
     /**
      * Create new user
@@ -151,6 +168,12 @@ class User
             $user->id = $userData['id'];
             $user->email = $userData['email'];
             $user->name = $userData['name'];
+            $user->storageUnitName = $userData['storage_unit_name'] ?? null;
+            $user->storageUnitAddress = $userData['storage_unit_address'] ?? null;
+            $user->storageUnitLatitude = $userData['storage_unit_latitude'] ?? null;
+            $user->storageUnitLongitude = $userData['storage_unit_longitude'] ?? null;
+            $user->storageUnitUpdatedAt = $userData['storage_unit_updated_at'] ?? null;
+            $user->profilePicture = $userData['profile_picture'] ?? null;
             $user->createdAt = $userData['created_at'];
             $user->updatedAt = $userData['updated_at'];
             return $user;
@@ -180,6 +203,48 @@ class User
 
         $stmt = $conn->prepare($sql);
         return $stmt->execute($params);
+    }
+
+    /**
+     * Update storage unit information
+     */
+    public function updateStorageUnit()
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "UPDATE users SET 
+                storage_unit_name = :name, 
+                storage_unit_address = :address, 
+                storage_unit_latitude = :latitude, 
+                storage_unit_longitude = :longitude,
+                storage_unit_updated_at = CURRENT_TIMESTAMP
+                WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+            ':name' => $this->storageUnitName,
+            ':address' => $this->storageUnitAddress,
+            ':latitude' => $this->storageUnitLatitude,
+            ':longitude' => $this->storageUnitLongitude,
+            ':id' => $this->id
+        ]);
+    }
+
+    /**
+     * Update profile picture
+     */
+    public function updateProfilePicture()
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "UPDATE users SET profile_picture = :picture WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+            ':picture' => $this->profilePicture,
+            ':id' => $this->id
+        ]);
     }
 
     /**

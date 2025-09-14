@@ -23,6 +23,20 @@ function router($script)
         case 'search':
             include __DIR__ . '/../app/search.php';
             break;
+        case 'profile':
+            $controller = new \StorageUnit\Controllers\ProfileController();
+            if (isset($_GET['action']) && $_GET['action'] === 'updateStorageUnit') {
+                $controller->updateStorageUnit();
+            } elseif (isset($_GET['action']) && $_GET['action'] === 'getStorageUnit') {
+                $controller->getStorageUnit();
+            } elseif (isset($_GET['action']) && $_GET['action'] === 'uploadProfilePicture') {
+                $controller->uploadProfilePicture();
+            } elseif (isset($_GET['action']) && $_GET['action'] === 'deleteProfilePicture') {
+                $controller->deleteProfilePicture();
+            } else {
+                $controller->index();
+            }
+            break;
         case 'default':
             include __DIR__ . '/../app/home.php';
             break;
