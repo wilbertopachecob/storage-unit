@@ -46,7 +46,7 @@ export const analyticsAPI = {
   // Get analytics data
   getAnalytics: async (): Promise<AnalyticsData> => {
     try {
-      const response = await api.get<ApiResponse<AnalyticsData>>('/analytics');
+      const response = await api.get<ApiResponse<AnalyticsData>>('/analytics.php');
       return response.data.data || (response.data as unknown as AnalyticsData);
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to fetch analytics data');

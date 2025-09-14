@@ -25,11 +25,6 @@ if (!file_exists($indexPath)) {
     die('React app not found. Please run the build script to copy React files to public directory.');
 }
 
-// Read and serve the React app HTML
-$html = file_get_contents($indexPath);
-
-// Fix manifest.json reference
-$html = str_replace('href="/manifest.json"', 'href="/manifest.php"', $html);
-
-echo $html;
+// Output the React app
+readfile($indexPath);
 ?>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React App Test</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>React App Test</h1>
+        <div id="root">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Loading React app...</p>
+        </div>
+    </div>
+
+    <!-- React and ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <script>
+    console.log('Testing React app...');
+    console.log('React available:', typeof React !== 'undefined');
+    console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
+
+    if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
+        const TestComponent = () => {
+            const [data, setData] = React.useState(null);
+            const [loading, setLoading] = React.useState(true);
+
+            React.useEffect(() => {
+                fetch('/api/analytics.php', {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('API Response:', result);
+                    setData(result);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('API Error:', error);
+                    setLoading(false);
+                });
+            }, []);
+
+            if (loading) {
+                return React.createElement('div', { className: 'text-center' },
+                    React.createElement('div', { className: 'spinner-border text-primary' }),
+                    React.createElement('p', { className: 'mt-2' }, 'Loading...')
+                );
+            }
+
+            return React.createElement('div', null,
+                React.createElement('h2', null, 'API Test Results'),
+                React.createElement('pre', { style: { backgroundColor: '#f8f9fa', padding: '1rem' } }, 
+                    JSON.stringify(data, null, 2)
+                )
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(TestComponent));
+        console.log('React app rendered!');
+    } else {
+        document.getElementById('root').innerHTML = '<div class="alert alert-danger">React not available</div>';
+    }
+    </script>
+</body>
+</html>
