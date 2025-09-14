@@ -6,6 +6,14 @@ RewriteRule ^api/(.*)$ api/$1 [L]
 # Handle analytics.php
 RewriteRule ^analytics\.php$ analytics.php [L]
 
+# Allow JSON files
+RewriteRule ^manifest\.json$ - [L]
+RewriteRule ^asset-manifest\.json$ - [L]
+
+# Allow static files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
 # Redirect root to index.php
 RewriteRule ^$ index.php [L]
 
