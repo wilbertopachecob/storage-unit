@@ -70,7 +70,18 @@ Before setting up the project, ensure you have the following installed:
 3. **Access the Application**:
    - **Web App**: http://localhost:8080
    - **phpMyAdmin**: http://localhost:8081
-   - **Test Account**: admin@example.com / password123
+
+### 🔐 Test Credentials
+
+The application comes with pre-configured test accounts for both environments:
+
+| Environment | Email | Password | Notes |
+|-------------|-------|----------|-------|
+| **Local** | admin@example.com | password123 | For local development |
+| **Docker** | admin@example.com | password | For Docker environment |
+| **Docker** | test@example.com | password | Additional test user |
+
+> **Note**: The Docker and local environments use different databases with different password hashes. Make sure to use the correct credentials for your environment.
 
 ### Option 2: Local Development Setup
 
@@ -413,7 +424,7 @@ tests/
    {
        // Arrange - Set up test data
        $email = 'test@example.com';
-       $password = 'password123';
+       $password = 'password'; // Use 'password123' for local, 'password' for Docker
        $name = 'Test User';
        
        // Act - Execute the code being tested
