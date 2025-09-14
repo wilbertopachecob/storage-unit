@@ -47,6 +47,7 @@ class Item
     public function getUpdatedAt() { return $this->updatedAt; }
 
     // Setters
+    public function setId($id) { $this->id = $id; }
     public function setTitle($title) { $this->title = $title; }
     public function setDescription($description) { $this->description = $description; }
     public function setQty($qty) { $this->qty = $qty; }
@@ -95,6 +96,10 @@ class Item
      */
     public function update()
     {
+        if (!$this->id) {
+            throw new \Exception('Item ID is required for update');
+        }
+
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
@@ -102,7 +107,7 @@ class Item
             throw new \Exception('Invalid item data');
         }
 
-        $sql = "UPDATE items SET title = :title, description = :description, qty = :qty, category_id = :category_id, location_id = :location_id, img = :img WHERE id = :id AND user_id = :user_id";
+        $sql = "UPDATE items SET title = :title, description = :description, qty = :qty, category_id = :category_id, location_id = :location_id, img = :img, updated_at = NOW() WHERE id = :id AND user_id = :user_id";
         $stmt = $conn->prepare($sql);
         
         $stmt->bindParam(':title', $this->title);
