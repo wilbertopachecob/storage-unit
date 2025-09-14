@@ -13,7 +13,7 @@ class FileLogger implements LoggerInterface
     private $maxFiles;
     private $dateFormat;
 
-    public function __construct(string $logPath = null, int $maxFileSize = 10485760, int $maxFiles = 5)
+    public function __construct(?string $logPath = null, int $maxFileSize = 10485760, int $maxFiles = 5)
     {
         $this->logPath = $logPath ?: __DIR__ . '/../../storage/logs/app.log';
         $this->maxFileSize = $maxFileSize; // 10MB default

@@ -13,11 +13,11 @@ return [
     ],
     
     'database' => [
-        'host' => 'localhost',
-        'port' => 3306,
-        'database' => 'storage_unit',
+        'host' => '127.0.0.1:3307',
+        'port' => 3307,
+        'database' => 'storageunit',
         'username' => 'root',
-        'password' => '',
+        'password' => 'rootpassword',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
     ],
