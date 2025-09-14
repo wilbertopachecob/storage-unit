@@ -12,7 +12,7 @@ $signParam = $_GET['sign'] ?? $_POST['sign'] ?? null;
 
 if (isset($signParam)) {
     if ($signParam == 'out') {
-        USER::logout();
+        \StorageUnit\Models\User::logout();
         header("Location: " . $baseUrl . "/index.php");
         exit;
     }
@@ -26,7 +26,7 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($email) || empty($password)) {
                 $_SESSION['login_error'] = 'Please fill in all fields.';
-                header("Location: " . $baseUrl . "/signin.php");
+                header("Location: " . $baseUrl . "/signIn.php");
                 exit;
             }
             
@@ -50,13 +50,13 @@ if (isset($signParam)) {
                 } else {
                     error_log("Login failed - result was false");
                     $_SESSION['login_error'] = 'Invalid email or password.';
-                    header("Location: " . $baseUrl . "/signin.php");
+                    header("Location: " . $baseUrl . "/signIn.php");
                     exit;
                 }
             } catch (Exception $e) {
                 error_log("Login exception: " . $e->getMessage());
                 $_SESSION['login_error'] = 'Login failed: ' . $e->getMessage();
-                header("Location: " . $baseUrl . "/signin.php");
+                header("Location: " . $baseUrl . "/signIn.php");
                 exit;
             }
         }
@@ -72,19 +72,19 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($name) || empty($email) || empty($password)) {
                 $_SESSION['signup_error'] = 'Please fill in all fields.';
-                header("Location: " . $baseUrl . "/signup.php");
+                header("Location: " . $baseUrl . "/signUp.php");
                 exit;
             }
             
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['signup_error'] = 'Please enter a valid email address.';
-                header("Location: " . $baseUrl . "/signup.php");
+                header("Location: " . $baseUrl . "/signUp.php");
                 exit;
             }
             
             if (strlen($password) < 8) {
                 $_SESSION['signup_error'] = 'Password must be at least 8 characters long.';
-                header("Location: " . $baseUrl . "/signup.php");
+                header("Location: " . $baseUrl . "/signUp.php");
                 exit;
             }
             
@@ -98,12 +98,12 @@ if (isset($signParam)) {
                     exit;
                 } else {
                     $_SESSION['signup_error'] = 'Failed to create account. Please try again.';
-                    header("Location: " . $baseUrl . "/signup.php");
+                    header("Location: " . $baseUrl . "/signUp.php");
                     exit;
                 }
             } catch (Exception $e) {
                 $_SESSION['signup_error'] = 'Signup failed: ' . $e->getMessage();
-                header("Location: " . $baseUrl . "/signup.php");
+                header("Location: " . $baseUrl . "/signUp.php");
                 exit;
             }
         }
