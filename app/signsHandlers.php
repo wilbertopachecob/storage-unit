@@ -3,7 +3,7 @@
 //     include 'db/user.php';
 // }
 if (!class_exists('User')) {
-    include 'db/Models/user.php';
+    include __DIR__ . '/Models/User.php';
 }
 $errors = [];
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';

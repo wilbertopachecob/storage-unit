@@ -27,8 +27,9 @@ abstract class TestCase extends PHPUnitTestCase
         $_ENV['DB_PASS'] = '';
         $_ENV['APP_DEBUG'] = 'true';
         
-        // Include config
-        require_once __DIR__ . '/../config/config.php';
+        // Include config and constants
+        require_once __DIR__ . '/../config/app/config.php';
+        require_once __DIR__ . '/../config/app/constants.php';
         
         // Set up test database connection
         $this->pdo = new PDO(

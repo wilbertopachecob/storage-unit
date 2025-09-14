@@ -1,5 +1,7 @@
 <?php
 
+namespace StorageUnit\Database;
+
 if (!class_exists('Connection')) {
 class Connection {
     // function __construct(){

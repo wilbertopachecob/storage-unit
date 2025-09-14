@@ -7,6 +7,7 @@ namespace StorageUnit\Tests\Integration\Controllers;
 
 use StorageUnit\Tests\TestCase;
 use StorageUnit\Controllers\ItemController;
+use StorageUnit\Core\Security;
 
 class ItemControllerTest extends TestCase
 {

@@ -8,5 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     'ec07570ca5a812141189b1fa81503674' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
-    '677bea1679e2b1299fcd062b4b245bce' => $baseDir . '/config/autoload.php',
+    '132235982791f248a0fc5a02dd434710' => $baseDir . '/config/app/autoload.php',
 );

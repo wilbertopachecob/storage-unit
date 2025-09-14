@@ -17,10 +17,10 @@
     },
     "autoload": {
         "psr-4": {
-            "StorageUnit\\": "src/"
+            "StorageUnit\\": "app/"
         },
         "files": [
-            "config/autoload.php"
+            "config/app/autoload.php"
         ]
     },
     "autoload-dev": {

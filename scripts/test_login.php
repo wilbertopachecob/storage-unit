@@ -21,7 +21,7 @@ $password = 'password123';
 echo "\n=== TESTING LOGIN WITH: $email ===\n";
 
 // Check if user exists
-include './lib/db/Models/user.php';
+include './app/Models/User.php';
 $userExists = User::ifExistsEmail($email);
 echo "User exists in database: " . ($userExists ? 'YES' : 'NO') . "\n";
 

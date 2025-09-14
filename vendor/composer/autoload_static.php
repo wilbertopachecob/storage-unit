@@ -9,7 +9,7 @@ class ComposerStaticInit120864773e0aa15a4348732beb32fe56
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
-        '677bea1679e2b1299fcd062b4b245bce' => __DIR__ . '/../..' . '/config/autoload.php',
+        '132235982791f248a0fc5a02dd434710' => __DIR__ . '/../..' . '/config/app/autoload.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -35,7 +35,7 @@ class ComposerStaticInit120864773e0aa15a4348732beb32fe56
         ),
         'StorageUnit\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/app',
         ),
         'PhpParser\\' => 
         array (
@@ -1510,19 +1510,22 @@ class ComposerStaticInit120864773e0aa15a4348732beb32fe56
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
-        'StorageUnit\\Controllers\\AuthController' => __DIR__ . '/../..' . '/src/Controllers/AuthController.php',
-        'StorageUnit\\Controllers\\ItemController' => __DIR__ . '/../..' . '/src/Controllers/ItemController.php',
-        'StorageUnit\\Core\\Database' => __DIR__ . '/../..' . '/src/Core/Database.php',
-        'StorageUnit\\Core\\Security' => __DIR__ . '/../..' . '/src/Core/Security.php',
-        'StorageUnit\\Models\\Item' => __DIR__ . '/../..' . '/src/Models/Item.php',
-        'StorageUnit\\Models\\User' => __DIR__ . '/../..' . '/src/Models/User.php',
+        'StorageUnit\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Controllers/AuthController.php',
+        'StorageUnit\\Controllers\\ItemController' => __DIR__ . '/../..' . '/app/Controllers/ItemController.php',
+        'StorageUnit\\Core\\Database' => __DIR__ . '/../..' . '/app/Core/Database.php',
+        'StorageUnit\\Core\\Security' => __DIR__ . '/../..' . '/app/Core/Security.php',
+        'StorageUnit\\Database\\Connection' => __DIR__ . '/../..' . '/app/Database/Connection.php',
+        'StorageUnit\\Models\\Item' => __DIR__ . '/../..' . '/app/Models/Item.php',
+        'StorageUnit\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'StorageUnit\\Tests\\Feature\\UserRegistrationTest' => __DIR__ . '/../..' . '/tests/Feature/UserRegistrationTest.php',
         'StorageUnit\\Tests\\Integration\\Controllers\\AuthControllerTest' => __DIR__ . '/../..' . '/tests/Integration/Controllers/AuthControllerTest.php',
         'StorageUnit\\Tests\\Integration\\Controllers\\ItemControllerTest' => __DIR__ . '/../..' . '/tests/Integration/Controllers/ItemControllerTest.php',
         'StorageUnit\\Tests\\TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
+        'StorageUnit\\Tests\\Unit\\Core\\SecuritySimpleTest' => __DIR__ . '/../..' . '/tests/Unit/Core/SecuritySimpleTest.php',
         'StorageUnit\\Tests\\Unit\\Core\\SecurityTest' => __DIR__ . '/../..' . '/tests/Unit/Core/SecurityTest.php',
         'StorageUnit\\Tests\\Unit\\Models\\ItemTest' => __DIR__ . '/../..' . '/tests/Unit/Models/ItemTest.php',
         'StorageUnit\\Tests\\Unit\\Models\\UserTest' => __DIR__ . '/../..' . '/tests/Unit/Models/UserTest.php',
+        'StorageUnit\\Validators\\Validator' => __DIR__ . '/../..' . '/app/Validators/Validator.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',
         'TheSeer\\Tokenizer\\NamespaceUriException' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUriException.php',

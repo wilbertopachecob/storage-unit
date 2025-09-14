@@ -33,7 +33,7 @@ class Database
             $dsn = sprintf(
                 'mysql:host=%s;dbname=%s;charset=%s',
                 DB_HOST,
-                DB_NAME,
+                DB_DATABASE,
                 DB_CHARSET
             );
 
@@ -44,7 +44,7 @@ class Database
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES " . DB_CHARSET
             ];
 
-            $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
+            $this->connection = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
         } catch (PDOException $e) {
             if (APP_DEBUG) {
                 throw new PDOException('Database connection failed: ' . $e->getMessage());

@@ -30,8 +30,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     zip \
     fileinfo
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Enable Apache modules
+RUN a2enmod rewrite headers
 
 # Copy Apache configuration
 COPY docker/apache-config.conf /etc/apache2/sites-available/000-default.conf
@@ -45,10 +45,10 @@ COPY . /var/www/html/
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/uploads
+    && chmod -R 777 /var/www/html/public/uploads
 
 # Create uploads directory and session directory if they don't exist
-RUN mkdir -p /var/www/html/uploads \
+RUN mkdir -p /var/www/html/public/uploads \
     && mkdir -p /tmp/php_sessions \
     && chown -R www-data:www-data /tmp/php_sessions \
     && chmod -R 755 /tmp/php_sessions

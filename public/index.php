@@ -1,12 +1,12 @@
 <?php
 session_start();
 //Evaluating signIn, signUp and signOut
-include './lib/helpers.php';
-include './lib/guards.php';
-include './lib/signsHandlers.php';
-include './lib/db/Controllers/ItemController.php';
+include __DIR__ . '/../app/Helpers/helpers.php';
+include __DIR__ . '/../app/Middleware/guards.php';
+include __DIR__ . '/../app/signsHandlers.php';
+include __DIR__ . '/../app/Controllers/ItemController.php';
 if (!isFileIncluded('connection.php')) {
-  include 'lib/db/connection.php';
+  include __DIR__ . '/../app/Database/Connection.php';
 }
 
 
@@ -55,19 +55,19 @@ endif;
   endif;
   ?>
 <?php
-include './partials/header.php';
+include __DIR__ . '/../resources/views/header.php';
 ?>
   <div class="container mt-4">
     <div class="row content">
       <div class="col-sm-12">
         <?php
 //phpinfo(32);
-include './lib/routes.php';
+include __DIR__ . '/../routes/routes.php';
 ?>
   </div>
   </div>
 <?php
-include './partials/footer.php';
+include __DIR__ . '/../resources/views/footer.php';
 ?>
 <!-- Just for future references, NEVER USE JQUERY SLIM AGAIN, 
 it cause some problems with fadeIn, hide('slow') and more  -->

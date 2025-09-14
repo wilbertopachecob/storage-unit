@@ -4,7 +4,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./uploads:/var/www/html/uploads
+      - ./public/uploads:/var/www/html/public/uploads
       - .:/var/www/html
       - session_data:/tmp/php_sessions
     depends_on:

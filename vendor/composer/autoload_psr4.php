@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'StorageUnit\\Tests\\' => array($baseDir . '/tests'),
-    'StorageUnit\\' => array($baseDir . '/src'),
+    'StorageUnit\\' => array($baseDir . '/app'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );
