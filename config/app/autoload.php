@@ -32,14 +32,19 @@ spl_autoload_register(function ($class) {
 
 // Legacy autoloader for existing classes
 spl_autoload_register(function ($class) {
+    // Get the project root directory (where composer.json is located)
+    $project_root = dirname(__DIR__);
+    
     $legacy_map = [
-        'Connection' => __DIR__ . '/../app/Database/Connection.php',
-        'User' => __DIR__ . '/../app/Models/User.php',
-        'Item' => __DIR__ . '/../app/Models/Item.php',
-        'ItemController' => __DIR__ . '/../app/Controllers/ItemController.php',
+        'Connection' => $project_root . '/app/Database/Connection.php',
+        'User' => $project_root . '/app/Models/User.php',
+        'Item' => $project_root . '/app/Models/Item.php',
+        'ItemController' => $project_root . '/app/Controllers/ItemController.php',
     ];
     
     if (isset($legacy_map[$class])) {
-        require $legacy_map[$class];
+        if (file_exists($legacy_map[$class])) {
+            require $legacy_map[$class];
+        }
     }
 });

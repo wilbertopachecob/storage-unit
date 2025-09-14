@@ -3,8 +3,10 @@ session_start();
 //Evaluating signIn, signUp and signOut
 include __DIR__ . '/../app/Helpers/helpers.php';
 include __DIR__ . '/../app/Middleware/guards.php';
-include __DIR__ . '/../app/signsHandlers.php';
 include __DIR__ . '/../app/Controllers/ItemController.php';
+include __DIR__ . '/../app/Models/User.php';
+include __DIR__ . '/../app/Models/Item.php';
+include __DIR__ . '/../app/signsHandlers.php';
 if (!isFileIncluded('connection.php')) {
   include __DIR__ . '/../app/Database/Connection.php';
 }

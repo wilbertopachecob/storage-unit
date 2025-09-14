@@ -21,6 +21,14 @@ if (isloggedIn()):
       </li>
       <li class="nav-item">
       <?php
+        // Ensure classes are available
+        if (!class_exists('ItemController')) {
+            include __DIR__ . '/../../app/Controllers/ItemController.php';
+        }
+        if (!class_exists('Connection')) {
+            include __DIR__ . '/../../app/Database/Connection.php';
+        }
+        
         $controller = new ItemController;
         $conn = new Connection;
         ?>

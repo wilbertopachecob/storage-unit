@@ -1,10 +1,5 @@
 <?php
-// if (!isFileIncluded('user.php')) {
-//     include 'db/user.php';
-// }
-if (!class_exists('User')) {
-    include __DIR__ . '/Models/User.php';
-}
+// User class is now autoloaded, no need for manual includes
 $errors = [];
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
