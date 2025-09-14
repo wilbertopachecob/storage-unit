@@ -15,9 +15,6 @@ if (!$user) {
     header('Location: /signIn.php');
     exit;
 }
-
-// Include header
-include __DIR__ . '/../header.php';
 ?>
 
 <div class="container mt-5">
@@ -154,10 +151,18 @@ include __DIR__ . '/../header.php';
 
 <!-- Google Maps API -->
 <?php
-$googleMapsConfig = include __DIR__ . '/../../config/app/google_maps.php';
-$apiKey = $googleMapsConfig['api_key'];
-$libraries = implode(',', $googleMapsConfig['libraries']);
-$callback = $googleMapsConfig['callback'];
+$googleMapsConfigPath = __DIR__ . '/../../config/app/google_maps.php';
+if (file_exists($googleMapsConfigPath)) {
+    $googleMapsConfig = include $googleMapsConfigPath;
+    $apiKey = $googleMapsConfig['api_key'];
+    $libraries = implode(',', $googleMapsConfig['libraries']);
+    $callback = $googleMapsConfig['callback'];
+} else {
+    // Fallback configuration if file doesn't exist
+    $apiKey = $_ENV['GOOGLE_MAPS_API_KEY'] ?? 'YOUR_GOOGLE_MAPS_API_KEY';
+    $libraries = 'places';
+    $callback = 'initAutocomplete';
+}
 ?>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?= $apiKey ?>&libraries=<?= $libraries ?>&callback=<?= $callback ?>" async defer></script>
 
@@ -211,7 +216,7 @@ document.getElementById('storageUnitForm').addEventListener('submit', function(e
     submitButton.disabled = true;
     
     // Send AJAX request
-    fetch('/index.php?script=profile&action=updateStorageUnit', {
+    fetch('/profile.php?action=updateStorageUnit', {
         method: 'POST',
         body: formData
     })
@@ -302,7 +307,7 @@ function uploadProfilePicture(input) {
         changeBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
         changeBtn.disabled = true;
         
-        fetch('/index.php?script=profile&action=uploadProfilePicture', {
+        fetch('/profile.php?action=uploadProfilePicture', {
             method: 'POST',
             body: formData
         })
@@ -335,7 +340,7 @@ function deleteProfilePicture() {
         return;
     }
     
-    fetch('/index.php?script=profile&action=deleteProfilePicture', {
+    fetch('/profile.php?action=deleteProfilePicture', {
         method: 'POST'
     })
     .then(response => response.json())
@@ -412,8 +417,3 @@ function updateProfilePictureDisplay(imageUrl) {
     }
 }
 </script>
-
-<?php
-// Include footer
-include __DIR__ . '/../footer.php';
-?>

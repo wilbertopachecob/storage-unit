@@ -78,15 +78,28 @@
               <i class="fas fa-chart-line" aria-hidden="true"></i> Analytics
             </a>
           </li>
-          
-          <!-- Profile Link -->
-          <li class="nav-item" role="none">
-            <a class="nav-link" href="/index.php?script=profile" role="menuitem">
-              <i class="fas fa-user-circle" aria-hidden="true"></i> Profile
-            </a>
-          </li>
         <?php endif; ?>
       </ul>
+
+      <!-- Center Search Form (for authenticated users) -->
+      <?php if (isloggedIn()): ?>
+        <div class="navbar-search-container">
+          <form class="form-inline" method="POST" action="/index.php?script=search" role="search">
+            <div class="input-group">
+              <label for="searchInput" class="sr-only">Search items</label>
+              <input name="searchTerm" id="searchInput" class="form-control" type="search" 
+                     placeholder="Search items..." aria-label="Search items in storage unit"
+                     autocomplete="off" spellcheck="false">
+              <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit" aria-label="Submit search">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+                  <span class="sr-only">Search</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      <?php endif; ?>
 
       <!-- Right Navigation -->
       <ul class="navbar-nav ml-auto" role="menubar">
@@ -103,62 +116,47 @@
             </a>
           </li>
         <?php else: ?>
-          <!-- Storage Unit Display -->
-          <?php 
-            $currentUser = \StorageUnit\Models\User::getCurrentUser();
-            if ($currentUser && $currentUser->getStorageUnitName()): 
-          ?>
-          <li class="nav-item" role="none">
-            <span class="nav-link text-light" role="menuitem">
-              <i class="fas fa-warehouse" aria-hidden="true"></i> 
-              <span class="d-none d-md-inline">Storage: </span>
-              <strong><?= htmlspecialchars($currentUser->getStorageUnitName()) ?></strong>
-            </span>
-          </li>
-          <?php endif; ?>
-          
-          <!-- User Profile Picture -->
-          <li class="nav-item" role="none">
-            <span class="nav-link text-light d-flex align-items-center" role="menuitem">
+          <!-- User Profile Dropdown -->
+          <li class="nav-item dropdown" role="none">
+            <?php 
+              $currentUser = \StorageUnit\Models\User::getCurrentUser();
+            ?>
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="menuitem" 
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <!-- Profile Picture -->
               <?php if ($currentUser && $currentUser->getProfilePicture()): ?>
                 <img src="/uploads/profiles/<?= htmlspecialchars($currentUser->getProfilePicture()) ?>" 
                      alt="Profile Picture" 
-                     class="profile-picture">
+                     class="profile-picture mr-2">
               <?php else: ?>
-                <div class="profile-picture-placeholder">
+                <div class="profile-picture-placeholder mr-2">
                   <i class="fas fa-user"></i>
                 </div>
               <?php endif; ?>
-              <span class="d-none d-md-inline ml-2"><?= htmlspecialchars($currentUser->getName()) ?></span>
-            </span>
-          </li>
-          
-          <!-- Authenticated User Navigation -->
-          <li class="nav-item" role="none">
-            <a class="nav-link" href="/index.php?sign=out" role="menuitem">
-              <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Sign Out
+              <!-- User Name -->
+              <span class="d-none d-md-inline"><?= htmlspecialchars($currentUser->getName()) ?></span>
             </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown" role="menu">
+              <!-- Storage Unit Info -->
+              <?php if ($currentUser && $currentUser->getStorageUnitName()): ?>
+                <div class="dropdown-header">
+                  <i class="fas fa-warehouse mr-2"></i>
+                  <strong><?= htmlspecialchars($currentUser->getStorageUnitName()) ?></strong>
+                </div>
+                <div class="dropdown-divider"></div>
+              <?php endif; ?>
+              <!-- User Actions -->
+              <a class="dropdown-item" href="/profile.php" role="menuitem">
+                <i class="fas fa-user-circle" aria-hidden="true"></i> Profile Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/index.php?sign=out" role="menuitem">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Sign Out
+              </a>
+            </div>
           </li>
         <?php endif; ?>
       </ul>
-
-      <!-- Search Form (for authenticated users) -->
-      <?php if (isloggedIn()): ?>
-        <form class="form-inline ml-3" method="POST" action="/index.php?script=search" role="search">
-          <div class="input-group">
-            <label for="searchInput" class="sr-only">Search items</label>
-            <input name="searchTerm" id="searchInput" class="form-control" type="search" 
-                   placeholder="Search items..." aria-label="Search items in storage unit"
-                   autocomplete="off" spellcheck="false">
-            <div class="input-group-append">
-              <button class="btn btn-outline-success" type="submit" aria-label="Submit search">
-                <i class="fas fa-search" aria-hidden="true"></i>
-                <span class="sr-only">Search</span>
-              </button>
-            </div>
-          </div>
-        </form>
-      <?php endif; ?>
     </div>
   </div>
 </nav>

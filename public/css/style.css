@@ -191,6 +191,20 @@ p {
   z-index: var(--z-sticky);
 }
 
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.navbar .navbar-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .navbar-brand {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
@@ -208,10 +222,11 @@ p {
 .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.9) !important;
   font-weight: 500;
-  padding: var(--space-2) var(--space-4) !important;
+  padding: var(--space-2) var(--space-3) !important;
   border-radius: var(--radius-md);
   transition: var(--transition-normal);
   position: relative;
+  margin: 0 var(--space-1);
 }
 
 .navbar-nav .nav-link:hover {
@@ -273,6 +288,46 @@ p {
   text-align: center;
 }
 
+/* User Profile Dropdown */
+.navbar .profile-picture {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: var(--transition-normal);
+}
+
+.navbar .profile-picture:hover {
+  border-color: white;
+  transform: scale(1.05);
+}
+
+.navbar .profile-picture-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: var(--transition-normal);
+}
+
+.navbar .profile-picture-placeholder:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: white;
+}
+
+.navbar .dropdown-header {
+  color: var(--dark-color);
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--bg-light);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
 /* Badge in Navigation */
 .navbar .badge {
   background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
@@ -292,8 +347,51 @@ p {
 }
 
 /* Search Form */
+.navbar-search-container {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 var(--space-4);
+}
+
 .navbar .form-inline {
-  margin-left: auto;
+  width: 100%;
+}
+
+.navbar .form-inline .input-group {
+  width: 100%;
+}
+
+.navbar .form-inline .form-control {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: var(--transition-normal);
+}
+
+.navbar .form-inline .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.navbar .form-inline .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar .form-inline .btn-outline-success {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: transparent;
+  color: white;
+  transition: var(--transition-normal);
+}
+
+.navbar .form-inline .btn-outline-success:hover {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
 }
 
 .navbar .form-control {
@@ -1051,6 +1149,12 @@ label {
   }
   
   /* Search form improvements */
+  .navbar-search-container {
+    margin: var(--space-2) 0;
+    max-width: none;
+    width: 100%;
+  }
+  
   .form-inline {
     margin-top: var(--space-2);
     width: 100%;
