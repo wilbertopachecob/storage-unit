@@ -29,7 +29,7 @@
   
   --light-color: #f8f9fc;
   --dark-color: #5a5c69;
-  --muted-color: #858796;
+  --muted-color: #5a5c69;
   --border-color: #e3e6f0;
   
   /* Background Colors */
@@ -148,7 +148,7 @@ h6 { font-size: var(--text-base); }
 
 p {
   margin: 0 0 var(--space-4) 0;
-  color: var(--muted-color);
+  color: var(--dark-color);
 }
 
 .text-primary { color: var(--primary-color) !important; }
@@ -554,6 +554,48 @@ p {
 }
 
 /* ========================================
+   TABLE SYSTEM
+   ======================================== */
+.table {
+  width: 100%;
+  margin-bottom: var(--space-4);
+  color: var(--dark-color);
+  background-color: var(--bg-primary);
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: top;
+  border-top: 1px solid var(--border-color);
+  color: var(--dark-color);
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 600;
+  color: var(--dark-color);
+  background-color: var(--bg-secondary);
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.table .text-muted {
+  color: var(--muted-color) !important;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================
    CARD SYSTEM
    ======================================== */
 .card {
@@ -599,7 +641,7 @@ p {
 }
 
 .card-text {
-  color: var(--muted-color);
+  color: var(--dark-color);
   margin-bottom: var(--space-4);
   flex: 1;
   line-height: 1.5;
@@ -1433,12 +1475,26 @@ label {
   }
   
   .table {
-    color: var(--text-primary);
+    color: var(--dark-color);
   }
   
   .table th,
   .table td {
     border-color: var(--border-color);
+    color: var(--dark-color);
+  }
+  
+  .table th {
+    font-weight: 600;
+    color: var(--dark-color);
+  }
+  
+  .table td {
+    color: var(--dark-color);
+  }
+  
+  .table .text-muted {
+    color: var(--muted-color) !important;
   }
 }
 
