@@ -282,6 +282,200 @@ storage-unit/
 6. **Search**: Find items quickly using the search functionality
 7. **Delete Items**: Remove items you no longer need
 
+## 🧪 Testing
+
+The application includes a comprehensive test suite using PHPUnit for unit, integration, and feature testing.
+
+### Prerequisites for Testing
+
+1. **PHPUnit**: Install via Composer
+2. **Test Database**: Create a separate test database
+3. **PHP Extensions**: Ensure required extensions are installed
+
+### Test Setup
+
+1. **Install Dependencies**:
+   ```bash
+   composer install
+   ```
+
+2. **Create Test Database**:
+   ```sql
+   CREATE DATABASE storageunit_test;
+   ```
+
+3. **Import Test Schema**:
+   ```bash
+   mysql -u root -p storageunit_test < tests/database_test.sql
+   ```
+
+4. **Configure Test Environment**:
+   Update the database credentials in `phpunit.xml` if needed:
+   ```xml
+   <env name="DB_HOST" value="localhost"/>
+   <env name="DB_NAME" value="storageunit_test"/>
+   <env name="DB_USER" value="root"/>
+   <env name="DB_PASS" value=""/>
+   ```
+
+### Running Tests
+
+1. **Run All Tests**:
+   ```bash
+   composer test
+   # or
+   ./vendor/bin/phpunit
+   ```
+
+2. **Run Specific Test Suites**:
+   ```bash
+   # Unit tests only
+   ./vendor/bin/phpunit --testsuite Unit
+   
+   # Integration tests only
+   ./vendor/bin/phpunit --testsuite Integration
+   
+   # Feature tests only
+   ./vendor/bin/phpunit --testsuite Feature
+   ```
+
+3. **Run Specific Test Classes**:
+   ```bash
+   # Test User model
+   ./vendor/bin/phpunit tests/Unit/Models/UserTest.php
+   
+   # Test Security class
+   ./vendor/bin/phpunit tests/Unit/Core/SecurityTest.php
+   
+   # Test Item model
+   ./vendor/bin/phpunit tests/Unit/Models/ItemTest.php
+   ```
+
+4. **Run Tests with Coverage**:
+   ```bash
+   composer test-coverage
+   # or
+   ./vendor/bin/phpunit --coverage-html coverage
+   ```
+
+5. **Run Tests with Verbose Output**:
+   ```bash
+   ./vendor/bin/phpunit --verbose
+   ```
+
+### Test Structure
+
+```
+tests/
+├── TestCase.php                 # Base test class
+├── Unit/                       # Unit tests
+│   ├── Core/
+│   │   └── SecurityTest.php    # Security class tests
+│   └── Models/
+│       ├── UserTest.php        # User model tests
+│       └── ItemTest.php        # Item model tests
+├── Integration/                # Integration tests
+│   ├── AuthControllerTest.php  # Authentication flow tests
+│   └── ItemControllerTest.php  # Item management tests
+├── Feature/                    # Feature tests
+│   ├── UserRegistrationTest.php
+│   ├── ItemManagementTest.php
+│   └── SearchFunctionalityTest.php
+└── database_test.sql          # Test database schema
+```
+
+### Test Categories
+
+1. **Unit Tests** (`tests/Unit/`):
+   - Test individual classes and methods in isolation
+   - Mock dependencies where necessary
+   - Focus on business logic and data validation
+
+2. **Integration Tests** (`tests/Integration/`):
+   - Test interaction between different components
+   - Test database operations with real database
+   - Test controller methods with proper request/response flow
+
+3. **Feature Tests** (`tests/Feature/`):
+   - Test complete user workflows
+   - Test end-to-end functionality
+   - Test user interface interactions
+
+### Writing Tests
+
+1. **Test Naming Convention**:
+   - Test methods should start with `test` or use `@test` annotation
+   - Use descriptive names: `testUserCanRegisterWithValidData()`
+
+2. **Test Structure** (AAA Pattern):
+   ```php
+   public function testUserRegistration()
+   {
+       // Arrange - Set up test data
+       $email = 'test@example.com';
+       $password = 'password123';
+       $name = 'Test User';
+       
+       // Act - Execute the code being tested
+       $user = new User($email, $password, $name);
+       $result = $user->create();
+       
+       // Assert - Verify the results
+       $this->assertTrue($result);
+       $this->assertNotNull($user->getId());
+   }
+   ```
+
+3. **Database Testing**:
+   - Use the `TestCase` base class for database tests
+   - Database is reset before each test
+   - Use `createTestUser()` and `createTestItem()` helper methods
+
+### Test Configuration
+
+The test configuration is defined in `phpunit.xml`:
+
+- **Bootstrap**: `vendor/autoload.php`
+- **Test Suites**: Unit, Integration, Feature
+- **Coverage**: HTML and text reports
+- **Environment**: Testing environment variables
+- **Database**: Separate test database
+
+### Continuous Integration
+
+For CI/CD pipelines, use:
+
+```bash
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+
+# Run tests
+composer test
+
+# Generate coverage report
+composer test-coverage
+```
+
+### Troubleshooting Tests
+
+1. **Database Connection Issues**:
+   - Verify test database exists and is accessible
+   - Check database credentials in `phpunit.xml`
+   - Ensure MySQL service is running
+
+2. **Permission Issues**:
+   - Ensure test database user has proper permissions
+   - Check file permissions for coverage reports
+
+3. **Memory Issues**:
+   - Increase PHP memory limit: `php -d memory_limit=512M ./vendor/bin/phpunit`
+   - Use `--process-isolation` flag for large test suites
+
+4. **Test Failures**:
+   - Run tests with `--verbose` flag for detailed output
+   - Check test database state between runs
+   - Verify all dependencies are installed
+
 ## 🐛 Troubleshooting
 
 ### Common Issues

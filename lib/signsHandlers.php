@@ -2,7 +2,7 @@
 // if (!isFileIncluded('user.php')) {
 //     include 'db/user.php';
 // }
-include 'user.php';
+include 'db/Models/user.php';
 $errors = [];
 $URI = "Location: http://" . $_SERVER['HTTP_HOST'];
 //I create this file to handle the redirections after the sings because you cant

@@ -30,7 +30,12 @@ class User
             $sql->bindParam(':password', $hash);
             $sql->bindParam(':name', $this->name);
             if ($sql->execute()) {
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
                 $_SESSION['user_id'] = $conexion->lastInsertId();
+                $_SESSION['user_name'] = $this->name;
+                $_SESSION['user_email'] = $this->email;
                 return true;
             }
             return false;
@@ -44,7 +49,12 @@ class User
         $user = $this->_checkCredentials();
         if ($user) {
             $this->user = $user; // store it so it can be accessed later
+            if (!isset($_SESSION)) {
+                session_start();
+            }
             $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_email'] = $user['email'];
             return $user['id'];
         }
         return false;

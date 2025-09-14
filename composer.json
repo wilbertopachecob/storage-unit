@@ -1,0 +1,39 @@
+{
+    "name": "storage-unit/management-system",
+    "description": "A web-based inventory management application built with PHP",
+    "type": "project",
+    "version": "2.0.0",
+    "authors": [
+        {
+            "name": "Engr. Wilberto Pacheco Batista",
+            "email": "admin@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "StorageUnit\\": "src/"
+        },
+        "files": [
+            "config/autoload.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StorageUnit\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}
