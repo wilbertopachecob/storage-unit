@@ -28,7 +28,7 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($email) || empty($password)) {
                 $_SESSION['login_error'] = 'Please fill in all fields.';
-                header("Location: " . $URI . "/index.php?script=signIn");
+                header("Location: " . $URI . "/signin.php");
                 exit;
             }
             
@@ -45,12 +45,12 @@ if (isset($signParam)) {
                     exit;
                 } else {
                     $_SESSION['login_error'] = 'Invalid email or password.';
-                    header("Location: " . $URI . "/index.php?script=signIn");
+                    header("Location: " . $URI . "/signin.php");
                     exit;
                 }
             } catch (Exception $e) {
                 $_SESSION['login_error'] = 'Login failed: ' . $e->getMessage();
-                header("Location: " . $URI . "/index.php?script=signIn");
+                header("Location: " . $URI . "/signin.php");
                 exit;
             }
         }
@@ -66,19 +66,19 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($name) || empty($email) || empty($password)) {
                 $_SESSION['signup_error'] = 'Please fill in all fields.';
-                header("Location: " . $URI . "/index.php?script=signUp");
+                header("Location: " . $URI . "/signup.php");
                 exit;
             }
             
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['signup_error'] = 'Please enter a valid email address.';
-                header("Location: " . $URI . "/index.php?script=signUp");
+                header("Location: " . $URI . "/signup.php");
                 exit;
             }
             
             if (strlen($password) < 8) {
                 $_SESSION['signup_error'] = 'Password must be at least 8 characters long.';
-                header("Location: " . $URI . "/index.php?script=signUp");
+                header("Location: " . $URI . "/signup.php");
                 exit;
             }
             
@@ -92,12 +92,12 @@ if (isset($signParam)) {
                     exit;
                 } else {
                     $_SESSION['signup_error'] = 'Failed to create account. Please try again.';
-                    header("Location: " . $URI . "/index.php?script=signUp");
+                    header("Location: " . $URI . "/signup.php");
                     exit;
                 }
             } catch (Exception $e) {
                 $_SESSION['signup_error'] = 'Signup failed: ' . $e->getMessage();
-                header("Location: " . $URI . "/index.php?script=signUp");
+                header("Location: " . $URI . "/signup.php");
                 exit;
             }
         }

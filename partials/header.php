@@ -37,10 +37,10 @@ if (isloggedIn()):
 if (!isloggedIn()):
 ?>
       <li class="nav-item">
-        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?script=signUp"><i class="fas fa-user-plus"></i> Sign Up</a>
+        <a class="nav-link" href="signup.php"><i class="fas fa-user-plus"></i> Sign Up</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?script=signIn"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+        <a class="nav-link" href="signin.php"><i class="fas fa-sign-in-alt"></i> Sign in</a>
       </li>
       <?php else: ?>
       <li class="nav-item">
