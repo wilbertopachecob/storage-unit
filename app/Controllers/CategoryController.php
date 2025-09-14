@@ -208,4 +208,22 @@ class CategoryController
             'message' => $message ?? null
         ];
     }
+
+    /**
+     * Export categories to CSV
+     */
+    public function export()
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportCategories();
+    }
+
+    /**
+     * Export items in this category to CSV
+     */
+    public function exportItems($id)
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportItemsByCategory($id);
+    }
 }

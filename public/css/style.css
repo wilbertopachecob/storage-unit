@@ -1030,6 +1030,324 @@ label {
 }
 
 /* ========================================
+   MOBILE RESPONSIVENESS IMPROVEMENTS
+   ======================================== */
+
+/* Extra Small Devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+  /* Navigation improvements */
+  .navbar-brand {
+    font-size: var(--text-lg);
+  }
+  
+  .navbar-nav .nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+  
+  .navbar-toggler {
+    padding: var(--space-1);
+    font-size: var(--text-sm);
+  }
+  
+  /* Search form improvements */
+  .form-inline {
+    margin-top: var(--space-2);
+    width: 100%;
+  }
+  
+  .form-inline .input-group {
+    width: 100%;
+  }
+  
+  .form-inline .form-control {
+    font-size: var(--text-sm);
+  }
+  
+  /* Card improvements */
+  .card {
+    margin-bottom: var(--space-3);
+  }
+  
+  .card-body {
+    padding: var(--space-3);
+  }
+  
+  .card-title {
+    font-size: var(--text-lg);
+  }
+  
+  .card-text {
+    font-size: var(--text-sm);
+  }
+  
+  /* Form improvements */
+  .form-group {
+    margin-bottom: var(--space-3);
+  }
+  
+  .form-control {
+    font-size: var(--text-base);
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .form-control-lg {
+    font-size: var(--text-lg);
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  /* Button improvements */
+  .btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    min-height: 2.5rem;
+  }
+  
+  .btn-sm {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    min-height: 2rem;
+  }
+  
+  .btn-lg {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-lg);
+    min-height: 3rem;
+  }
+  
+  /* Table improvements */
+  .table-responsive {
+    font-size: var(--text-sm);
+  }
+  
+  .table th,
+  .table td {
+    padding: var(--space-1) var(--space-2);
+  }
+  
+  /* Modal improvements */
+  .modal-dialog {
+    margin: var(--space-2);
+    max-width: calc(100% - var(--space-4));
+  }
+  
+  .modal-content {
+    border-radius: var(--radius-lg);
+  }
+  
+  .modal-header {
+    padding: var(--space-3);
+  }
+  
+  .modal-body {
+    padding: var(--space-3);
+  }
+  
+  .modal-footer {
+    padding: var(--space-3);
+  }
+  
+  /* Alert improvements */
+  .alert {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-3);
+  }
+  
+  /* Badge improvements */
+  .badge {
+    font-size: var(--text-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+  
+  /* Image improvements */
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .img-thumbnail {
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+  }
+  
+  /* Container improvements */
+  .container {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+  
+  /* Grid improvements */
+  .row {
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
+  }
+  
+  .col,
+  [class*="col-"] {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+  
+  /* Spacing utilities for mobile */
+  .mb-mobile-2 { margin-bottom: var(--space-2) !important; }
+  .mb-mobile-3 { margin-bottom: var(--space-3) !important; }
+  .mb-mobile-4 { margin-bottom: var(--space-4) !important; }
+  
+  .mt-mobile-2 { margin-top: var(--space-2) !important; }
+  .mt-mobile-3 { margin-top: var(--space-3) !important; }
+  .mt-mobile-4 { margin-top: var(--space-4) !important; }
+  
+  .p-mobile-2 { padding: var(--space-2) !important; }
+  .p-mobile-3 { padding: var(--space-3) !important; }
+  .p-mobile-4 { padding: var(--space-4) !important; }
+}
+
+/* Small Devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container {
+    max-width: 540px;
+  }
+  
+  .card {
+    margin-bottom: var(--space-4);
+  }
+  
+  .btn {
+    min-height: 2.25rem;
+  }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  .navbar-nav .nav-link {
+    padding: var(--space-2) var(--space-4);
+  }
+  
+  .card {
+    margin-bottom: var(--space-4);
+  }
+}
+
+/* Large Devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  .navbar-nav .nav-link {
+    padding: var(--space-2) var(--space-4);
+  }
+}
+
+/* Extra Large Devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-control {
+    min-height: 44px;
+  }
+  
+  .dropdown-toggle::after {
+    margin-left: var(--space-2);
+  }
+  
+  /* Improve hover states for touch */
+  .btn:hover {
+    transform: none;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .img-fluid {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  .navbar {
+    padding: var(--space-1) 0;
+  }
+  
+  .container {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+  
+  .card {
+    margin-bottom: var(--space-2);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: #404040;
+  }
+  
+  .card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+  
+  .form-control {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  .table {
+    color: var(--text-primary);
+  }
+  
+  .table th,
+  .table td {
+    border-color: var(--border-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
    PRINT STYLES
    ======================================== */
 @media print {

@@ -228,4 +228,22 @@ class LocationController
             'message' => $message ?? null
         ];
     }
+
+    /**
+     * Export locations to CSV
+     */
+    public function export()
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportLocations();
+    }
+
+    /**
+     * Export items in this location to CSV
+     */
+    public function exportItems($id)
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportItemsByLocation($id);
+    }
 }

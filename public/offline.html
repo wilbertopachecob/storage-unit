@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Offline - Storage Unit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .offline-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .offline-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 3rem;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .offline-icon {
+      font-size: 4rem;
+      color: #6c757d;
+      margin-bottom: 1.5rem;
+    }
+    
+    .offline-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #343a40;
+      margin-bottom: 1rem;
+    }
+    
+    .offline-message {
+      color: #6c757d;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .retry-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+    
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      color: white;
+    }
+    
+    .offline-features {
+      margin-top: 2rem;
+      text-align: left;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      color: #6c757d;
+    }
+    
+    .feature-item i {
+      margin-right: 0.5rem;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-card">
+      <div class="offline-icon">
+        <i class="fas fa-wifi-slash"></i>
+      </div>
+      
+      <h1 class="offline-title">You're Offline</h1>
+      
+      <p class="offline-message">
+        It looks like you're not connected to the internet. Don't worry, you can still access some features of Storage Unit.
+      </p>
+      
+      <button class="btn retry-btn" onclick="retryConnection()">
+        <i class="fas fa-sync-alt"></i> Try Again
+      </button>
+      
+      <div class="offline-features">
+        <h5 class="mb-3">Available Offline:</h5>
+        <div class="feature-item">
+          <i class="fas fa-check"></i>
+          <span>View cached items</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-check"></i>
+          <span>Search through cached data</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-check"></i>
+          <span>View item details</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-check"></i>
+          <span>Browse categories and locations</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-times"></i>
+          <span>Add or edit items (will sync when online)</span>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <small class="text-muted">
+          <i class="fas fa-info-circle"></i>
+          Some features require an internet connection. Your changes will be saved and synced when you're back online.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function retryConnection() {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        // Show a message that connection is still offline
+        const btn = document.querySelector('.retry-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-times"></i> Still Offline';
+        btn.classList.add('btn-danger');
+        btn.classList.remove('retry-btn');
+        
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('btn-danger');
+          btn.classList.add('retry-btn');
+        }, 2000);
+      }
+    }
+
+    // Listen for online event
+    window.addEventListener('online', () => {
+      window.location.href = '/';
+    });
+
+    // Check connection status periodically
+    setInterval(() => {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

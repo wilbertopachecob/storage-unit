@@ -384,4 +384,22 @@ class EnhancedItemController
             'recent_items' => array_slice($items, 0, 5) // Last 5 items
         ];
     }
+
+    /**
+     * Export all items to CSV
+     */
+    public function exportAll()
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportItems();
+    }
+
+    /**
+     * Export search results to CSV
+     */
+    public function exportSearch()
+    {
+        $exportController = new \StorageUnit\Controllers\ExportController();
+        return $exportController->exportSearchResults();
+    }
 }
