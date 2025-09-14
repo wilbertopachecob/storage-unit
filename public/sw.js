@@ -3,7 +3,7 @@
  * Provides offline capabilities and caching
  */
 
-const CACHE_NAME = 'storage-unit-v3';
+const CACHE_NAME = 'storage-unit-v4';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline use
@@ -15,6 +15,7 @@ const CACHE_FILES = [
   '/js/card.js',
   '/js/searchLoader.js',
   '/js/upload-image-preview.js',
+  '/js/popper.min.js',
   '/offline.html',
   'https://use.fontawesome.com/releases/v5.6.3/css/all.css',
   'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
