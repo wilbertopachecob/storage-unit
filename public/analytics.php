@@ -1,7 +1,7 @@
 <?php
 /**
  * Analytics Page
- * Main analytics dashboard
+ * Serves the React analytics dashboard
  */
 
 session_start();
@@ -19,8 +19,11 @@ if (!isloggedIn()) {
     exit;
 }
 
-// Add a comment to test live reload
-// This change should be visible immediately without restarting Docker
+// Serve the React app
+$indexPath = __DIR__ . '/index.html';
+if (!file_exists($indexPath)) {
+    die('React app not found. Please run the build script to copy React files to public directory.');
+}
 
-// Include the analytics dashboard view
-include_once __DIR__ . '/../resources/views/analytics/dashboard.php';
+// Output the React app
+readfile($indexPath);

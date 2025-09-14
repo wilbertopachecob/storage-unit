@@ -1,10 +1,13 @@
 RewriteEngine On
 
+# Handle API routes first
+RewriteRule ^api/(.*)$ api/$1 [L]
+
+# Handle analytics.php
+RewriteRule ^analytics\.php$ analytics.php [L]
+
 # Redirect root to index.php
 RewriteRule ^$ index.php [L]
-
-# Handle analytics.php and other PHP files
-RewriteRule ^analytics\.php$ analytics.php [L]
 
 # Handle other routes
 RewriteCond %{REQUEST_FILENAME} !-f

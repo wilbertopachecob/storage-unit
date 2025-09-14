@@ -325,6 +325,153 @@ This project is licensed under the MIT License.
 4. Add tests for new functionality
 5. Submit a pull request
 
+## ⚛️ React Frontend (Proof of Concept)
+
+The project now includes a React frontend as a proof of concept for the analytics dashboard feature. This demonstrates how the PHP backend can be integrated with a modern React application.
+
+### 🚀 Quick Start with React
+
+1. **Prerequisites**
+   - Node.js 16+ installed
+   - PHP backend running (Docker setup)
+
+2. **Setup React Frontend**
+   ```bash
+   # Run the setup script
+   ./scripts/setup-react.sh
+   ```
+
+3. **Start Development**
+   ```bash
+   # Start PHP backend
+   docker-compose up -d
+   
+   # Start React development server
+   ./scripts/start-react.sh
+   ```
+
+4. **Access the Application**
+   - React App: http://localhost:3000
+   - PHP Backend: http://localhost:8080
+   - API Endpoints: http://localhost:8080/api/
+
+### 📁 React Frontend Structure
+
+```
+react-frontend/
+├── public/                 # Static files
+├── src/
+│   ├── components/         # React components
+│   │   ├── AnalyticsDashboard.js
+│   │   ├── MetricCard.js
+│   │   ├── QuickStats.js
+│   │   └── RecentItems.js
+│   ├── services/           # API services
+│   │   └── api.js
+│   ├── App.js             # Main app component
+│   └── index.js           # Entry point
+├── package.json           # Dependencies
+└── .env                   # Environment variables
+```
+
+### 🔧 Available Scripts
+
+```bash
+# Development
+npm start                  # Start development server
+npm run dev               # Start with API URL configured
+
+# Production
+npm run build             # Build for production
+npm run build:prod        # Build with production API URL
+
+# Testing
+npm test                  # Run tests
+```
+
+### 🌐 API Endpoints
+
+The React app communicates with the PHP backend through REST API endpoints:
+
+- `GET /api/analytics` - Get analytics dashboard data
+- `GET /api/items` - Get all items
+- `POST /api/items` - Create new item
+- `GET /api/categories` - Get categories
+- `GET /api/locations` - Get locations
+
+### 🎨 Features Implemented
+
+- **Analytics Dashboard**: Interactive charts and metrics
+- **Responsive Design**: Mobile-friendly interface
+- **Real-time Data**: Live data from PHP backend
+- **Modern UI**: Bootstrap 5 with custom styling
+- **Chart.js Integration**: Interactive charts and graphs
+
+### 🔄 Development Workflow
+
+1. **Backend Changes**: Modify PHP controllers and models
+2. **API Updates**: Update API endpoints as needed
+3. **Frontend Changes**: Modify React components
+4. **Testing**: Test both backend and frontend integration
+5. **Deployment**: Build and deploy both applications
+
+### 📊 Analytics Dashboard Features
+
+- **Key Metrics**: Total items, quantity, categories, locations
+- **Category Distribution**: Doughnut chart showing items by category
+- **Location Analysis**: Bar chart showing items by location
+- **Time Series**: Line chart showing items added over time
+- **Quick Stats**: Image coverage, average quantity, etc.
+- **Recent Items**: Display of latest added items
+
+### 🚀 Production Deployment
+
+1. **Build React App**
+   ```bash
+   ./scripts/build-react.sh
+   ```
+
+2. **Deploy Files**
+   - Copy `react-frontend/build/` contents to web server
+   - Configure web server to serve React app
+   - Update API URL in production environment
+
+3. **Configure Backend**
+   - Ensure CORS headers are properly set
+   - Update API endpoints for production domain
+   - Configure authentication as needed
+
+### 🔧 Configuration
+
+Environment variables in `react-frontend/.env`:
+
+```env
+REACT_APP_API_URL=http://localhost:8080/api
+GENERATE_SOURCEMAP=false
+```
+
+### 🐛 Troubleshooting
+
+**React App Issues:**
+```bash
+# Clear node_modules and reinstall
+cd react-frontend
+rm -rf node_modules package-lock.json
+npm install
+
+# Check API connection
+curl http://localhost:8080/api/analytics
+```
+
+**API Issues:**
+```bash
+# Check PHP backend logs
+docker-compose logs web
+
+# Test API endpoints
+curl -X GET http://localhost:8080/api/analytics
+```
+
 ## 📞 Support
 
 For support and questions, please open an issue on GitHub.
