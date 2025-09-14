@@ -8,7 +8,6 @@ Welcome to the Storage Unit Management System documentation. This index provides
 - **[QUICKSTART.md](QUICKSTART.md)** - Quick Docker setup guide for getting started
 - **[DOCKER_ONLY_SETUP.md](DOCKER_ONLY_SETUP.md)** - Complete Docker-only setup guide
 - **[DOCKER_SETUP_COMPLETE.md](DOCKER_SETUP_COMPLETE.md)** - Docker setup and configuration guide
-- **[LOCAL_SETUP.md](LOCAL_SETUP.md)** - ⚠️ DEPRECATED - Local setup (use Docker instead)
 
 ### Development
 - **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development guidelines and best practices
@@ -37,9 +36,7 @@ Welcome to the Storage Unit Management System documentation. This index provides
 docs/
 ├── INDEX.md                      # This file - documentation index
 ├── QUICKSTART.md                 # Quick setup guide
-├── LOCAL_SETUP.md               # Local development setup
 ├── DOCKER_SETUP_COMPLETE.md     # Docker setup guide
-├── SETUP_SUMMARY.md             # Setup options summary
 ├── DEVELOPMENT.md               # Development guidelines
 ├── FILESYSTEM_IMPROVEMENTS.md   # Project structure guide
 └── DEBUG.md                     # Debugging and logging guide
@@ -48,7 +45,7 @@ docs/
 ## 🔍 Finding Information
 
 ### Setup Issues
-- Check [LOCAL_SETUP.md](LOCAL_SETUP.md) for step-by-step instructions
+- Check [DOCKER_ONLY_SETUP.md](DOCKER_ONLY_SETUP.md) for step-by-step instructions
 - Review [DOCKER_SETUP_COMPLETE.md](DOCKER_SETUP_COMPLETE.md) for Docker-specific issues
 - See [DEBUG.md](DEBUG.md) for troubleshooting common problems
 

@@ -106,7 +106,6 @@ All detailed documentation is organized in the `docs/` folder:
 
 - **[docs/INDEX.md](docs/INDEX.md)** - Documentation index and navigation
 - **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - Quick setup guide
-- **[docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md)** - Local development setup
 - **[docs/DOCKER_SETUP_COMPLETE.md](docs/DOCKER_SETUP_COMPLETE.md)** - Docker setup guide
 - **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Development guidelines
 - **[docs/FILESYSTEM_IMPROVEMENTS.md](docs/FILESYSTEM_IMPROVEMENTS.md)** - Project structure improvements
