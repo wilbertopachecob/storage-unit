@@ -2,10 +2,13 @@
 // if (!isFileIncluded('user.php')) {
 //     include 'db/user.php';
 // }
-include 'db/Models/user.php';
+if (!class_exists('User')) {
+    include 'db/Models/user.php';
+}
 $errors = [];
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$URI = "Location: http://" . $host;
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$baseUrl = $protocol . "://" . $host;
 //I create this file to handle the redirections after the sings because you cant
 //send headers after the code
 //Handling singOut
@@ -15,7 +18,7 @@ $signParam = $_GET['sign'] ?? $_POST['sign'] ?? null;
 if (isset($signParam)) {
     if ($signParam == 'out') {
         USER::logout();
-        header($URI);
+        header("Location: " . $baseUrl . "/index.php");
         exit;
     }
 
@@ -28,7 +31,7 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($email) || empty($password)) {
                 $_SESSION['login_error'] = 'Please fill in all fields.';
-                header("Location: " . $URI . "/signin.php");
+                header("Location: " . $baseUrl . "/signin.php");
                 exit;
             }
             
@@ -41,16 +44,16 @@ if (isset($signParam)) {
                     $_SESSION['login_success'] = 'Welcome back!';
                     
                     // Redirect to items list
-                    header("Location: " . $URI . "/index.php?script=itemsList");
+                    header("Location: " . $baseUrl . "/index.php?script=itemsList");
                     exit;
                 } else {
                     $_SESSION['login_error'] = 'Invalid email or password.';
-                    header("Location: " . $URI . "/signin.php");
+                    header("Location: " . $baseUrl . "/signin.php");
                     exit;
                 }
             } catch (Exception $e) {
                 $_SESSION['login_error'] = 'Login failed: ' . $e->getMessage();
-                header("Location: " . $URI . "/signin.php");
+                header("Location: " . $baseUrl . "/signin.php");
                 exit;
             }
         }
@@ -66,19 +69,19 @@ if (isset($signParam)) {
             // Basic validation
             if (empty($name) || empty($email) || empty($password)) {
                 $_SESSION['signup_error'] = 'Please fill in all fields.';
-                header("Location: " . $URI . "/signup.php");
+                header("Location: " . $baseUrl . "/signup.php");
                 exit;
             }
             
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['signup_error'] = 'Please enter a valid email address.';
-                header("Location: " . $URI . "/signup.php");
+                header("Location: " . $baseUrl . "/signup.php");
                 exit;
             }
             
             if (strlen($password) < 8) {
                 $_SESSION['signup_error'] = 'Password must be at least 8 characters long.';
-                header("Location: " . $URI . "/signup.php");
+                header("Location: " . $baseUrl . "/signup.php");
                 exit;
             }
             
@@ -88,16 +91,16 @@ if (isset($signParam)) {
                 if ($result) {
                     // Signup successful
                     $_SESSION['signup_success'] = 'Account created successfully! Welcome!';
-                    header("Location: " . $URI . "/index.php?script=itemsList");
+                    header("Location: " . $baseUrl . "/index.php?script=itemsList");
                     exit;
                 } else {
                     $_SESSION['signup_error'] = 'Failed to create account. Please try again.';
-                    header("Location: " . $URI . "/signup.php");
+                    header("Location: " . $baseUrl . "/signup.php");
                     exit;
                 }
             } catch (Exception $e) {
                 $_SESSION['signup_error'] = 'Signup failed: ' . $e->getMessage();
-                header("Location: " . $URI . "/signup.php");
+                header("Location: " . $baseUrl . "/signup.php");
                 exit;
             }
         }

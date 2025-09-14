@@ -13,11 +13,12 @@ function accesingFiles(): void{
     if(isset($_GET['script'])){
         $script = $_GET['script'];
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         
         $checkVars = array('itemsList', 'editItem', 'addItem');
         if(in_array($script, $checkVars)){
             if(!isloggedIn()){
-                header("Location: http://" . $host . "/index.php");
+                header("Location: " . $protocol . "://" . $host . "/index.php");
                 exit;
             }
         }
@@ -28,7 +29,7 @@ function accesingFiles(): void{
             // Don't redirect if we're processing a login/signup form
             if(!isset($_POST['btn_submit'])) {
                 if(isloggedIn()){ 
-                    header("Location: http://" . $host . "/index.php?script=itemsList");
+                    header("Location: " . $protocol . "://" . $host . "/index.php?script=itemsList");
                     exit;
                 }
             }
