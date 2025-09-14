@@ -106,12 +106,14 @@ const AnalyticsDashboard: React.FC = () => {
     }]
   };
 
-  // Calculate monthly data for line chart
-  const monthlyData: Record<string, number> = analytics.recent_items.reduce((acc: Record<string, number>, item) => {
-    const month = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    acc[month] = (acc[month] || 0) + 1;
-    return acc;
-  }, {});
+  // Use monthly data from API (already calculated on the backend)
+  const monthlyData: Record<string, number> = analytics.monthly_data || {};
+
+  // Debug logging
+  console.log('Analytics data:', analytics);
+  console.log('Monthly data:', monthlyData);
+  console.log('Monthly data keys:', Object.keys(monthlyData));
+  console.log('Monthly data values:', Object.values(monthlyData));
 
   const monthlyChartData: ChartData = {
     labels: Object.keys(monthlyData),
@@ -124,6 +126,8 @@ const AnalyticsDashboard: React.FC = () => {
       fill: true
     }]
   };
+
+  console.log('Monthly chart data:', monthlyChartData);
 
   const chartOptions = {
     responsive: true,
