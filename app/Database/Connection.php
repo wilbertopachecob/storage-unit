@@ -23,7 +23,7 @@ class Connection {
             $user = 'root';
             $pass = 'rootpassword';
             $dbname = 'storageunit';
-            $host = 'localhost';
+            $host = '127.0.0.1'; // Use 127.0.0.1 instead of localhost for Docker port forwarding
         }
         try{
             $connection = new \PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
