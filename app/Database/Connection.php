@@ -19,9 +19,9 @@ class Connection {
             $dbname = 'storageunit';
             $host = 'db'; // Docker service name
         } else {
-            // Local configuration
+            // Local configuration - connect to Docker database
             $user = 'root';
-            $pass = '';
+            $pass = 'rootpassword';
             $dbname = 'storageunit';
             $host = 'localhost';
         }
