@@ -123,7 +123,7 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--dark-color);
-  background-color: var(--bg-primary);
+  background-color: #ffffff;
   position: relative;
   padding-bottom: 6rem;
 }
@@ -459,10 +459,10 @@ p {
    CARD SYSTEM
    ======================================== */
 .card {
-  background-color: var(--bg-primary);
+  background-color: #ffffff !important;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   transition: var(--transition-normal);
   overflow: hidden;
   position: relative;
@@ -529,7 +529,7 @@ p {
 }
 
 .card-footer {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   border-top: 1px solid var(--border-color);
   padding: var(--space-4) var(--space-6);
   margin-top: auto;
@@ -1371,7 +1371,7 @@ body:has(.bg) {
 }
 
 .card-body {
-  background-color: var(--bg-primary);
+  background-color: #ffffff !important;
 }
 
 /* Form Label Styling */

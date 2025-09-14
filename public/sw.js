@@ -3,7 +3,7 @@
  * Provides offline capabilities and caching
  */
 
-const CACHE_NAME = 'storage-unit-v2';
+const CACHE_NAME = 'storage-unit-v3';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline use
@@ -18,7 +18,11 @@ const CACHE_FILES = [
   '/offline.html',
   'https://use.fontawesome.com/releases/v5.6.3/css/all.css',
   'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
-  'https://fonts.googleapis.com/css2?family=Rancho&display=swap'
+  'https://fonts.googleapis.com/css2?family=Rancho&display=swap',
+  'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js',
+  'https://unpkg.com/popper.js@1.14.6/dist/umd/popper.min.js',
+  'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js'
 ];
 
 // Install event - cache resources
@@ -155,10 +159,20 @@ self.addEventListener('fetch', (event) => {
 
             return response;
           })
-          .catch(() => {
+          .catch((error) => {
+            console.warn('Network fetch failed for:', event.request.url, error);
+            
             // If network fails and it's a navigation request, show offline page
             if (event.request.mode === 'navigate') {
               return caches.match(OFFLINE_URL);
+            }
+            
+            // For CDN resources, try to serve from cache even if network failed
+            if (event.request.url.includes('cdnjs.cloudflare.com') || 
+                event.request.url.includes('stackpath.bootstrapcdn.com') ||
+                event.request.url.includes('ajax.googleapis.com')) {
+              console.log('Attempting to serve CDN resource from cache:', event.request.url);
+              return caches.match(event.request);
             }
             
             // For other requests, return a basic offline response
