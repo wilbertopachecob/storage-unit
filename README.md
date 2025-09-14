@@ -2,7 +2,7 @@
 
 A modern, secure web-based inventory management application built with PHP.
 
-**Version**: 2.0.0  
+**Version**: 2.0.1  
 **PHP Version**: >=7.4  
 **License**: MIT
 
@@ -325,9 +325,26 @@ This project is licensed under the MIT License.
 4. Add tests for new functionality
 5. Submit a pull request
 
-## ⚛️ React Frontend (Proof of Concept)
+## 🆕 Recent Updates
 
-The project now includes a React frontend as a proof of concept for the analytics dashboard feature. This demonstrates how the PHP backend can be integrated with a modern React application.
+### Image Display Fixes (v2.0.1)
+- **Fixed broken images** in analytics dashboard Recent Items section
+- **Corrected image URLs** to use `/uploads/` instead of `/api/uploads/`
+- **Added error handling** with proper fallback placeholders for failed image loads
+- **Enhanced user experience** with clean image placeholders and icons
+- **Dynamic asset loading** for analytics.php to automatically use current React builds
+- **Improved reliability** with proper image loading error management
+
+### React Frontend Improvements
+- **Enhanced RecentItems component** with better image handling
+- **Added CSS styling** for image placeholders with professional appearance
+- **Implemented error tracking** for failed image loads
+- **Created manifest.php endpoint** for secure asset manifest serving
+- **Updated analytics.php** to dynamically load current React build files
+
+## ⚛️ React Frontend (Production Ready)
+
+The project includes a fully functional React frontend for the analytics dashboard feature. This demonstrates seamless integration between the PHP backend and modern React application with proper image handling and error management.
 
 ### 🚀 Quick Start with React
 
@@ -361,17 +378,24 @@ The project now includes a React frontend as a proof of concept for the analytic
 react-frontend/
 ├── public/                 # Static files
 ├── src/
-│   ├── components/         # React components
-│   │   ├── AnalyticsDashboard.js
-│   │   ├── MetricCard.js
-│   │   ├── QuickStats.js
-│   │   └── RecentItems.js
+│   ├── components/         # React components (TypeScript)
+│   │   ├── AnalyticsDashboard.tsx
+│   │   ├── MetricCard.tsx
+│   │   ├── QuickStats.tsx
+│   │   ├── RecentItems.tsx
+│   │   └── *.css           # Component styles
 │   ├── services/           # API services
-│   │   └── api.js
-│   ├── App.js             # Main app component
-│   └── index.js           # Entry point
-├── package.json           # Dependencies
-└── .env                   # Environment variables
+│   │   └── api.ts
+│   ├── types/              # TypeScript type definitions
+│   │   └── index.ts
+│   ├── App.tsx             # Main app component
+│   ├── App.css             # Global styles
+│   ├── index.tsx           # Entry point
+│   └── index.css           # Global styles
+├── build/                  # Production build output
+├── package.json            # Dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+└── .env                    # Environment variables
 ```
 
 ### 🔧 Available Scripts
@@ -422,7 +446,10 @@ The React app communicates with the PHP backend through REST API endpoints:
 - **Location Analysis**: Bar chart showing items by location
 - **Time Series**: Line chart showing items added over time
 - **Quick Stats**: Image coverage, average quantity, etc.
-- **Recent Items**: Display of latest added items
+- **Recent Items**: Display of latest added items with proper image handling
+- **Image Management**: Automatic error handling with fallback placeholders
+- **Responsive Design**: Mobile-optimized interface with Bootstrap 5
+- **Real-time Updates**: Live data from PHP backend API
 
 ### 🚀 Production Deployment
 
@@ -452,12 +479,28 @@ GENERATE_SOURCEMAP=false
 
 ### 🐛 Troubleshooting
 
+**Image Display Issues:**
+```bash
+# Check if images are accessible
+curl -I http://localhost:8080/uploads/your-image.jpg
+
+# Verify image URLs in browser console
+# Look for 404 errors in Network tab
+
+# Clear browser cache and refresh
+# Hard refresh: Ctrl+F5 (Windows) or Cmd+Shift+R (Mac)
+```
+
 **React App Issues:**
 ```bash
 # Clear node_modules and reinstall
 cd react-frontend
 rm -rf node_modules package-lock.json
 npm install
+
+# Rebuild React app
+npm run build
+cd .. && cp -r react-frontend/build/* public/
 
 # Check API connection
 curl http://localhost:8080/api/analytics
@@ -470,6 +513,18 @@ docker-compose logs web
 
 # Test API endpoints
 curl -X GET http://localhost:8080/api/analytics
+
+# Test manifest endpoint
+curl http://localhost:8080/manifest.php
+```
+
+**Analytics Page Issues:**
+```bash
+# Check if analytics.php loads correctly
+curl -s http://localhost:8080/analytics.php | grep -E "(main\.|manifest)"
+
+# Verify asset manifest is accessible
+curl http://localhost:8080/manifest.php
 ```
 
 ## 📞 Support
