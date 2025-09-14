@@ -12,18 +12,20 @@ class ItemTest extends TestCase
 {
     public function testItemCreation()
     {
-        $item = new Item('Test Item', 'Test Description', 5, 1, 'test.jpg');
+        $item = new Item('Test Item', 'Test Description', 5, 1, 'test.jpg', 1, 2);
         
         $this->assertEquals('Test Item', $item->getTitle());
         $this->assertEquals('Test Description', $item->getDescription());
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals(1, $item->getUserId());
+        $this->assertEquals(1, $item->getCategoryId());
+        $this->assertEquals(2, $item->getLocationId());
         $this->assertEquals('test.jpg', $item->getImg());
     }
 
     public function testItemCreate()
     {
-        $item = new Item('New Item', 'New Description', 3, 1, 'new.jpg');
+        $item = new Item('New Item', 'New Description', 3, 1, 'new.jpg', 1, 2);
         
         $this->assertTrue($item->create());
         $this->assertNotNull($item->getId());
@@ -178,5 +180,96 @@ class ItemTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid item data');
         $item->create();
+    }
+
+    public function testEnhancedSearchWithNoFilters()
+    {
+        $items = Item::search('Test Item', 1);
+        
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
+        
+        foreach ($items as $item) {
+            $this->assertArrayHasKey('category_name', $item);
+            $this->assertArrayHasKey('category_color', $item);
+            $this->assertArrayHasKey('location_name', $item);
+        }
+    }
+
+    public function testEnhancedSearchWithCategoryFilter()
+    {
+        $items = Item::search('', 1, 1); // Search with Tools category
+        
+        $this->assertIsArray($items);
+        $this->assertCount(1, $items);
+        $this->assertEquals('Tools', $items[0]['category_name']);
+    }
+
+    public function testEnhancedSearchWithLocationFilter()
+    {
+        $items = Item::search('', 1, null, 2); // Search with Workbench location
+        
+        $this->assertIsArray($items);
+        $this->assertCount(1, $items);
+        $this->assertEquals('Workbench', $items[0]['location_name']);
+    }
+
+    public function testEnhancedSearchWithMultipleFilters()
+    {
+        $items = Item::search('Test', 1, 1, 2); // Search with category and location filters
+        
+        $this->assertIsArray($items);
+        $this->assertCount(1, $items);
+        $this->assertEquals('Tools', $items[0]['category_name']);
+        $this->assertEquals('Workbench', $items[0]['location_name']);
+    }
+
+    public function testGetAllWithDetails()
+    {
+        $items = Item::getAllWithDetails(1);
+        
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
+        
+        foreach ($items as $item) {
+            $this->assertArrayHasKey('category_name', $item);
+            $this->assertArrayHasKey('category_color', $item);
+            $this->assertArrayHasKey('category_icon', $item);
+            $this->assertArrayHasKey('location_name', $item);
+            $this->assertArrayHasKey('location_parent_id', $item);
+        }
+    }
+
+    public function testItemSettersAndGetters()
+    {
+        $item = new Item();
+        
+        $item->setTitle('Test Title');
+        $item->setDescription('Test Description');
+        $item->setQty(5);
+        $item->setUserId(1);
+        $item->setCategoryId(2);
+        $item->setLocationId(3);
+        $item->setImg('test.jpg');
+        
+        $this->assertEquals('Test Title', $item->getTitle());
+        $this->assertEquals('Test Description', $item->getDescription());
+        $this->assertEquals(5, $item->getQty());
+        $this->assertEquals(1, $item->getUserId());
+        $this->assertEquals(2, $item->getCategoryId());
+        $this->assertEquals(3, $item->getLocationId());
+        $this->assertEquals('test.jpg', $item->getImg());
+    }
+
+    public function testToArrayIncludesNewFields()
+    {
+        $item = Item::findById(1, 1);
+        $array = $item->toArray();
+        
+        $this->assertIsArray($array);
+        $this->assertArrayHasKey('category_id', $array);
+        $this->assertArrayHasKey('location_id', $array);
+        $this->assertEquals(1, $array['category_id']);
+        $this->assertEquals(2, $array['location_id']);
     }
 }
