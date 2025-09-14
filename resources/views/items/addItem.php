@@ -159,7 +159,7 @@ endif;
         <label for="category_id" class="form-label font-weight-bold text-dark">
           <i class="fas fa-folder text-primary mr-2"></i>Category
         </label>
-        <select class="form-control" name="category_id" id="category_id">
+        <select class="form-control form-control-lg" name="category_id" id="category_id">
           <option value="">Choose category (optional)</option>
           <?php foreach ($categories as $category): ?>
             <option value="<?= $category['id'] ?>">
@@ -174,7 +174,7 @@ endif;
         <label for="location_id" class="form-label font-weight-bold text-dark">
           <i class="fas fa-map-marker-alt text-primary mr-2"></i>Location
         </label>
-        <select class="form-control" name="location_id" id="location_id">
+        <select class="form-control form-control-lg" name="location_id" id="location_id">
           <option value="">Choose location (optional)</option>
           <?php foreach ($locations as $location): ?>
             <option value="<?= $location['id'] ?>">

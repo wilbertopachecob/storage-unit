@@ -1431,6 +1431,15 @@ select.form-control {
   min-height: 60px;
   padding: var(--space-4) var(--space-5);
   font-size: var(--text-lg);
+  height: 60px !important;
+  line-height: 1.5;
+}
+
+select.form-control.form-control-lg {
+  min-height: 70px;
+  height: 70px !important;
+  padding: var(--space-5) var(--space-6);
+  font-size: var(--text-xl);
 }
 
 select.form-control option {
