@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// Set cache headers to prevent caching of authentication-sensitive content
+header('Cache-Control: no-cache, no-store, must-revalidate, private');
+header('Pragma: no-cache');
+header('Expires: 0');
+
 // Include necessary files
 include __DIR__ . '/Helpers/helpers.php';
 include __DIR__ . '/Middleware/guards.php';

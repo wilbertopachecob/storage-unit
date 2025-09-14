@@ -3,13 +3,12 @@
  * Provides offline capabilities and caching
  */
 
-const CACHE_NAME = 'storage-unit-v1';
+const CACHE_NAME = 'storage-unit-v2';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline use
 const CACHE_FILES = [
   '/',
-  '/index.php',
   '/css/style.css',
   '/js/main.js',
   '/js/touch-gestures.js',
@@ -77,6 +76,42 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip authentication-sensitive pages
+  const url = new URL(event.request.url);
+  const pathname = url.pathname;
+  
+  // Don't cache pages that require authentication or contain sensitive data
+  if (pathname.includes('index.php') || 
+      pathname.includes('signin.php') || 
+      pathname.includes('signup.php') ||
+      pathname.includes('signIn.php') || 
+      pathname.includes('signUp.php') ||
+      pathname.includes('analytics.php')) {
+    // Always fetch from network for auth-sensitive pages
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          return response;
+        })
+        .catch(() => {
+          // If network fails and it's a navigation request, show offline page
+          if (event.request.mode === 'navigate') {
+            return caches.match(OFFLINE_URL);
+          }
+          
+          // For other requests, return a basic offline response
+          return new Response('Offline - content not available', {
+            status: 503,
+            statusText: 'Service Unavailable',
+            headers: new Headers({
+              'Content-Type': 'text/plain'
+            })
+          });
+        })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -95,8 +130,14 @@ self.addEventListener('fetch', (event) => {
             }
 
             // Only cache HTTP/HTTPS requests, skip chrome-extension and other schemes
-            const url = new URL(event.request.url);
             if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+              return response;
+            }
+
+            // Check if response has no-cache headers
+            const cacheControl = response.headers.get('Cache-Control');
+            if (cacheControl && (cacheControl.includes('no-cache') || cacheControl.includes('no-store'))) {
+              console.log('Skipping cache for no-cache response:', event.request.url);
               return response;
             }
 
