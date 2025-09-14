@@ -49,14 +49,29 @@ endif;
   <script src="js/offline-manager.js?v=<?= time() ?>" defer></script>
   <script src="js/sw-update.js?v=<?= time() ?>" defer></script>
   <script>
-    // Force cache refresh
+    // Force cache refresh and clear all caches
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
         for(let registration of registrations) {
-          registration.update();
+          registration.unregister();
         }
       });
     }
+    
+    // Clear all caches
+    if ('caches' in window) {
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.map(function(cacheName) {
+            return caches.delete(cacheName);
+          })
+        );
+      });
+    }
+    
+    // Clear storage
+    localStorage.clear();
+    sessionStorage.clear();
   </script>
   <noscript>
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
