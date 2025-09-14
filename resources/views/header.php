@@ -78,6 +78,13 @@
               <i class="fas fa-chart-line" aria-hidden="true"></i> Analytics
             </a>
           </li>
+          
+          <!-- Export Link -->
+          <li class="nav-item" role="none">
+            <a class="nav-link" href="/index.php?script=export" role="menuitem">
+              <i class="fas fa-download" aria-hidden="true"></i> Export
+            </a>
+          </li>
         <?php endif; ?>
       </ul>
 

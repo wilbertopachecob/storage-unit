@@ -31,9 +31,18 @@ if (count($items) > 0):
     <div class="dropdown-divider"></div>
 </div>
 <div class="container pt-3 pb-3 cards">
-    <h1 class="mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
-        Search results:
-    </h1>
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
+                Search results:
+            </h1>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="/export/search.php?q=<?= urlencode($searchTerm) ?>" class="btn btn-success btn-lg">
+                <i class="fas fa-download"></i> Export Results (CSV)
+            </a>
+        </div>
+    </div>
     <div class="cards-container row">
         <?php
 foreach ($items as $item):

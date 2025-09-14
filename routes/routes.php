@@ -37,6 +37,9 @@ function router($script)
                 $controller->index();
             }
             break;
+        case 'export':
+            include __DIR__ . '/../resources/views/export/export.php';
+            break;
         case 'default':
             include __DIR__ . '/../app/home.php';
             break;

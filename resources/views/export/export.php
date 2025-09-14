@@ -164,7 +164,7 @@ $totalQuantity = \StorageUnit\Models\Item::getTotalQuantityForUser($user->getId(
                             </ul>
                         </div>
                         <div class="card-footer">
-                            <a href="/search.php" class="btn btn-secondary btn-block">
+                            <a href="/index.php?script=search" class="btn btn-secondary btn-block">
                                 <i class="fas fa-search"></i> Go to Search & Export
                             </a>
                         </div>
