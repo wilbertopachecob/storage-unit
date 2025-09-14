@@ -38,20 +38,28 @@ if (isset($signParam)) {
             $user = new User($email, $password, null);
             try {
                 $result = $user->login();
+                
+                // Debug logging
+                error_log("Login attempt - Email: $email, Result: " . var_export($result, true));
+                error_log("Session before login: " . print_r($_SESSION, true));
+                
                 if ($result) {
                     // Login successful - clear any existing errors
                     unset($_SESSION['login_error']);
                     $_SESSION['login_success'] = 'Welcome back!';
                     
+                    error_log("Login successful - redirecting to items list");
                     // Redirect to items list
                     header("Location: " . $baseUrl . "/index.php?script=itemsList");
                     exit;
                 } else {
+                    error_log("Login failed - result was false");
                     $_SESSION['login_error'] = 'Invalid email or password.';
                     header("Location: " . $baseUrl . "/signin.php");
                     exit;
                 }
             } catch (Exception $e) {
+                error_log("Login exception: " . $e->getMessage());
                 $_SESSION['login_error'] = 'Login failed: ' . $e->getMessage();
                 header("Location: " . $baseUrl . "/signin.php");
                 exit;

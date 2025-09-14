@@ -49,7 +49,7 @@ class User
         $user = $this->_checkCredentials();
         if ($user) {
             $this->user = $user; // store it so it can be accessed later
-            if (!isset($_SESSION)) {
+            if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
             $_SESSION['user_id'] = $user['id'];
@@ -62,8 +62,12 @@ class User
 
     public static function logout()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         unset($_SESSION["user_id"]);
+        unset($_SESSION["user_name"]);
+        unset($_SESSION["user_email"]);
         session_destroy();
         session_write_close();
         //return $_SESSION["user_id"];
