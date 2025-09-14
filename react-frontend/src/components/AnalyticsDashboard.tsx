@@ -109,12 +109,6 @@ const AnalyticsDashboard: React.FC = () => {
   // Use monthly data from API (already calculated on the backend)
   const monthlyData: Record<string, number> = analytics.monthly_data || {};
 
-  // Debug logging
-  console.log('Analytics data:', analytics);
-  console.log('Monthly data:', monthlyData);
-  console.log('Monthly data keys:', Object.keys(monthlyData));
-  console.log('Monthly data values:', Object.values(monthlyData));
-
   const monthlyChartData: ChartData = {
     labels: Object.keys(monthlyData),
     datasets: [{
@@ -126,8 +120,6 @@ const AnalyticsDashboard: React.FC = () => {
       fill: true
     }]
   };
-
-  console.log('Monthly chart data:', monthlyChartData);
 
   const chartOptions = {
     responsive: true,
