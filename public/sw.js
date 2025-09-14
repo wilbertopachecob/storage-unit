@@ -94,6 +94,12 @@ self.addEventListener('fetch', (event) => {
               return response;
             }
 
+            // Only cache HTTP/HTTPS requests, skip chrome-extension and other schemes
+            const url = new URL(event.request.url);
+            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+              return response;
+            }
+
             // Clone the response
             const responseToCache = response.clone();
 
@@ -101,6 +107,9 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
+              })
+              .catch((error) => {
+                console.warn('Failed to cache response:', event.request.url, error);
               });
 
             return response;
