@@ -4,7 +4,7 @@ $(function () {
     //alert(1);
     if (event.key === "Enter") {
       event.preventDefault();
-      $.post("http://localhost/storageUnit/searchScript.php",
+      $.post("/searchScript.php",
         { searchTerm: $(this).val()},
         buildCards)
       // .done(function() {
@@ -35,7 +35,7 @@ function buildCards(items) {
 
       containerCards += `
             <div class="card h-100">
-                        <img src="/storageUnit/uploads/${img}" class="card-img-top" alt="My Saw saw" style="height: 209px;" />
+                        <img src="/uploads/${img}" class="card-img-top" alt="My Saw saw" style="height: 209px;" />
             <div class="card-body">
                 <h5 class="card-title" style="font-family: 'Rancho', serif; font-size:2em;">
                   ${title}
@@ -58,7 +58,7 @@ function buildCards(items) {
                         </a>
                     </div>
                     <div class="col-sm-6">
-                        <a href="/storageUnit/index.php?script=editItem&amp;id=${id}" class="btn btn-success btn-edit btn-block" style="opacity:1;">
+                        <a href="/index.php?script=editItem&amp;id=${id}" class="btn btn-success btn-edit btn-block" style="opacity:1;">
                             <i class="fas fa-edit"></i>
                             Edit
                         </a>

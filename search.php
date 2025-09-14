@@ -52,7 +52,7 @@ foreach ($items as $item):
 	            <?php
     $item['img'] = $item['img'] ?? 'image-not-found.png';
     ?>
-	            <img src="/storageUnit/uploads/<?=$item['img']?>" class="card-img-top" alt="<?=$item['title']?>">
+	            <img src="/uploads/<?=$item['img']?>" class="card-img-top" alt="<?=$item['title']?>">
 	            <div class="card-body">
 	                <h5 class="card-title" style="font-family: 'Rancho', serif; font-size:2em;">
 	                    <?=$item['title']?>

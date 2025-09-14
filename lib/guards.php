@@ -12,14 +12,14 @@ function accesingFiles(): void{
         $checkVars = array('itemsList', 'editItem', 'addItem');
         if(in_array($script, $checkVars)){
             if(!isloggedIn()){
-                header("Location: http://" . $_SERVER['HTTP_HOST'] . "/storageUnit");
+                header("Location: http://" . $_SERVER['HTTP_HOST']);
                 exit;
             }
         }
         $checkVars = array('signUp', 'signIn');
         if(in_array($script, $checkVars)){
             if(isloggedIn()){ 
-                header("Location: http://" . $_SERVER['HTTP_HOST'] . "/storageUnit");
+                header("Location: http://" . $_SERVER['HTTP_HOST']);
                 exit;
             }
         }

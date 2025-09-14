@@ -107,7 +107,7 @@ if (isset($_GET['id'])):
     ?>
     <div style="position: relative;" class="image-del-container">
                 <i class="fas fa-times-circle float-right delete_img" title="Delete image"></i>
-                <img src="/storageUnit/uploads/<?=$item[0]['img']?>" class="img-fluid edit_img" alt="<?=$item[0]['title']?>" />
+                <img src="/uploads/<?=$item[0]['img']?>" class="img-fluid edit_img" alt="<?=$item[0]['title']?>" />
     </div>
                 <?php
 endif;

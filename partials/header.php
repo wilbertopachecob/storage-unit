@@ -44,7 +44,7 @@ if (!isloggedIn()):
       </li>
       <?php else: ?>
       <li class="nav-item">
-        <a class="nav-link" href="./storageUnit/index.php?sign=out"> <i class="fas fa-sign-out-alt"></i> Sign out</a>
+        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?sign=out"> <i class="fas fa-sign-out-alt"></i> Sign out</a>
       </li>
       <?php endif;?>
     </ul>

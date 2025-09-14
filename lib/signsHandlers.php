@@ -4,7 +4,7 @@
 // }
 include 'user.php';
 $errors = [];
-$URI = "Location: http://" . $_SERVER['HTTP_HOST'] . "/storageUnit";
+$URI = "Location: http://" . $_SERVER['HTTP_HOST'];
 //I create this file to handle the redirections after the sings because you cant
 //send headers after the code
 //Handling singOut
