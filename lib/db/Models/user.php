@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 include 'lib/helpers.php';
 if (!isFileIncluded('connection.php')) {
-    include 'db/connection.php';
+    include __DIR__ . '/../connection.php';
 }
 class User
 {
