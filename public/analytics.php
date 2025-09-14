@@ -8,10 +8,13 @@ session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/app/config.php';
 require_once __DIR__ . '/../config/app/constants.php';
+require_once __DIR__ . '/../app/Middleware/guards.php';
 
 // Check if user is logged in
 if (!isloggedIn()) {
-    header('Location: /signin.php');
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    header("Location: " . $protocol . "://" . $host . "/signin.php");
     exit;
 }
 

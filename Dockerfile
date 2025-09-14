@@ -42,12 +42,7 @@ COPY docker/apache-config.conf /etc/apache2/sites-available/000-default.conf
 # Enable our custom site
 RUN a2ensite 000-default
 
-# Override the default DocumentRoot in the main Apache configuration
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/apache2.conf || true
-
-# Create a custom Apache configuration to override DocumentRoot
-RUN echo "DocumentRoot /var/www/html/public" > /etc/apache2/conf-available/custom-documentroot.conf && \
-    a2enconf custom-documentroot
+# DocumentRoot is set in the virtual host configuration
 
 # Copy PHP session configuration
 COPY docker/php-session.ini /usr/local/etc/php/conf.d/session.ini
@@ -58,9 +53,8 @@ RUN mkdir -p /var/www/html/public/uploads \
     && chown -R www-data:www-data /tmp/php_sessions \
     && chmod -R 755 /tmp/php_sessions
 
-# Create .htaccess file for additional security
-RUN echo "Options -Indexes" > /var/www/html/.htaccess && \
-    echo "Options -Indexes" > /var/www/html/public/.htaccess
+# Create .htaccess file for additional security (only if it doesn't exist)
+RUN if [ ! -f /var/www/html/.htaccess ]; then echo "Options -Indexes" > /var/www/html/.htaccess; fi
 
 # Expose port 80
 EXPOSE 80
