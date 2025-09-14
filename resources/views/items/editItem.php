@@ -46,9 +46,9 @@ if (isset($_POST['btn_submit'])):
             //editItem($id, $title, $description, $qty, $img):bool
             $id = $_GET['id'];
             $user_id = $_SESSION['user_id'];
-            $controller = new ItemController;
-            $item = new Item($title, $description, $qty, $user_id, $img);
-            $item->setDb(new Connection);          
+            $controller = new \StorageUnit\Controllers\ItemController;
+            $item = new \StorageUnit\Models\Item($title, $description, $qty, $user_id, $img);
+            $item->setDb(new \StorageUnit\Database\Connection);          
             $item = $controller->editItem($item, $id);
             if ($item) {
                 $messages[] = 'Item successfuly edited';
@@ -92,8 +92,8 @@ endif
 if (isset($_GET['id'])):
     $item_id = $_GET['id'];
     //echo $_GET['id'];
-    $controller = new ItemController;
-    $conn = new Connection;
+    $controller = new \StorageUnit\Controllers\ItemController;
+    $conn = new \StorageUnit\Database\Connection;
     $item = $controller->getItemById($item_id, $conn);
     //echo var_dump($item);
     ?>

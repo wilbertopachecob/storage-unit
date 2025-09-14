@@ -7,7 +7,7 @@
 spl_autoload_register(function ($class) {
     // Convert namespace to file path
     $prefix = 'StorageUnit\\';
-    $base_dir = __DIR__ . '/../app/';
+    $base_dir = dirname(dirname(__DIR__)) . '/app/';
     
     // Check if the class uses the namespace prefix
     $len = strlen($prefix);
@@ -36,10 +36,10 @@ spl_autoload_register(function ($class) {
     $project_root = dirname(__DIR__);
     
     $legacy_map = [
-        'Connection' => $project_root . '/app/Database/Connection.php',
-        'User' => $project_root . '/app/Models/User.php',
-        'Item' => $project_root . '/app/Models/Item.php',
-        'ItemController' => $project_root . '/app/Controllers/ItemController.php',
+        'StorageUnit\\Database\\Connection' => $project_root . '/app/Database/Connection.php',
+        'StorageUnit\\Models\\User' => $project_root . '/app/Models/User.php',
+        'StorageUnit\\Models\\Item' => $project_root . '/app/Models/Item.php',
+        'StorageUnit\\Controllers\\ItemController' => $project_root . '/app/Controllers/ItemController.php',
     ];
     
     if (isset($legacy_map[$class])) {

@@ -37,9 +37,9 @@ if (isset($_POST['btn_submit'])):
             $img = $file_name ?? null;
             //addItem($title, $description, $qty, $img)
             $user_id = $_SESSION['user_id'];
-            $controller = new ItemController;
-            $item = new Item($title, $description, $qty, $user_id, $img);
-            $item->setDb(new Connection);
+            $controller = new \StorageUnit\Controllers\ItemController;
+            $item = new \StorageUnit\Models\Item($title, $description, $qty, $user_id, $img);
+            $item->setDb(new \StorageUnit\Database\Connection);
             $item = $controller->addItem($item);
             if ($item) {
                 $messages[] = 'Item successfuly added';

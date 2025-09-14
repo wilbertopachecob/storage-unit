@@ -4,8 +4,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./public/uploads:/var/www/html/public/uploads
-      - ./public:/var/www/html/public
+      # Mount the entire application for live development
+      - .:/var/www/html
+      # Keep uploads and sessions as separate volumes
       - session_data:/tmp/php_sessions
     depends_on:
       - db

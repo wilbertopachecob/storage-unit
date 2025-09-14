@@ -20,7 +20,7 @@ function search($user_id, $searchTerm, $conn): array
 
 $user_id = $_SESSION['user_id'];
 $searchTerm = $_POST['searchTerm'];
-$conn = new Connection;
+$conn = new \StorageUnit\Database\Connection;
 
 $items = search($user_id, $searchTerm, $conn);
 if (count($items) > 0):

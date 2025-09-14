@@ -8,8 +8,8 @@
     </h1>
 
     <?php
-$controller = new ItemController;
-$conn = new Connection;       
+$controller = new \StorageUnit\Controllers\ItemController;
+$conn = new \StorageUnit\Database\Connection;       
 $items = $controller->getAllItems($_SESSION['user_id'], $conn);
 //Creating array of array with 3 elements to show 3 cards per card-group
 // $arr3 = [];

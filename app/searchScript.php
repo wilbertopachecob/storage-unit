@@ -6,7 +6,7 @@ require 'lib/db/connection.php';
 //$user_id = $_POST['user_id'];
 $user_id = $_SESSION['user_id'];
 $searchTerm = $_POST['searchTerm'];
-$conn = new Connection;
+$conn = new \StorageUnit\Database\Connection;
 $conexion = $conn->getConnection();
 
 /**

@@ -52,23 +52,15 @@ RUN echo "DocumentRoot /var/www/html/public" > /etc/apache2/conf-available/custo
 # Copy PHP session configuration
 COPY docker/php-session.ini /usr/local/etc/php/conf.d/session.ini
 
-# Copy application files
-COPY . /var/www/html/
-
-# Create .htaccess file for additional security
-RUN echo "Options -Indexes" > /var/www/html/.htaccess && \
-    echo "Options -Indexes" > /var/www/html/public/.htaccess
-
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/public/uploads
-
-# Create uploads directory and session directory if they don't exist
+# Create necessary directories (application files will be mounted as volumes)
 RUN mkdir -p /var/www/html/public/uploads \
     && mkdir -p /tmp/php_sessions \
     && chown -R www-data:www-data /tmp/php_sessions \
     && chmod -R 755 /tmp/php_sessions
+
+# Create .htaccess file for additional security
+RUN echo "Options -Indexes" > /var/www/html/.htaccess && \
+    echo "Options -Indexes" > /var/www/html/public/.htaccess
 
 # Expose port 80
 EXPOSE 80

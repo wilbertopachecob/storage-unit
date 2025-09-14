@@ -19,6 +19,7 @@ class Item
     private $img;
     private $createdAt;
     private $updatedAt;
+    private $db;
 
     public function __construct($title = null, $description = null, $qty = 1, $userId = null, $img = null)
     {
@@ -45,6 +46,10 @@ class Item
     public function setQty($qty) { $this->qty = $qty; }
     public function setUserId($userId) { $this->userId = $userId; }
     public function setImg($img) { $this->img = $img; }
+    public function setDb($db) { $this->db = $db; }
+    
+    // Database getter
+    public function getDb() { return $this->db; }
 
     /**
      * Create new item

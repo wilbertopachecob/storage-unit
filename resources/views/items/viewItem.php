@@ -12,8 +12,8 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $item_id = $_GET['id'];
-$controller = new ItemController;
-$conn = new Connection;
+$controller = new \StorageUnit\Controllers\ItemController;
+$conn = new \StorageUnit\Database\Connection;
 $item = $controller->getItemById($item_id, $conn);
 
 // Check if item exists and belongs to current user

@@ -26,9 +26,9 @@ class Connection {
             $host = 'localhost';
         }
         try{
-            $connection = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+            $connection = new \PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
         }
-        catch (PDOException $e) {
+        catch (\PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }

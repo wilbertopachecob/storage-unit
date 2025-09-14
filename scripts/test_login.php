@@ -6,7 +6,7 @@ echo "=== LOGIN UNIT TEST ===\n";
 // Test database connection
 try {
     include './lib/db/connection.php';
-    $conn = new Connection();
+    $conn = new \StorageUnit\Database\Connection();
     $conexion = $conn->getConnection();
     echo "✓ Database connection successful\n";
 } catch (Exception $e) {

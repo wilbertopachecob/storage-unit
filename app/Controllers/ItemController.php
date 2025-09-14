@@ -99,7 +99,7 @@ class ItemController
 
                 if (empty($errors)) {
                     try {
-                        $item = new Item($title, $description, $qty, $user->getId(), $img);
+                        $item = new \StorageUnit\Models\Item($title, $description, $qty, $user->getId(), $img);
                         if ($item->create()) {
                             $success = true;
                             // Redirect to items list after successful creation
@@ -251,5 +251,137 @@ class ItemController
             'query' => $query,
             'total_count' => count($items)
         ];
+    }
+
+    /**
+     * Get total amount of items for a user (legacy method for header)
+     */
+    public function getItemsAmountTotal($userId, $conn)
+    {
+        try {
+            $connection = $conn->getConnection();
+            $sql = "SELECT COUNT(*) FROM items WHERE user_id = :user_id";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->execute();
+            
+            return $stmt->fetchColumn() ?: 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Get all items for a user (legacy method for views)
+     */
+    public function getAllItems($userId, $conn)
+    {
+        try {
+            $connection = $conn->getConnection();
+            $sql = "SELECT * FROM items WHERE user_id = :user_id ORDER BY updated_at DESC";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->execute();
+            
+            return $stmt->fetchAll();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Get item by ID (legacy method for views)
+     */
+    public function getItemById($itemId, $conn)
+    {
+        try {
+            $connection = $conn->getConnection();
+            $sql = "SELECT * FROM items WHERE id = :id";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindParam(':id', $itemId);
+            $stmt->execute();
+            
+            $item = $stmt->fetch();
+            // Return as array of arrays to match expected format
+            return $item ? [$item] : [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Add item (legacy method for views)
+     */
+    public function addItem($item)
+    {
+        try {
+            $db = $item->getDb();
+            $connection = $db->getConnection();
+            
+            $sql = "INSERT INTO items (title, description, qty, user_id, img, created_at, updated_at) VALUES (:title, :description, :qty, :user_id, :img, NOW(), NOW())";
+            $stmt = $connection->prepare($sql);
+            
+            $title = $item->getTitle();
+            $description = $item->getDescription();
+            $qty = $item->getQty();
+            $userId = $item->getUserId();
+            $img = $item->getImg();
+            
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':qty', $qty);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->bindParam(':img', $img);
+            
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Edit item (legacy method for views)
+     */
+    public function editItem($item, $id)
+    {
+        try {
+            $db = $item->getDb();
+            $connection = $db->getConnection();
+            
+            $sql = "UPDATE items SET title = :title, description = :description, qty = :qty, img = :img, updated_at = NOW() WHERE id = :id";
+            $stmt = $connection->prepare($sql);
+            
+            $title = $item->getTitle();
+            $description = $item->getDescription();
+            $qty = $item->getQty();
+            $img = $item->getImg();
+            
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':qty', $qty);
+            $stmt->bindParam(':img', $img);
+            $stmt->bindParam(':id', $id);
+            
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Delete item (legacy method for views)
+     */
+    public function deleteItem($id, $conn)
+    {
+        try {
+            $connection = $conn->getConnection();
+            $sql = "DELETE FROM items WHERE id = :id";
+            $stmt = $connection->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

@@ -3,21 +3,17 @@ session_start();
 //Evaluating signIn, signUp and signOut
 include __DIR__ . '/../app/Helpers/helpers.php';
 include __DIR__ . '/../app/Middleware/guards.php';
-include __DIR__ . '/../app/Controllers/ItemController.php';
-include __DIR__ . '/../app/Models/User.php';
-include __DIR__ . '/../app/Models/Item.php';
+include __DIR__ . '/../config/app/autoload.php';
 include __DIR__ . '/../app/signsHandlers.php';
-if (!isFileIncluded('connection.php')) {
-  include __DIR__ . '/../app/Database/Connection.php';
-}
+// Connection class is now autoloaded
 
 
 //Deleting an Item
 if (isset($_POST['btn_delete'])):
     $id = $_GET['id'];
     //deleteItem(int $id):bool
-    $controller = new ItemController;
-    $conn = new Connection;
+    $controller = new \StorageUnit\Controllers\ItemController;
+    $conn = new \StorageUnit\Database\Connection;
     $item = $controller->deleteItem($id, $conn);
     unsetVariables([$controller, $conn]);
     if ($item):
