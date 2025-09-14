@@ -6,6 +6,7 @@ services:
     volumes:
       - ./uploads:/var/www/html/uploads
       - .:/var/www/html
+      - session_data:/tmp/php_sessions
     depends_on:
       - db
     environment:
@@ -42,3 +43,4 @@ services:
 
 volumes:
   mysql_data:
+  session_data:

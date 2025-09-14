@@ -1,5 +1,6 @@
 <?php
 
+if (!class_exists('Connection')) {
 class Connection {
     // function __construct(){
 
@@ -33,4 +34,5 @@ class Connection {
         return $connection;
 
     }
+}
 }

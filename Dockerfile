@@ -36,6 +36,9 @@ RUN a2enmod rewrite
 # Copy Apache configuration
 COPY docker/apache-config.conf /etc/apache2/sites-available/000-default.conf
 
+# Copy PHP session configuration
+COPY docker/php-session.ini /usr/local/etc/php/conf.d/session.ini
+
 # Copy application files
 COPY . /var/www/html/
 
@@ -44,8 +47,11 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 777 /var/www/html/uploads
 
-# Create uploads directory if it doesn't exist
-RUN mkdir -p /var/www/html/uploads
+# Create uploads directory and session directory if they don't exist
+RUN mkdir -p /var/www/html/uploads \
+    && mkdir -p /tmp/php_sessions \
+    && chown -R www-data:www-data /tmp/php_sessions \
+    && chmod -R 755 /tmp/php_sessions
 
 # Expose port 80
 EXPOSE 80
