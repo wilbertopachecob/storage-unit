@@ -17,22 +17,36 @@ include __DIR__ . '/../app/signsHandlers.php';
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Storage Unit Management System - Sign In">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Preconnect to external domains for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="preconnect" href="https://use.fontawesome.com">
+  <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rancho:wght@400&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  
+  <!-- CSS Framework -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Fallback for no-JS -->
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rancho:wght@400&display=swap" rel="stylesheet">
   </noscript>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <img class="bg" src="img/storage-unit.jpg" alt="background">
 <?php
 include __DIR__ . '/../resources/views/header.php';
 ?>
-  <div class="container mt-4">
+  <div class="container mt-4" id="main-content">
     <div class="col-sm-12">
       <?php include __DIR__ . '/../resources/views/login/signIn.php'; ?>
     </div>

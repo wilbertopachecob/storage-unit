@@ -1,9 +1,16 @@
-<div class="views">
-    <p> Views: <i class="fas fa-th-large" title="Grid view"></i> | <i title="List view" class="fas fa-list-ul"></i></p>
+<div class="views" role="toolbar" aria-label="View options">
+    <p> Views: 
+        <button type="button" class="btn btn-link p-0" aria-label="Switch to grid view" title="Grid view">
+            <i class="fas fa-th-large" aria-hidden="true"></i>
+        </button> | 
+        <button type="button" class="btn btn-link p-0" aria-label="Switch to list view" title="List view">
+            <i class="fas fa-list-ul" aria-hidden="true"></i>
+        </button>
+    </p>
     <div class="dropdown-divider"></div>
 </div>
-<div class="container pt-3 pb-3 cards">
-    <h1 class="text-center mt-5 mb-5" style="color: #111; font-family: 'Rancho', serif; font-weight: bolder;">
+<main class="container pt-3 pb-3 cards" role="main" aria-labelledby="items-heading">
+    <h1 id="items-heading" class="text-center mt-5 mb-5">
         Storage Unit List
     </h1>
 
@@ -27,7 +34,7 @@ $items = $controller->getAllItems($_SESSION['user_id'], $conn);
 //Showing the cards
 //for ($j = 0; $j < count($arr3); $j++):
 ?>
-    <div class="cards-container row">
+    <div class="cards-container" role="grid" aria-label="Storage items">
         <?php
 foreach ($items as $item):
     if (strlen($item['description']) > 100):
@@ -37,45 +44,51 @@ foreach ($items as $item):
         $description = $item['description'];
     endif;
     ?>
-    <div class="col-md-4 col-6 col-sm-12 mb-5">
-            <div class="card h-100">
-            <!-- <div class="view-card" style="position: absolute; display: none;">
-            <h2 class="solid">View item</h2>
-            </div> -->
+    <div class="card-item" role="gridcell">
+            <article class="card h-100">
             <?php 
 $item['img'] = $item['img'] ?? 'image-not-found.png';
 ?>
-            <img src="/uploads/<?=$item['img']?>" class="card-img-top" alt="<?=$item['title']?>">
+            <img src="/uploads/<?=$item['img']?>" class="card-img-top" 
+                 alt="<?=htmlspecialchars($item['title'])?> - Storage item image"
+                 loading="lazy">
             <div class="card-body">
-                <h5 class="card-title" style="font-family: 'Rancho', serif; font-size:2em;">
-                    <?=$item['title']?>
-                </h5>
-                <p class="card-text qty"><small class="text-muted">Number of items: </small><span class="badge badge-primary">
-                        <?=$item['qty']?></span></p>
+                <h2 class="card-title h5">
+                    <?=htmlspecialchars($item['title'])?>
+                </h2>
+                <p class="card-text qty">
+                    <small class="text-muted">Number of items: </small>
+                    <span class="badge badge-primary" aria-label="<?=$item['qty']?> items">
+                        <?=$item['qty']?>
+                    </span>
+                </p>
                 <p class="card-text description">
-                    <?=$description?>
+                    <?=htmlspecialchars($description)?>
                 </p>
             </div>
-            <div class="card-footer">
+            <footer class="card-footer">
                 <div class="row">
                     <div class="col-sm-6 mb-2">
-                        <a class="btn btn-primary btn-view btn-block" href="<?=$_SERVER['PHP_SELF']?>?script=viewItem&id=<?=$item['id']?>">
-                            <i class="fas fa-eye"></i>
+                        <a class="btn btn-primary btn-view btn-block" 
+                           href="<?=$_SERVER['PHP_SELF']?>?script=viewItem&id=<?=$item['id']?>"
+                           aria-label="View details for <?=htmlspecialchars($item['title'])?>">
+                            <i class="fas fa-eye" aria-hidden="true"></i>
                             View
                         </a>
                     </div>
                     <div class="col-sm-6">
-                        <a href="<?=$_SERVER['PHP_SELF']?>?script=editItem&id=<?=$item['id']?>" class="btn btn-success btn-edit btn-block"
-                            style="opacity:1;">
-                            <i class="fas fa-edit"></i>
+                        <a href="<?=$_SERVER['PHP_SELF']?>?script=editItem&id=<?=$item['id']?>" 
+                           class="btn btn-success btn-edit btn-block"
+                           aria-label="Edit <?=htmlspecialchars($item['title'])?>">
+                            <i class="fas fa-edit" aria-hidden="true"></i>
                             Edit
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
+            </footer>
+        </article>
 </div>
         <?php endforeach; ?>
     </div>
-</div>
+</main>
 </div>
