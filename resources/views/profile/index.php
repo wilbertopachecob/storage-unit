@@ -4,6 +4,18 @@
  * Displays user profile with storage unit management
  */
 
+// Check authentication first
+if (!\StorageUnit\Models\User::isLoggedIn()) {
+    header('Location: /signIn.php');
+    exit;
+}
+
+$user = \StorageUnit\Models\User::getCurrentUser();
+if (!$user) {
+    header('Location: /signIn.php');
+    exit;
+}
+
 // Include header
 include __DIR__ . '/../header.php';
 ?>

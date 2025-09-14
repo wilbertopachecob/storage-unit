@@ -17,17 +17,6 @@ class ProfileController
      */
     public function index()
     {
-        if (!User::isLoggedIn()) {
-            header('Location: /signIn.php');
-            exit;
-        }
-
-        $user = User::getCurrentUser();
-        if (!$user) {
-            header('Location: /signIn.php');
-            exit;
-        }
-
         include __DIR__ . '/../../resources/views/profile/index.php';
     }
 
