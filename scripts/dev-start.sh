@@ -24,7 +24,7 @@ docker-compose -f docker-compose.dev.yml ps
 echo ""
 echo "✅ Development environment is ready!"
 echo "🌐 Application: http://localhost:8080"
-echo "🗄️  Database: localhost:3306"
+echo "🗄️  Database: localhost:3307 (external), db:3306 (internal)"
 echo "📊 phpMyAdmin: http://localhost:8081"
 echo ""
 echo "💡 Code changes will be reflected immediately without restarting containers!"
