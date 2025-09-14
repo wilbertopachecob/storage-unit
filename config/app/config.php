@@ -13,11 +13,11 @@ return [
     ],
     
     'database' => [
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'database' => 'storageunit',
-        'username' => 'root',
-        'password' => '',
+        'host' => $_ENV['DB_HOST'] ?? 'db',
+        'port' => $_ENV['DB_PORT'] ?? 3306,
+        'database' => $_ENV['DB_DATABASE'] ?? 'storageunit',
+        'username' => $_ENV['DB_USERNAME'] ?? 'root',
+        'password' => $_ENV['DB_PASSWORD'] ?? 'rootpassword',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
     ],

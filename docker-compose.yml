@@ -10,6 +10,8 @@ services:
       - session_data:/tmp/php_sessions
     depends_on:
       - db
+    env_file:
+      - docker.env
     environment:
       - DOCKER_ENV=true
     restart: unless-stopped

@@ -5,10 +5,10 @@ Welcome to the Storage Unit Management System documentation. This index provides
 ## 📚 Documentation Files
 
 ### Setup & Installation
-- **[QUICKSTART.md](QUICKSTART.md)** - Quick setup guide for getting started
-- **[LOCAL_SETUP.md](LOCAL_SETUP.md)** - Detailed local development setup instructions
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick Docker setup guide for getting started
+- **[DOCKER_ONLY_SETUP.md](DOCKER_ONLY_SETUP.md)** - Complete Docker-only setup guide
 - **[DOCKER_SETUP_COMPLETE.md](DOCKER_SETUP_COMPLETE.md)** - Docker setup and configuration guide
-- **[SETUP_SUMMARY.md](SETUP_SUMMARY.md)** - Summary of setup options and requirements
+- **[LOCAL_SETUP.md](LOCAL_SETUP.md)** - ⚠️ DEPRECATED - Local setup (use Docker instead)
 
 ### Development
 - **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development guidelines and best practices
@@ -19,12 +19,12 @@ Welcome to the Storage Unit Management System documentation. This index provides
 
 ### For New Users
 1. Start with [QUICKSTART.md](QUICKSTART.md) for a quick overview
-2. Follow [LOCAL_SETUP.md](LOCAL_SETUP.md) for detailed setup
+2. Follow [DOCKER_ONLY_SETUP.md](DOCKER_ONLY_SETUP.md) for complete setup
 3. Check [DEBUG.md](DEBUG.md) if you encounter issues
 
 ### For Developers
 1. Read [DEVELOPMENT.md](DEVELOPMENT.md) for coding standards
-2. Review [FILESYSTEM_IMPROVEMENTS.md](FILESYSTEM_IMPROVEMENTS.md) for project structure
+2. Review [DOCKER_ONLY_SETUP.md](DOCKER_ONLY_SETUP.md) for Docker development
 3. Use [DEBUG.md](DEBUG.md) for troubleshooting and logging
 
 ### For Docker Users

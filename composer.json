@@ -30,7 +30,14 @@
     },
     "scripts": {
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-html coverage"
+        "test-coverage": "phpunit --coverage-html coverage",
+        "docker:start": "docker-compose up -d",
+        "docker:stop": "docker-compose down",
+        "docker:restart": "docker-compose restart",
+        "docker:test": "docker-compose exec web phpunit",
+        "docker:migrate": "docker-compose exec web php scripts/run-migrations.php",
+        "docker:logs": "docker-compose logs -f",
+        "docker:db": "docker-compose exec db mysql -u root -prootpassword storageunit"
     },
     "config": {
         "optimize-autoloader": true,

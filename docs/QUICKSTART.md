@@ -2,7 +2,7 @@
 
 Get the Storage Unit Management System running in 5 minutes!
 
-## 🚀 Option 1: Docker (Easiest)
+## 🚀 Docker Setup (Only Method Supported)
 
 1. **Prerequisites**
    - Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -12,39 +12,37 @@ Get the Storage Unit Management System running in 5 minutes!
    docker-compose up -d
    ```
 
-3. **Access the Application**
-   - Web App: http://localhost:8080
-   - Database Admin: http://localhost:8081 (phpMyAdmin)
-
-4. **Test Login**
-   - Email: `admin@example.com`
-   - Password: `password123`
-
-## 🛠 Option 2: Local Development
-
-1. **Prerequisites**
-   - PHP 7.4+
-   - MySQL 5.7+
-   - Web server (Apache/Nginx) or PHP built-in server
-
-2. **Quick Setup**
+3. **Run Database Migrations**
    ```bash
-   # Run the setup script
-   ./setup.sh
-   ```
-
-3. **Start PHP Built-in Server**
-   ```bash
-   php -S localhost:8000
+   ./scripts/docker-migrate.sh
    ```
 
 4. **Access the Application**
-   - Web App: http://localhost:8000
+   - Web App: http://localhost:8080
+   - Database Admin: http://localhost:8081 (phpMyAdmin)
+
+5. **Test Login**
+   - Email: `admin@example.com`
+   - Password: `password123`
+
+## 🔧 Configuration
+
+1. **Google Maps Setup (Optional)**
+   ```bash
+   # Edit docker.env file
+   nano docker.env
+   # Add your Google Maps API key
+   GOOGLE_MAPS_API_KEY=your_actual_api_key_here
+   
+   # Restart containers
+   docker-compose restart
+   ```
 
 ## 📋 What You'll See
 
 - **Home Page**: Welcome screen with navigation
 - **Sign Up/Login**: User authentication
+- **Profile Page**: User profile with storage unit management
 - **Items List**: Grid view of your storage items
 - **Add Item**: Form to add new items with image upload
 - **Search**: Real-time search functionality
@@ -53,10 +51,12 @@ Get the Storage Unit Management System running in 5 minutes!
 ## 🎯 Key Features to Test
 
 1. **Create Account** → Register with email/password
-2. **Add Items** → Upload images and set quantities
-3. **Search Items** → Use the search bar to find items
-4. **Edit Items** → Modify item details and images
-5. **Delete Items** → Remove items from inventory
+2. **Set Storage Unit** → Configure your storage location with Google Maps
+3. **Upload Profile Picture** → Add a profile picture
+4. **Add Items** → Upload images and set quantities
+5. **Search Items** → Use the search bar to find items
+6. **Edit Items** → Modify item details and images
+7. **Delete Items** → Remove items from inventory
 
 ## 🔧 Troubleshooting
 
@@ -70,59 +70,43 @@ docker-compose logs
 
 # Restart services
 docker-compose restart
+
+# Rebuild containers
+docker-compose up -d --build
 ```
 
-### Local Setup Issues
+### Database Issues
 ```bash
-# Check PHP version
-php -v
-
-# Check MySQL status
-mysql --version
-
 # Check database connection
-mysql -u root -p -e "SHOW DATABASES;"
+docker-compose exec web php -r "echo 'Testing database connection...\n'; try { \$pdo = new PDO('mysql:host=db;dbname=storageunit', 'root', 'rootpassword'); echo 'Database connected successfully!\n'; } catch (Exception \$e) { echo 'Database connection failed: ' . \$e->getMessage() . '\n'; }"
+
+# Reset database
+docker-compose down -v
+docker-compose up -d
+./scripts/docker-migrate.sh
 ```
 
-### Common Problems
+### Migration Issues
+```bash
+# Run migrations manually
+docker-compose exec web php scripts/run-migrations.php
 
-1. **"Database connection failed"**
-   - Check MySQL is running
-   - Verify credentials in `lib/db/connection.php`
+# Check migration status
+docker-compose exec db mysql -u root -prootpassword -e "DESCRIBE storageunit.users;"
+```
 
-2. **"Permission denied" on uploads**
-   ```bash
-   chmod 755 uploads/
-   ```
+## 🧪 Testing
 
-3. **"Page not found" errors**
-   - Check web server configuration
-   - Ensure mod_rewrite is enabled (Apache)
+```bash
+# Run all tests
+docker-compose exec web composer test
 
-## 📱 Mobile Testing
+# Run specific test
+docker-compose exec web vendor/bin/phpunit tests/Unit/Controllers/ProfileControllerTest.php
+```
 
-The application is responsive! Test on mobile devices:
-- Open browser developer tools
-- Toggle device simulation
-- Test touch interactions
+## 📚 Next Steps
 
-## 🎨 Customization
-
-### Styling
-- Edit `public/css/style.css` for custom styles
-- Modify Bootstrap classes in HTML templates
-
-### Functionality
-- Add new routes in `lib/routes.php`
-- Create new views in `views/` directory
-- Extend models in `lib/db/Models/`
-
-## 📞 Need Help?
-
-1. Check the full [README.md](README.md) for detailed setup
-2. Review [DEVELOPMENT.md](DEVELOPMENT.md) for development info
-3. Create an issue in the repository
-
----
-
-**Happy coding! 🎉**
+- Read the [Development Guide](DEVELOPMENT.md) for development setup
+- Check [Docker Setup Complete](DOCKER_SETUP_COMPLETE.md) for detailed Docker configuration
+- Review [Debug Guide](DEBUG.md) for troubleshooting

@@ -55,27 +55,50 @@ storage-unit/
 
 ## 📋 Requirements
 
-- PHP 7.4 or higher
-- MySQL 5.7 or higher
-- Apache with mod_rewrite enabled
-- Composer for dependency management
+- Docker and Docker Compose
+- Git
 
 ## 🛠️ Installation
 
-### Using Docker (Recommended)
+### Docker Setup (Only Method Supported)
 
-1. Clone the repository
-2. Run `docker-compose up -d`
-3. Access the application at `http://localhost`
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/storage-unit.git
+   cd storage-unit
+   ```
 
-### Manual Installation
+2. **Start the application**
+   ```bash
+   docker-compose up -d
+   ```
 
-1. Clone the repository
-2. Install dependencies: `composer install`
-3. Configure database in `config/app/config.php`
-4. Import database schema: `mysql -u root -p storage_unit < config/database/database.sql`
-5. Set up web server to point to the `public/` directory
-6. Ensure `public/uploads/` is writable
+3. **Run database migrations**
+   ```bash
+   ./scripts/docker-migrate.sh
+   ```
+
+4. **Access the application**
+   - Web Application: http://localhost:8080
+   - phpMyAdmin: http://localhost:8081
+   - Default admin: admin@example.com / password123
+
+5. **Configure Google Maps (Optional)**
+   ```bash
+   # Edit docker.env file
+   nano docker.env
+   # Add your Google Maps API key
+   GOOGLE_MAPS_API_KEY=your_actual_api_key_here
+   
+   # Restart containers
+   docker-compose restart
+   ```
+
+### Docker Services
+
+- **Web Server**: Apache with PHP 8.4 on port 8080
+- **Database**: MySQL 8.0 on port 3307 (internal: 3306)
+- **phpMyAdmin**: Database management on port 8081
 
 ## 📚 Documentation
 
@@ -91,14 +114,16 @@ All detailed documentation is organized in the `docs/` folder:
 
 ## 🧪 Testing
 
-Run the test suite:
+Run the test suite in Docker:
 ```bash
-composer test
-```
+# Run all tests
+docker-compose exec web composer test
 
-Run tests with coverage:
-```bash
-composer test-coverage
+# Run tests with coverage
+docker-compose exec web composer test-coverage
+
+# Run specific test file
+docker-compose exec web vendor/bin/phpunit tests/Unit/Controllers/ProfileControllerTest.php
 ```
 
 ## 🔧 Configuration

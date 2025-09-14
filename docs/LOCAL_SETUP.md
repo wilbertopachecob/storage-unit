@@ -1,156 +1,36 @@
-# Local Development Setup (Without Docker)
+# Local Development Setup (DEPRECATED)
 
-Since Docker Desktop is having security issues on your Mac, here's how to run the Storage Unit Management System locally.
+> **⚠️ WARNING: This setup method is deprecated and no longer supported.**
+> 
+> The Storage Unit Management System now uses **Docker-only** deployment for consistency and reliability.
 
-## 🛠 Prerequisites
+## 🐳 Use Docker Instead
 
-You'll need to install:
+Please use the Docker setup instead:
 
-1. **PHP 7.4+**
-2. **MySQL 5.7+**
-3. **Web Server** (Apache/Nginx) or use PHP built-in server
+1. **Quick Start**: See [QUICKSTART.md](QUICKSTART.md)
+2. **Docker Setup**: See [DOCKER_SETUP_COMPLETE.md](DOCKER_SETUP_COMPLETE.md)
+3. **Main README**: See [README.md](../README.md)
 
-## 📦 Installation Steps
+## Why Docker-Only?
 
-### Step 1: Install PHP
+- **Consistency**: Same environment for all developers
+- **Reliability**: No local configuration issues
+- **Simplicity**: One-command setup
+- **Isolation**: No conflicts with local PHP/MySQL versions
+- **Production-like**: Matches production environment
 
-```bash
-# Install PHP using Homebrew
-brew install php
+## Migration from Local Setup
 
-# Install required PHP extensions
-brew install php-mysql php-gd php-mbstring
+If you were using local setup:
 
-# Verify installation
-php --version
-```
+1. **Stop local services** (Apache, MySQL, PHP)
+2. **Install Docker Desktop**
+3. **Follow Docker setup** in [QUICKSTART.md](QUICKSTART.md)
+4. **Your data will be preserved** in Docker volumes
 
-### Step 2: Install MySQL
+## Need Help?
 
-```bash
-# Install MySQL
-brew install mysql
-
-# Start MySQL service
-brew services start mysql
-
-# Secure MySQL installation (optional)
-mysql_secure_installation
-```
-
-### Step 3: Setup Database
-
-```bash
-# Connect to MySQL
-mysql -u root -p
-
-# Create database and user
-CREATE DATABASE storageunit;
-CREATE USER 'storageuser'@'localhost' IDENTIFIED BY 'storagepass';
-GRANT ALL PRIVILEGES ON storageunit.* TO 'storageuser'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-
-# Import database schema
-mysql -u root -p storageunit < database.sql
-```
-
-### Step 4: Configure Database Connection
-
-The database connection is already configured to work locally. Verify in `lib/db/connection.php`:
-
-```php
-// Local configuration (should be used when not in Docker)
-$user = 'root';
-$pass = '';  // Your MySQL root password
-$dbname = 'storageunit';
-$host = 'localhost';
-```
-
-### Step 5: Start Development Server
-
-```bash
-# Navigate to project directory
-cd /Users/wilbertopachecobatista/Projects/storage-unit
-
-# Start PHP built-in server
-php -S localhost:8000
-
-# Or use the setup script
-./setup.sh
-```
-
-### Step 6: Access Application
-
-- **Web App**: http://localhost:8000
-- **Test Account**: admin@example.com / password123
-
-## 🔧 Troubleshooting
-
-### PHP Issues
-```bash
-# Check PHP extensions
-php -m | grep -E "(pdo|mysql|gd|mbstring)"
-
-# If missing extensions, install them
-brew install php@7.4
-```
-
-### MySQL Issues
-```bash
-# Check MySQL status
-brew services list | grep mysql
-
-# Start MySQL if not running
-brew services start mysql
-
-# Check MySQL connection
-mysql -u root -p -e "SHOW DATABASES;"
-```
-
-### File Permissions
-```bash
-# Set proper permissions
-chmod 755 uploads/
-chmod 644 uploads/*
-```
-
-## 🎯 Quick Start Commands
-
-```bash
-# 1. Install dependencies
-brew install php mysql
-
-# 2. Start services
-brew services start mysql
-
-# 3. Setup database
-mysql -u root -p < database.sql
-
-# 4. Start development server
-php -S localhost:8000
-```
-
-## 📋 What You'll Have
-
-- ✅ Local PHP development server
-- ✅ MySQL database with sample data
-- ✅ All application features working
-- ✅ No Docker security issues
-- ✅ Easy debugging and development
-
-## 🔄 Switching Back to Docker Later
-
-Once you resolve the Docker security issue:
-
-1. Follow the steps in `DOCKER_SECURITY_FIX.md`
-2. Run `docker-compose up -d`
-3. Access at http://localhost:8080
-
-## 💡 Benefits of Local Setup
-
-- **Faster startup** - No container overhead
-- **Direct file access** - Edit files directly
-- **Better debugging** - Native PHP error reporting
-- **No security warnings** - Uses system PHP/MySQL
-- **Easier customization** - Full control over configuration
+- Check [QUICKSTART.md](QUICKSTART.md) for quick setup
+- Review [DOCKER_SETUP_COMPLETE.md](DOCKER_SETUP_COMPLETE.md) for detailed configuration
+- See [DEBUG.md](DEBUG.md) for troubleshooting

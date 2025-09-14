@@ -15,6 +15,7 @@ use StorageUnit\Database\Migrations\AddStorageUnitToUsers;
 
 try {
     echo "Running migrations...\n";
+    echo "Note: This script should be run inside Docker container or with Docker database accessible.\n";
     
     $migration = new AddStorageUnitToUsers();
     $migration->up();
@@ -24,5 +25,6 @@ try {
     
 } catch (Exception $e) {
     echo "Migration failed: " . $e->getMessage() . "\n";
+    echo "Make sure Docker database is running and accessible.\n";
     exit(1);
 }

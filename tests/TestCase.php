@@ -21,10 +21,11 @@ abstract class TestCase extends PHPUnitTestCase
         
         // Set up test environment
         $_ENV['APP_ENV'] = 'testing';
-        $_ENV['DB_HOST'] = 'localhost';
-        $_ENV['DB_NAME'] = 'storageunit_test';
-        $_ENV['DB_USER'] = 'root';
-        $_ENV['DB_PASS'] = '';
+        $_ENV['DB_HOST'] = 'db';
+        $_ENV['DB_DATABASE'] = 'storageunit_test';
+        $_ENV['DB_USERNAME'] = 'root';
+        $_ENV['DB_PASSWORD'] = 'rootpassword';
+        $_ENV['DB_PORT'] = '3306';
         $_ENV['APP_DEBUG'] = 'true';
         
         // Include config and constants
@@ -33,9 +34,9 @@ abstract class TestCase extends PHPUnitTestCase
         
         // Set up test database connection
         $this->pdo = new PDO(
-            'mysql:host=localhost;dbname=storageunit_test;charset=utf8mb4',
+            'mysql:host=db;dbname=storageunit_test;charset=utf8mb4',
             'root',
-            '',
+            'rootpassword',
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

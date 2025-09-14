@@ -1,4 +1,4 @@
-create # Development Guide
+# Development Guide
 
 This document provides detailed information for developers working on the Storage Unit Management System.
 
@@ -6,28 +6,29 @@ This document provides detailed information for developers working on the Storag
 
 ### Essential Tools
 
-1. **PHP 7.4+**
-   - Download from: https://www.php.net/downloads.php
-   - macOS: `brew install php`
-   - Ubuntu: `sudo apt install php php-mysql php-gd php-mbstring`
+1. **Docker & Docker Compose**
+   - Download from: https://www.docker.com/products/docker-desktop
+   - **Required**: The application only supports Docker deployment
 
-2. **MySQL 5.7+**
-   - Download from: https://dev.mysql.com/downloads/mysql/
-   - macOS: `brew install mysql`
-   - Ubuntu: `sudo apt install mysql-server`
+2. **Git**
+   - Download from: https://git-scm.com/downloads
+   - For version control
 
-3. **Web Server** (Choose one)
-   - **Apache**: https://httpd.apache.org/download.cgi
-   - **Nginx**: https://nginx.org/en/download.html
-   - **PHP Built-in Server**: Included with PHP
+### Development Environment
+
+The application runs entirely in Docker containers:
+- **Web Server**: Apache with PHP 8.4
+- **Database**: MySQL 8.0
+- **Admin Interface**: phpMyAdmin
 
 ### Optional Tools
 
-1. **Docker & Docker Compose**
-   - Download from: https://www.docker.com/products/docker-desktop
-   - For containerized development
+1. **IDE/Editor**
+   - **VS Code**: https://code.visualstudio.com/
+   - **PhpStorm**: https://www.jetbrains.com/phpstorm/
+   - **Sublime Text**: https://www.sublimetext.com/
 
-2. **phpMyAdmin**
+2. **Database Management**
    - Download from: https://www.phpmyadmin.net/downloads/
    - Web-based MySQL administration
    - Included in Docker setup
@@ -40,22 +41,7 @@ This document provides detailed information for developers working on the Storag
 
 ## 🔧 Development Environment Setup
 
-### Option 1: Traditional Setup
-
-1. **Install Prerequisites**
-   ```bash
-   # Run the setup script
-   ./setup.sh
-   ```
-
-2. **Manual Setup Steps**
-   - Install PHP with required extensions
-   - Install and configure MySQL
-   - Import database schema
-   - Configure web server
-   - Set file permissions
-
-### Option 2: Docker Setup (Recommended)
+### Docker Setup (Only Method Supported)
 
 1. **Install Docker**
    ```bash
@@ -71,10 +57,15 @@ This document provides detailed information for developers working on the Storag
    docker-compose up -d
    ```
 
-3. **Access Applications**
+3. **Run Database Migrations**
+   ```bash
+   ./scripts/docker-migrate.sh
+   ```
+
+4. **Access Applications**
    - Web App: http://localhost:8080
    - phpMyAdmin: http://localhost:8081
-   - MySQL: localhost:3306
+   - MySQL: localhost:3307 (external), 3306 (internal)
 
 ## 📁 Development Workflow
 
@@ -178,6 +169,22 @@ return $sql->execute();
    - Implement proper access controls
 
 ## 🧪 Testing
+
+### Running Tests in Docker
+
+```bash
+# Run all tests
+docker-compose exec web composer test
+
+# Run specific test file
+docker-compose exec web vendor/bin/phpunit tests/Unit/Controllers/ProfileControllerTest.php
+
+# Run tests with coverage
+docker-compose exec web composer test-coverage
+
+# Run tests with verbose output
+docker-compose exec web vendor/bin/phpunit --verbose
+```
 
 ### Manual Testing Checklist
 
