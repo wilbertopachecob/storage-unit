@@ -109,8 +109,37 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-#Mine
+# Project specific
 Notas.txt
 frontend/node_modules/*
+
+# Build artifacts
+public/static/js/main.*.js
+public/static/js/main.*.js.map
+public/static/js/main.*.LICENSE.txt
+public/static/css/main.*.css
+public/static/css/main.*.css.map
+
+# Development files
+cookies.txt
+composer.phar
+*.temp
+*.tmp
+
+# Empty directories
+app/Http/
+app/Services/
+app/Exceptions/
+resources/assets/
+storage/framework/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # End of https://www.gitignore.io/api/node,windows
