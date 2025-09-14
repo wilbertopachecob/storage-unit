@@ -2,9 +2,9 @@
 session_start();
 
 // Include necessary files
-include './lib/helpers.php';
-include './lib/guards.php';
-include './lib/signsHandlers.php';
+include __DIR__ . '/Helpers/helpers.php';
+include __DIR__ . '/Middleware/guards.php';
+include __DIR__ . '/signsHandlers.php';
 
 // If user is already logged in, redirect to items list
 if (isloggedIn()) {
