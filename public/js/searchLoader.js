@@ -52,7 +52,7 @@ function buildCards(items) {
             <div class="card-footer">
                 <div class="row">
                     <div class="col-sm-6 mb-2">
-                        <a class="btn btn-primary btn-view btn-block" href="#">
+                        <a class="btn btn-primary btn-view btn-block" href="/index.php?script=viewItem&id=${id}">
                             <i class="fas fa-eye"></i>
                             View
                         </a>

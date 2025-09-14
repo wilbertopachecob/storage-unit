@@ -59,7 +59,7 @@ $item['img'] = $item['img'] ?? 'image-not-found.png';
             <div class="card-footer">
                 <div class="row">
                     <div class="col-sm-6 mb-2">
-                        <a class="btn btn-primary btn-view btn-block" href="#">
+                        <a class="btn btn-primary btn-view btn-block" href="<?=$_SERVER['PHP_SELF']?>?script=viewItem&id=<?=$item['id']?>">
                             <i class="fas fa-eye"></i>
                             View
                         </a>

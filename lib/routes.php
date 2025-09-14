@@ -8,6 +8,9 @@ function router($script)
         case 'editItem':
             include './views/items/editItem.php';
             break;
+        case 'viewItem':
+            include './views/items/viewItem.php';
+            break;
         case 'addItem':
             include './views/items/addItem.php';
             break;

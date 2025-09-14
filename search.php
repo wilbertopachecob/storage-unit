@@ -66,10 +66,10 @@ foreach ($items as $item):
 	            <div class="card-footer">
 	                <div class="row">
 	                    <div class="col-sm-6 mb-2">
-	                        <a class="btn btn-primary btn-view btn-block" href="#">
-	                            <i class="fas fa-eye"></i>
-	                            View
-	                        </a>
+                        <a class="btn btn-primary btn-view btn-block" href="<?=$_SERVER['PHP_SELF']?>?script=viewItem&id=<?=$item['id']?>">
+                            <i class="fas fa-eye"></i>
+                            View
+                        </a>
 	                    </div>
 	                    <div class="col-sm-6">
 	                        <a href="<?=$_SERVER['PHP_SELF']?>?script=editItem&id=<?=$item['id']?>" class="btn btn-success btn-edit btn-block"

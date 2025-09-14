@@ -60,12 +60,17 @@ $(function () {
                     let description = [];
                     let btnEdit = [];
                     let btnView = [];
+                    let itemIds = [];
                     $.each(cardArray, function (index, value) {                      
                         titles.push($(value).find('.card-title').html());
                         qty.push($(value).find('.qty>span').html());
                         description.push($(value).find('.description').html());
                         btnEdit.push($(value).find('.card-footer a.btn-edit').get());
                         btnView.push($(value).find('.card-footer a.btn-view').get());
+                        // Extract ID from edit button URL
+                        let editUrl = $(value).find('.card-footer a.btn-edit').attr('href');
+                        let id = editUrl ? editUrl.split('id=')[1] : '';
+                        itemIds.push(id);
                     });
                     let tablePartial = '';
                     for (let i = 0; i < cardArray.length; i++) {
@@ -85,10 +90,10 @@ $(function () {
                                     ${description[i]}
                                     </td>
                                     <td>
-                                    <a href="${btnView[i]}" class="btn btn-primary mb-2">
+                                    <a href="/index.php?script=viewItem&id=${itemIds[i]}" class="btn btn-primary btn-view">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="${btnEdit[i]}" class="btn btn-success">
+                                    <a href="${btnEdit[i]}" class="btn btn-success btn-edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     </td>
