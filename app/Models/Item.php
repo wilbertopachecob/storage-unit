@@ -16,17 +16,21 @@ class Item
     private $description;
     private $qty;
     private $userId;
+    private $categoryId;
+    private $locationId;
     private $img;
     private $createdAt;
     private $updatedAt;
     private $db;
 
-    public function __construct($title = null, $description = null, $qty = 1, $userId = null, $img = null)
+    public function __construct($title = null, $description = null, $qty = 1, $userId = null, $img = null, $categoryId = null, $locationId = null)
     {
         $this->title = $title;
         $this->description = $description;
         $this->qty = $qty;
         $this->userId = $userId;
+        $this->categoryId = $categoryId;
+        $this->locationId = $locationId;
         $this->img = $img;
     }
 
@@ -36,6 +40,8 @@ class Item
     public function getDescription() { return $this->description; }
     public function getQty() { return $this->qty; }
     public function getUserId() { return $this->userId; }
+    public function getCategoryId() { return $this->categoryId; }
+    public function getLocationId() { return $this->locationId; }
     public function getImg() { return $this->img; }
     public function getCreatedAt() { return $this->createdAt; }
     public function getUpdatedAt() { return $this->updatedAt; }
@@ -45,6 +51,8 @@ class Item
     public function setDescription($description) { $this->description = $description; }
     public function setQty($qty) { $this->qty = $qty; }
     public function setUserId($userId) { $this->userId = $userId; }
+    public function setCategoryId($categoryId) { $this->categoryId = $categoryId; }
+    public function setLocationId($locationId) { $this->locationId = $locationId; }
     public function setImg($img) { $this->img = $img; }
     public function setDb($db) { $this->db = $db; }
     
@@ -63,13 +71,15 @@ class Item
             throw new \Exception('Invalid item data');
         }
 
-        $sql = "INSERT INTO items (title, description, qty, user_id, img) VALUES (:title, :description, :qty, :user_id, :img)";
+        $sql = "INSERT INTO items (title, description, qty, user_id, category_id, location_id, img) VALUES (:title, :description, :qty, :user_id, :category_id, :location_id, :img)";
         $stmt = $conn->prepare($sql);
         
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':qty', $this->qty);
         $stmt->bindParam(':user_id', $this->userId);
+        $stmt->bindParam(':category_id', $this->categoryId);
+        $stmt->bindParam(':location_id', $this->locationId);
         $stmt->bindParam(':img', $this->img);
 
         if ($stmt->execute()) {
@@ -92,12 +102,14 @@ class Item
             throw new \Exception('Invalid item data');
         }
 
-        $sql = "UPDATE items SET title = :title, description = :description, qty = :qty, img = :img WHERE id = :id AND user_id = :user_id";
+        $sql = "UPDATE items SET title = :title, description = :description, qty = :qty, category_id = :category_id, location_id = :location_id, img = :img WHERE id = :id AND user_id = :user_id";
         $stmt = $conn->prepare($sql);
         
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':qty', $this->qty);
+        $stmt->bindParam(':category_id', $this->categoryId);
+        $stmt->bindParam(':location_id', $this->locationId);
         $stmt->bindParam(':img', $this->img);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':user_id', $this->userId);
@@ -148,6 +160,8 @@ class Item
             $item->description = $itemData['description'];
             $item->qty = $itemData['qty'];
             $item->userId = $itemData['user_id'];
+            $item->categoryId = $itemData['category_id'];
+            $item->locationId = $itemData['location_id'];
             $item->img = $itemData['img'];
             $item->createdAt = $itemData['created_at'];
             $item->updatedAt = $itemData['updated_at'];
@@ -199,6 +213,84 @@ class Item
         $stmt->bindParam(':title', $searchTerm);
         $stmt->execute();
 
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Enhanced search with multiple criteria
+     */
+    public static function search($searchTerm, $userId, $categoryId = null, $locationId = null, $limit = null, $offset = 0)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT i.*, c.name as category_name, c.color as category_color, l.name as location_name 
+                FROM items i 
+                LEFT JOIN categories c ON i.category_id = c.id 
+                LEFT JOIN locations l ON i.location_id = l.id 
+                WHERE i.user_id = :user_id";
+        
+        $params = [':user_id' => $userId];
+
+        if (!empty($searchTerm)) {
+            $sql .= " AND (i.title LIKE :search_term OR i.description LIKE :search_term OR c.name LIKE :search_term OR l.name LIKE :search_term)";
+            $searchPattern = '%' . $searchTerm . '%';
+            $params[':search_term'] = $searchPattern;
+        }
+
+        if ($categoryId) {
+            $sql .= " AND i.category_id = :category_id";
+            $params[':category_id'] = $categoryId;
+        }
+
+        if ($locationId) {
+            $sql .= " AND i.location_id = :location_id";
+            $params[':location_id'] = $locationId;
+        }
+
+        $sql .= " ORDER BY i.updated_at DESC";
+
+        if ($limit) {
+            $sql .= " LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $limit;
+            $params[':offset'] = $offset;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Get items with category and location data
+     */
+    public static function getAllWithDetails($userId, $limit = null, $offset = 0)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT i.*, c.name as category_name, c.color as category_color, c.icon as category_icon, 
+                       l.name as location_name, l.parent_id as location_parent_id
+                FROM items i 
+                LEFT JOIN categories c ON i.category_id = c.id 
+                LEFT JOIN locations l ON i.location_id = l.id 
+                WHERE i.user_id = :user_id 
+                ORDER BY i.updated_at DESC";
+        
+        if ($limit) {
+            $sql .= " LIMIT :limit OFFSET :offset";
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $userId);
+        
+        if ($limit) {
+            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 
@@ -265,6 +357,8 @@ class Item
             'description' => $this->description,
             'qty' => $this->qty,
             'user_id' => $this->userId,
+            'category_id' => $this->categoryId,
+            'location_id' => $this->locationId,
             'img' => $this->img,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt

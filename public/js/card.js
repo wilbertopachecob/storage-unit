@@ -61,6 +61,7 @@ $(function () {
                     let btnEdit = [];
                     let btnView = [];
                     let itemIds = [];
+                    let updatedAt = [];
                     $.each(cardArray, function (index, value) {                      
                         titles.push($(value).find('.card-title').html());
                         qty.push($(value).find('.qty>span').html());
@@ -71,6 +72,10 @@ $(function () {
                         let editUrl = $(value).find('.card-footer a.btn-edit').attr('href');
                         let id = editUrl ? editUrl.split('id=')[1] : '';
                         itemIds.push(id);
+                        // Extract updated_at from the last updated text
+                        let updatedText = $(value).find('.card-text small').text();
+                        let updatedMatch = updatedText.match(/Last updated: (.+)/);
+                        updatedAt.push(updatedMatch ? updatedMatch[1] : 'Unknown');
                     });
                     let tablePartial = '';
                     for (let i = 0; i < cardArray.length; i++) {
@@ -88,6 +93,12 @@ $(function () {
                                     </td>
                                     <td>
                                     ${description[i]}
+                                    </td>
+                                    <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock" aria-hidden="true"></i>
+                                        ${updatedAt[i]}
+                                    </small>
                                     </td>
                                     <td>
                                     <a href="/index.php?script=viewItem&id=${itemIds[i]}" class="btn btn-primary btn-view">
@@ -108,6 +119,7 @@ $(function () {
                 <th scope="col">Title</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Description</th>
+                <th scope="col">Last Updated</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>

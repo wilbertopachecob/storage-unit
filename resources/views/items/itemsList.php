@@ -65,6 +65,12 @@ $item['img'] = $item['img'] ?? 'image-not-found.png';
                 <p class="card-text description">
                     <?=htmlspecialchars($description)?>
                 </p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-clock" aria-hidden="true"></i>
+                        Last updated: <?=date('M j, Y g:i A', strtotime($item['updated_at']))?>
+                    </small>
+                </p>
             </div>
             <footer class="card-footer">
                 <div class="row">

@@ -8,6 +8,8 @@ namespace StorageUnit\Controllers;
 
 use StorageUnit\Models\Item;
 use StorageUnit\Models\User;
+use StorageUnit\Models\Category;
+use StorageUnit\Models\Location;
 use StorageUnit\Core\Security;
 
 class ItemController
@@ -22,10 +24,14 @@ class ItemController
             throw new \Exception('User not authenticated');
         }
 
-        $items = Item::getAllForUser($user->getId());
+        $items = Item::getAllWithDetails($user->getId());
+        $categories = Category::getAllForUser($user->getId());
+        $locations = Location::getAllForUser($user->getId());
         
         return [
             'items' => $items,
+            'categories' => $categories,
+            'locations' => $locations,
             'total_quantity' => Item::getTotalQuantityForUser($user->getId()),
             'total_count' => Item::getCountForUser($user->getId())
         ];

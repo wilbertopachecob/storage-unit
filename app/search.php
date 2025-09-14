@@ -62,6 +62,12 @@ foreach ($items as $item):
 	                <p class="card-text description">
 	                    <?=$description?>
 	                </p>
+	                <p class="card-text">
+	                    <small class="text-muted">
+	                        <i class="fas fa-clock" aria-hidden="true"></i>
+	                        Last updated: <?=date('M j, Y g:i A', strtotime($item['updated_at']))?>
+	                    </small>
+	                </p>
 	            </div>
 	            <div class="card-footer">
 	                <div class="row">

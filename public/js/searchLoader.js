@@ -48,6 +48,19 @@ function buildCards(items) {
                 <p class="card-text description">
                   ${description}
                 </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <i class="fas fa-clock" aria-hidden="true"></i>
+                    Last updated: ${item.updated_at ? new Date(item.updated_at).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true 
+                    }) : 'Unknown'}
+                  </small>
+                </p>
             </div>
             <div class="card-footer">
                 <div class="row">
