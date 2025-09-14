@@ -3,7 +3,8 @@ function isloggedIn(): bool{
     if(!isset($_SESSION)){
         session_start();
     }
-    if(isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])){
+    // Check if user_id exists and is not empty, and also verify it's a valid integer
+    if(isset($_SESSION['user_id']) && !empty($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])){
         return true;
     }
     return false;
