@@ -4,8 +4,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      # Mount only the public directory for proper DocumentRoot handling
-      - ./public:/var/www/html/public
+      # Mount the entire project for proper file access
+      - .:/var/www/html
       # Keep uploads and sessions as separate volumes
       - session_data:/tmp/php_sessions
     depends_on:

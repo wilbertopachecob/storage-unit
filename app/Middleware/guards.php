@@ -37,5 +37,9 @@ function accesingFiles(): void{
     }
 }
 
-accesingFiles();
+// Only call accesingFiles() if we're not in a direct file access context
+// This prevents issues when including guards.php in files like analytics.php
+if (basename($_SERVER['PHP_SELF']) !== 'analytics.php') {
+    accesingFiles();
+}
 
