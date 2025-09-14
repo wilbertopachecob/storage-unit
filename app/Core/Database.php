@@ -13,9 +13,11 @@ class Database
 {
     private static $instance = null;
     private $connection;
+    private $logger;
 
     private function __construct()
     {
+        $this->logger = LoggerFactory::getLogger('database');
         $this->connect();
     }
 
@@ -44,8 +46,23 @@ class Database
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES " . DB_CHARSET
             ];
 
+            $this->logger->info('Attempting database connection', [
+                'host' => DB_HOST,
+                'database' => DB_DATABASE,
+                'charset' => DB_CHARSET
+            ]);
+
             $this->connection = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
+            
+            $this->logger->info('Database connection established successfully');
         } catch (PDOException $e) {
+            $this->logger->error('Database connection failed', [
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'host' => DB_HOST,
+                'database' => DB_DATABASE
+            ]);
+            
             if (APP_DEBUG) {
                 throw new PDOException('Database connection failed: ' . $e->getMessage());
             } else {

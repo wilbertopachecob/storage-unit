@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="<?=$_SERVER['PHP_SELF']?>">Storage Unit</a>
+  <a class="navbar-brand" href="/index.php">Storage Unit</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -15,8 +15,8 @@ if (isloggedIn()):
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <!-- Pointing the link to index.php to load the right script there-->
-          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF']?>?script=itemsList">View Items List</a>
-          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF']?>?script=addItem">Add Item</a>
+          <a class="dropdown-item" href="/index.php?script=itemsList">View Items List</a>
+          <a class="dropdown-item" href="/index.php?script=addItem">Add Item</a>
         </div>
       </li>
       <li class="nav-item">
@@ -37,21 +37,21 @@ if (isloggedIn()):
 if (!isloggedIn()):
 ?>
       <li class="nav-item">
-        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?script=signUp"><i class="fas fa-user-plus"></i> Sign Up</a>
+        <a class="nav-link" href="/signUp.php"><i class="fas fa-user-plus"></i> Sign Up</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?script=signIn"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+        <a class="nav-link" href="/signIn.php"><i class="fas fa-sign-in-alt"></i> Sign in</a>
       </li>
       <?php else: ?>
       <li class="nav-item">
-        <a class="nav-link" href="<?=$_SERVER['PHP_SELF']?>?sign=out"> <i class="fas fa-sign-out-alt"></i> Sign out</a>
+        <a class="nav-link" href="/index.php?sign=out"> <i class="fas fa-sign-out-alt"></i> Sign out</a>
       </li>
       <?php endif;?>
     </ul>
     <?php
 if (isloggedIn()):
 ?>
-    <form class="form-inline my-2 my-lg-0" method="POST" action="<?=$_SERVER['PHP_SELF']?>?script=search">
+    <form class="form-inline my-2 my-lg-0" method="POST" action="/index.php?script=search">
       <input name="searchTerm" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>

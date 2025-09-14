@@ -38,4 +38,25 @@ return [
         'uploads' => 'public/uploads',
         'base_url' => 'http://localhost',
     ],
+    
+    'logging' => [
+        'default' => [
+            'type' => 'file',
+            'path' => 'storage/logs/app.log',
+            'max_file_size' => 10485760, // 10MB
+            'max_files' => 5,
+        ],
+        'database' => [
+            'type' => 'file',
+            'path' => 'storage/logs/database.log',
+            'max_file_size' => 5242880, // 5MB
+            'max_files' => 3,
+        ],
+        'auth' => [
+            'type' => 'file',
+            'path' => 'storage/logs/auth.log',
+            'max_file_size' => 5242880, // 5MB
+            'max_files' => 3,
+        ],
+    ],
 ];

@@ -4,6 +4,9 @@
  * Implements PSR-4 autoloading standard
  */
 
+// Load constants first
+require_once __DIR__ . '/constants.php';
+
 spl_autoload_register(function ($class) {
     // Convert namespace to file path
     $prefix = 'StorageUnit\\';
@@ -40,6 +43,9 @@ spl_autoload_register(function ($class) {
         'StorageUnit\\Models\\User' => $project_root . '/app/Models/User.php',
         'StorageUnit\\Models\\Item' => $project_root . '/app/Models/Item.php',
         'StorageUnit\\Controllers\\ItemController' => $project_root . '/app/Controllers/ItemController.php',
+        'StorageUnit\\Core\\LoggerInterface' => $project_root . '/app/Core/LoggerInterface.php',
+        'StorageUnit\\Core\\FileLogger' => $project_root . '/app/Core/FileLogger.php',
+        'StorageUnit\\Core\\LoggerFactory' => $project_root . '/app/Core/LoggerFactory.php',
     ];
     
     if (isset($legacy_map[$class])) {

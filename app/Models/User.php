@@ -74,6 +74,14 @@ class User
     }
 
     /**
+     * Add user (alias for create)
+     */
+    public function addUser()
+    {
+        return $this->create();
+    }
+
+    /**
      * Authenticate user
      */
     public function authenticate()
@@ -98,6 +106,14 @@ class User
         }
 
         return false;
+    }
+
+    /**
+     * Login user (alias for authenticate)
+     */
+    public function login()
+    {
+        return $this->authenticate();
     }
 
     /**

@@ -29,7 +29,7 @@
                     <?php unset($_SESSION['login_success']); ?>
                 <?php endif; ?>
 
-                <form method="post" action="<?=$_SERVER['PHP_SELF']?>" novalidate>
+                <form method="post" action="/signIn.php" novalidate>
                     <input type="hidden" name="sign" value="in">
                     <div class="mb-4">
                         <label for="email" class="font-weight-bold">Email Address</label>
@@ -73,7 +73,7 @@
                     <div class="text-center">
                         <p class="text-muted mb-0">
                             Don't have an account? 
-                            <a href="<?=$_SERVER['PHP_SELF']?>?script=signUp" class="text-primary font-weight-bold">
+                            <a href="/signUp.php" class="text-primary font-weight-bold">
                                 Sign up here
                             </a>
                         </p>

@@ -31,6 +31,7 @@ storage-unit/
 ├── storage/                      # Storage Directories
 │   ├── logs/                     # Log Files
 │   └── framework/                # Framework Cache
+├── docs/                         # Documentation Files
 ├── tests/                        # Test Suites
 │   ├── Unit/                     # Unit Tests
 │   ├── Feature/                  # Feature Tests
@@ -75,6 +76,18 @@ storage-unit/
 4. Import database schema: `mysql -u root -p storage_unit < config/database/database.sql`
 5. Set up web server to point to the `public/` directory
 6. Ensure `public/uploads/` is writable
+
+## 📚 Documentation
+
+All detailed documentation is organized in the `docs/` folder:
+
+- **[docs/INDEX.md](docs/INDEX.md)** - Documentation index and navigation
+- **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - Quick setup guide
+- **[docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md)** - Local development setup
+- **[docs/DOCKER_SETUP_COMPLETE.md](docs/DOCKER_SETUP_COMPLETE.md)** - Docker setup guide
+- **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Development guidelines
+- **[docs/FILESYSTEM_IMPROVEMENTS.md](docs/FILESYSTEM_IMPROVEMENTS.md)** - Project structure improvements
+- **[docs/DEBUG.md](docs/DEBUG.md)** - Debugging and logging guide
 
 ## 🧪 Testing
 

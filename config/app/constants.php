@@ -17,7 +17,7 @@ define('APP_URL', $config['app']['url']);
 define('DB_HOST', $config['database']['host']);
 define('DB_PORT', $config['database']['port']);
 // Use test database for testing environment
-define('DB_DATABASE', $_ENV['APP_ENV'] === 'testing' ? 'storageunit_test' : $config['database']['database']);
+define('DB_DATABASE', (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'testing') ? 'storageunit_test' : $config['database']['database']);
 define('DB_USERNAME', $config['database']['username']);
 define('DB_PASSWORD', $config['database']['password']);
 define('DB_CHARSET', $config['database']['charset']);
