@@ -18,5 +18,8 @@ if (!isloggedIn()) {
     exit;
 }
 
+// Add a comment to test live reload
+// This change should be visible immediately without restarting Docker
+
 // Include the analytics dashboard view
 include_once __DIR__ . '/../resources/views/analytics/dashboard.php';

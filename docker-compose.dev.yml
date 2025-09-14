@@ -1,6 +1,6 @@
 services:
   web:
-    image: php:8.4-apache
+    image: webdevops/php-apache:8.4
     ports:
       - "8080:80"
     volumes:
@@ -8,29 +8,12 @@ services:
       - .:/var/www/html
       # Keep uploads and sessions as separate volumes
       - session_data:/tmp/php_sessions
-      # Mount Apache configuration
-      - ./docker/apache-config.conf:/etc/apache2/sites-available/000-default.conf
-      # Mount PHP session configuration
-      - ./docker/php-session.ini:/usr/local/etc/php/conf.d/session.ini
     depends_on:
       - db
     environment:
       - DOCKER_ENV=true
+      - WEB_DOCUMENT_ROOT=/var/www/html/public
     restart: unless-stopped
-    command: >
-      bash -c "
-        apt-get update &&
-        apt-get install -y libpng-dev libonig-dev libxml2-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev &&
-        docker-php-ext-configure gd --with-freetype --with-jpeg &&
-        docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip fileinfo &&
-        a2enmod rewrite headers &&
-        a2dissite 000-default &&
-        a2ensite 000-default &&
-        mkdir -p /var/www/html/public/uploads /tmp/php_sessions &&
-        chown -R www-data:www-data /tmp/php_sessions &&
-        chmod -R 755 /tmp/php_sessions &&
-        apache2-foreground
-      "
 
   db:
     image: mysql:8.0
