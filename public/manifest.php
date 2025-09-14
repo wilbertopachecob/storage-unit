@@ -1,15 +1,18 @@
 <?php
 /**
- * Serve manifest.json with proper headers
+ * Asset Manifest Endpoint
+ * Serves the React app asset manifest
  */
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-$manifestPath = __DIR__ . '/manifest.json';
+$manifestPath = __DIR__ . '/asset-manifest.json';
+
 if (file_exists($manifestPath)) {
-    readfile($manifestPath);
+    echo file_get_contents($manifestPath);
 } else {
     http_response_code(404);
-    echo json_encode(['error' => 'Manifest not found']);
+    echo json_encode(['error' => 'Asset manifest not found']);
 }
 ?>

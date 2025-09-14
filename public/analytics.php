@@ -39,20 +39,17 @@ include_once __DIR__ . '/../resources/views/header.php';
 
 <!-- Load React App from build directory -->
 <script>
-// React app file manifest (embedded to avoid server config issues)
-const manifest = {
-    css: 'main.f544adf9.css',
-    js: 'main.d4778753.js'
-};
-
-// Check if React app is built and available
-const checkReactApp = async () => {
+// Load React app using asset manifest
+const loadReactApp = async () => {
     try {
+        // Fetch the asset manifest to get current file names
+        const manifestResponse = await fetch('/manifest.php');
+        const manifest = await manifestResponse.json();
         
         // Load CSS first
         const cssLink = document.createElement('link');
         cssLink.rel = 'stylesheet';
-        cssLink.href = `/static/css/${manifest.css}`;
+        cssLink.href = manifest.files['main.css'];
         document.head.appendChild(cssLink);
         
         // Clear the loading content before loading React
@@ -60,7 +57,7 @@ const checkReactApp = async () => {
         
         // Load the React app bundle
         const script = document.createElement('script');
-        script.src = `/static/js/${manifest.js}`;
+        script.src = manifest.files['main.js'];
         script.onload = () => {
             console.log('✅ React app loaded successfully');
             // Give React a moment to initialize
@@ -112,7 +109,7 @@ const checkReactApp = async () => {
 };
 
 // Initialize when page loads
-document.addEventListener('DOMContentLoaded', checkReactApp);
+document.addEventListener('DOMContentLoaded', loadReactApp);
 </script>
 
 <?php

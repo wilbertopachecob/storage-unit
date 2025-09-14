@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { RecentItemsProps, Item } from '@/types';
 import './RecentItems.css';
 
 const RecentItems: React.FC<RecentItemsProps> = ({ items }) => {
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
+
   if (!items || items.length === 0) {
     return (
       <Card className="analytics-card">
@@ -28,6 +30,36 @@ const RecentItems: React.FC<RecentItemsProps> = ({ items }) => {
     });
   };
 
+  const handleImageError = (itemId: number) => {
+    setImageErrors(prev => new Set(prev).add(itemId));
+  };
+
+  const renderItemImage = (item: Item) => {
+    const hasImage = item.img && item.img.trim() !== '';
+    const hasError = imageErrors.has(item.id);
+
+    if (!hasImage || hasError) {
+      // Show a proper placeholder with icon instead of text
+      return (
+        <div className="item-image-placeholder">
+          <i className="fas fa-image text-muted"></i>
+          <small className="d-block text-muted mt-1">No Image</small>
+        </div>
+      );
+    }
+
+    return (
+      <div className="item-image">
+        <img 
+          src={`/uploads/${item.img}`} 
+          alt={item.title}
+          className="img-thumbnail"
+          onError={() => handleImageError(item.id)}
+        />
+      </div>
+    );
+  };
+
   return (
     <Card className="analytics-card">
       <Card.Header>
@@ -43,15 +75,7 @@ const RecentItems: React.FC<RecentItemsProps> = ({ items }) => {
               <div className="recent-item-card">
                 <div className="item-header">
                   <h6 className="item-title">{item.title}</h6>
-                  {item.img && (
-                    <div className="item-image">
-                      <img 
-                        src={`${process.env.REACT_APP_API_URL || 'http://localhost:8080'}/uploads/${item.img}`} 
-                        alt={item.title}
-                        className="img-thumbnail"
-                      />
-                    </div>
-                  )}
+                  {renderItemImage(item)}
                 </div>
                 <div className="item-details">
                   <p className="item-info">
