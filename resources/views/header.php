@@ -74,7 +74,7 @@
           
           <!-- Analytics Link -->
           <li class="nav-item" role="none">
-            <a class="nav-link" href="/analytics.php" role="menuitem">
+            <a class="nav-link" href="/index.php?script=analytics" role="menuitem">
               <i class="fas fa-chart-line" aria-hidden="true"></i> Analytics
             </a>
           </li>
