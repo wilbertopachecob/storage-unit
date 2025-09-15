@@ -69,6 +69,8 @@ CREATE TABLE item_tags (
 - Location-based search and filtering
 - Visual location mapping
 - Location utilization reports
+- **Garage Storage Support** - Allow users to store items in their personal garage
+- **Multi-location Management** - Support both storage units and personal garages
 
 **Database Schema**:
 ```sql
@@ -77,6 +79,7 @@ CREATE TABLE locations (
     name VARCHAR(100) NOT NULL,
     parent_id INT NULL,
     user_id INT NOT NULL,
+    location_type ENUM('storage_unit', 'garage', 'room', 'shelf', 'box') DEFAULT 'room',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (parent_id) REFERENCES locations(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -103,7 +106,53 @@ ALTER TABLE items ADD FOREIGN KEY (location_id) REFERENCES locations(id);
 - Save frequently used searches
 - Search suggestions based on history
 
-#### 5. 📈 Analytics & Reporting
+#### 5. 🤖 AI-Powered Room Placement Suggestions
+**Impact**: High | **Effort**: High | **Timeline**: 6-8 weeks
+
+- **Smart Placement Algorithm** - AI analyzes room photos and object dimensions to suggest optimal placement
+- **Computer Vision Integration** - Process room images to identify available spaces and constraints
+- **Object Recognition** - Identify objects in photos and suggest compatible storage locations
+- **Space Optimization** - Recommend efficient use of available space in rooms/garages
+- **3D Visualization** - Show suggested placements in a visual interface
+- **Learning System** - Improve suggestions based on user feedback and successful placements
+
+**Technical Implementation**:
+- Integrate with AI/ML services (OpenAI Vision API, Google Cloud Vision, or custom models)
+- Image processing pipeline for room analysis
+- Object detection and dimension estimation
+- Space calculation algorithms
+- User feedback loop for continuous improvement
+
+**Implementation Guides**:
+- 📋 [Complete Implementation Path](docs/AI_PLACEMENT_IMPLEMENTATION.md) - Detailed technical roadmap
+- ⚡ [Quick Start Guide](docs/AI_PLACEMENT_QUICKSTART.md) - Get started in 30 minutes
+- 🔍 [AI Tools Analysis](docs/AI_TOOLS_ANALYSIS.md) - Comprehensive comparison of AI services and PHP libraries
+
+**Database Schema**:
+```sql
+CREATE TABLE room_placements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    room_image_path VARCHAR(255) NOT NULL,
+    object_image_path VARCHAR(255) NOT NULL,
+    suggested_location VARCHAR(100) NOT NULL,
+    confidence_score DECIMAL(3,2) DEFAULT 0.00,
+    user_feedback ENUM('accepted', 'rejected', 'modified') NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE room_analyses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    room_image_path VARCHAR(255) NOT NULL,
+    available_spaces JSON,
+    room_dimensions JSON,
+    constraints JSON,
+    analyzed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### 6. 📈 Analytics & Reporting
 **Impact**: High | **Effort**: Medium | **Timeline**: 3-4 weeks
 
 - Item count by category and location
@@ -122,7 +171,7 @@ ALTER TABLE items ADD FOREIGN KEY (location_id) REFERENCES locations(id);
 
 ### **MEDIUM PRIORITY (Enhanced User Experience)**
 
-#### 6. 🔍 Barcode/QR Code Support
+#### 7. 🔍 Barcode/QR Code Support
 **Impact**: Medium | **Effort**: Medium | **Timeline**: 4-6 weeks
 
 - Generate QR codes for items
@@ -137,7 +186,7 @@ ALTER TABLE items ADD FOREIGN KEY (location_id) REFERENCES locations(id);
 - Create barcode lookup system
 - Implement bulk import features
 
-#### 7. 📅 Expiration & Maintenance Tracking
+#### 8. 📅 Expiration & Maintenance Tracking
 **Impact**: Medium | **Effort**: Medium | **Timeline**: 3-4 weeks
 
 - Expiration dates for perishable items
@@ -160,7 +209,7 @@ CREATE TABLE item_maintenance (
 );
 ```
 
-#### 8. 👥 Multi-User & Sharing
+#### 9. 👥 Multi-User & Sharing
 **Impact**: Medium | **Effort**: High | **Timeline**: 6-8 weeks
 
 - Family/household sharing
@@ -174,7 +223,7 @@ CREATE TABLE item_maintenance (
 - **User**: Can add, edit, delete own items
 - **Viewer**: Read-only access to shared items
 
-#### 9. 🔔 Notification System
+#### 10. 🔔 Notification System
 **Impact**: Medium | **Effort**: Medium | **Timeline**: 3-4 weeks
 
 - Email notifications for important events
@@ -191,7 +240,7 @@ CREATE TABLE item_maintenance (
 - System updates
 - User activity notifications
 
-#### 10. 📱 API & Integration
+#### 11. 📱 API & Integration
 **Impact**: Medium | **Effort**: High | **Timeline**: 6-8 weeks
 
 - RESTful API for third-party integrations
@@ -210,7 +259,7 @@ CREATE TABLE item_maintenance (
 
 ### **LOW PRIORITY (Advanced Features)**
 
-#### 11. 💰 Value Tracking
+#### 12. 💰 Value Tracking
 **Impact**: Low | **Effort**: Medium | **Timeline**: 4-6 weeks
 
 - Item value estimation
@@ -219,7 +268,7 @@ CREATE TABLE item_maintenance (
 - Insurance value reports
 - Total inventory value
 
-#### 12. 📦 Inventory Management
+#### 13. 📦 Inventory Management
 **Impact**: Low | **Effort**: High | **Timeline**: 8-10 weeks
 
 - Stock level monitoring
@@ -228,7 +277,7 @@ CREATE TABLE item_maintenance (
 - Purchase history tracking
 - Cost analysis
 
-#### 13. 🖼️ Advanced Media Support
+#### 14. 🖼️ Advanced Media Support
 **Impact**: Low | **Effort**: Medium | **Timeline**: 3-4 weeks
 
 - Multiple images per item
@@ -237,7 +286,7 @@ CREATE TABLE item_maintenance (
 - Document storage (receipts, manuals, warranties)
 - Image optimization and compression
 
-#### 14. 🌐 Cloud Sync & Backup
+#### 15. 🌐 Cloud Sync & Backup
 **Impact**: Low | **Effort**: High | **Timeline**: 8-10 weeks
 
 - Automatic cloud backup
@@ -246,7 +295,7 @@ CREATE TABLE item_maintenance (
 - Version history and rollback
 - Multi-device conflict resolution
 
-#### 15. 🎨 UI/UX Enhancements
+#### 16. 🎨 UI/UX Enhancements
 **Impact**: Low | **Effort**: Medium | **Timeline**: 4-6 weeks
 
 - Dark mode support
@@ -258,7 +307,7 @@ CREATE TABLE item_maintenance (
 
 ### **TECHNICAL IMPROVEMENTS**
 
-#### 16. 🔒 Enhanced Security
+#### 17. 🔒 Enhanced Security
 **Impact**: High | **Effort**: Medium | **Timeline**: 2-3 weeks
 
 - Two-factor authentication (2FA)
@@ -267,7 +316,7 @@ CREATE TABLE item_maintenance (
 - Audit logging and monitoring
 - Rate limiting and DDoS protection
 
-#### 17. ⚡ Performance Optimization
+#### 18. ⚡ Performance Optimization
 **Impact**: Medium | **Effort**: Medium | **Timeline**: 3-4 weeks
 
 - Image optimization and compression
@@ -276,7 +325,7 @@ CREATE TABLE item_maintenance (
 - Database indexing optimization
 - CDN integration for static assets
 
-#### 18. 📱 Progressive Web App
+#### 19. 📱 Progressive Web App
 **Impact**: Medium | **Effort**: High | **Timeline**: 6-8 weeks
 
 - Offline functionality
@@ -285,7 +334,7 @@ CREATE TABLE item_maintenance (
 - Install prompts
 - Background sync
 
-#### 19. 🔧 Developer Features
+#### 20. 🔧 Developer Features
 **Impact**: Low | **Effort**: High | **Timeline**: 8-10 weeks
 
 - Plugin system for extensions
@@ -294,7 +343,7 @@ CREATE TABLE item_maintenance (
 - Comprehensive API documentation
 - Developer tools and debugging
 
-#### 20. 📊 Advanced Analytics
+#### 21. 📊 Advanced Analytics
 **Impact**: Low | **Effort**: High | **Timeline**: 6-8 weeks
 
 - Usage statistics and metrics
@@ -355,14 +404,14 @@ CREATE TABLE item_maintenance (
 
 - 🔧 Plugin System
 - 🏠 Smart Home Integration
-- 🤖 AI-powered features
+- 🤖 AI-powered Room Placement Suggestions
 - 📊 Advanced Analytics
 - 🌐 Full Cloud Sync
 
 **Deliverables**:
 - Extensible plugin architecture
 - Smart home connectivity
-- AI-powered recommendations
+- AI-powered room placement recommendations
 - Enterprise analytics
 
 ## 💡 Quick Wins (Can be implemented immediately)
@@ -371,6 +420,7 @@ CREATE TABLE item_maintenance (
 1. **Add Categories Table** - Simple database addition with basic CRUD
 2. **Add Location Field** - Basic location tracking for items
 3. **Add Tags Support** - Simple tagging system
+4. **Add Garage Storage Support** - Extend location types to include garage storage
 
 ### **Week 3-4: UI Improvements**
 4. **Enhanced Search** - Add description and category search
@@ -429,7 +479,8 @@ CREATE TABLE item_maintenance (
 
 ### **Feature Adoption**
 - Category usage rate
-- Location tracking adoption
+- Location tracking adoption (including garage storage)
+- AI placement suggestion usage
 - Mobile app installs
 - API usage statistics
 
