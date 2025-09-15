@@ -30,7 +30,7 @@ if (isset($signParam)) {
                 exit;
             }
             
-            $user = new \StorageUnit\Models\User($email, $password, null);
+            $user = new \StorageUnit\Models\User(null, $email, $password);
             try {
                 $result = $user->login();
                 

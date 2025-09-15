@@ -95,7 +95,7 @@ class AuthController
 
                 if (empty($errors)) {
                     try {
-                        $user = new \StorageUnit\Models\User($email, $password);
+                        $user = new \StorageUnit\Models\User(null, $email, $password);
                         if ($user->authenticate()) {
                             $success = true;
                             // Redirect to dashboard after successful login
