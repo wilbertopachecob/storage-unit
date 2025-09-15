@@ -19,13 +19,13 @@ abstract class TestCase extends PHPUnitTestCase
     {
         parent::setUp();
         
-        // Set up test environment
+        // Set up test environment BEFORE including config files
         $_ENV['APP_ENV'] = 'testing';
-        $_ENV['DB_HOST'] = 'db';
+        $_ENV['DB_HOST'] = '127.0.0.1';
         $_ENV['DB_DATABASE'] = 'storageunit_test';
         $_ENV['DB_USERNAME'] = 'root';
         $_ENV['DB_PASSWORD'] = 'rootpassword';
-        $_ENV['DB_PORT'] = '3306';
+        $_ENV['DB_PORT'] = '3307';
         $_ENV['APP_DEBUG'] = 'true';
         
         // Include config and constants
@@ -34,7 +34,7 @@ abstract class TestCase extends PHPUnitTestCase
         
         // Set up test database connection
         $this->pdo = new PDO(
-            'mysql:host=db;dbname=storageunit_test;charset=utf8mb4',
+            'mysql:host=127.0.0.1;port=3307;dbname=storageunit_test;charset=utf8mb4',
             'root',
             'rootpassword',
             [
@@ -43,6 +43,9 @@ abstract class TestCase extends PHPUnitTestCase
                 PDO::ATTR_EMULATE_PREPARES => false
             ]
         );
+        
+        // Reset the Database singleton to use test connection
+        $this->resetDatabaseSingleton();
         
         // Clear and recreate test data
         $this->resetDatabase();
@@ -53,6 +56,44 @@ abstract class TestCase extends PHPUnitTestCase
         // Clean up after each test
         $this->resetDatabase();
         parent::tearDown();
+    }
+
+    /**
+     * Reset the Database singleton to use test connection
+     */
+    protected function resetDatabaseSingleton()
+    {
+        // Create a mock Database instance with test connection
+        $mockDb = new class($this->pdo) {
+            private $connection;
+            
+            public function __construct($pdo) {
+                $this->connection = $pdo;
+            }
+            
+            public function getConnection() {
+                return $this->connection;
+            }
+            
+            public function beginTransaction() {
+                return $this->connection->beginTransaction();
+            }
+            
+            public function commit() {
+                return $this->connection->commit();
+            }
+            
+            public function rollback() {
+                return $this->connection->rollback();
+            }
+            
+            public function lastInsertId() {
+                return $this->connection->lastInsertId();
+            }
+        };
+        
+        // Set the mock instance
+        \StorageUnit\Core\Database::setInstance($mockDb);
     }
 
     /**

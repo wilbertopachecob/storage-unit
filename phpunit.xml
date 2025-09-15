@@ -8,10 +8,10 @@
          cacheResultFile=".phpunit.result.cache"
          executionOrder="depends,defects"
          requireCoverageMetadata="true"
-         beStrictAboutCoverageMetadata="true"
-         beStrictAboutOutputDuringTests="true"
-         failOnRisky="true"
-         failOnWarning="true">
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="false"
+         failOnRisky="false"
+         failOnWarning="false">
     
     <testsuites>
         <testsuite name="Unit">

@@ -26,8 +26,11 @@ class AnalyticsControllerTest extends TestCase
     public function testGetAnalyticsDataReturnsCorrectStructure()
     {
         // Create test user and items
-        $userId = $this->createTestUser('test@example.com', 'Test User');
+        $userId = $this->createTestUser('test1@example.com', 'Test User 1');
         $this->createTestItems($userId);
+        
+        // Set up session for authentication
+        $_SESSION['user_id'] = $userId;
         
         $result = $this->controller->getAnalyticsData($userId);
         
@@ -65,8 +68,11 @@ class AnalyticsControllerTest extends TestCase
      */
     public function testGetApiResponseReturnsSuccessResponse()
     {
-        $userId = $this->createTestUser('test@example.com', 'Test User');
+        $userId = $this->createTestUser('test2@example.com', 'Test User 2');
         $this->createTestItems($userId);
+        
+        // Set up session for authentication
+        $_SESSION['user_id'] = $userId;
         
         $result = $this->controller->getApiResponse($userId);
         
@@ -94,7 +100,7 @@ class AnalyticsControllerTest extends TestCase
      */
     public function testValidateUserReturnsUserWhenAuthenticated()
     {
-        $userId = $this->createTestUser('test@example.com', 'Test User');
+        $userId = $this->createTestUser('test3@example.com', 'Test User 3');
         $_SESSION['user_id'] = $userId;
         
         $user = $this->controller->validateUser();
@@ -121,12 +127,15 @@ class AnalyticsControllerTest extends TestCase
      */
     public function testMonthlyDataCalculation()
     {
-        $userId = $this->createTestUser('test@example.com', 'Test User');
+        $userId = $this->createTestUser('test4@example.com', 'Test User 4');
+        
+        // Set up session for authentication
+        $_SESSION['user_id'] = $userId;
         
         // Create items with different dates
-        $this->createTestItem($userId, 'Item 1', '2024-01-15 10:00:00');
-        $this->createTestItem($userId, 'Item 2', '2024-01-20 14:30:00');
-        $this->createTestItem($userId, 'Item 3', '2024-02-10 09:15:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 1', '2024-01-15 10:00:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 2', '2024-01-20 14:30:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 3', '2024-02-10 09:15:00');
         
         $result = $this->controller->getAnalyticsData($userId);
         $monthlyData = $result['data']['monthly_data'];
@@ -142,12 +151,15 @@ class AnalyticsControllerTest extends TestCase
      */
     public function testImageStatisticsCalculation()
     {
-        $userId = $this->createTestUser('test@example.com', 'Test User');
+        $userId = $this->createTestUser('test5@example.com', 'Test User 5');
+        
+        // Set up session for authentication
+        $_SESSION['user_id'] = $userId;
         
         // Create items with and without images
-        $this->createTestItem($userId, 'Item with image', null, 'image1.jpg');
-        $this->createTestItem($userId, 'Item without image', null, null);
-        $this->createTestItem($userId, 'Another item without image', null, '');
+        $this->createTestItemWithCustomParams($userId, 'Item with image', null, 'image1.jpg');
+        $this->createTestItemWithCustomParams($userId, 'Item without image', null, null);
+        $this->createTestItemWithCustomParams($userId, 'Another item without image', null, '');
         
         $result = $this->controller->getAnalyticsData($userId);
         $data = $result['data'];
@@ -163,14 +175,14 @@ class AnalyticsControllerTest extends TestCase
      */
     private function createTestItems($userId)
     {
-        $this->createTestItem($userId, 'Test Item 1', null, 'image1.jpg');
-        $this->createTestItem($userId, 'Test Item 2', null, null);
+        $this->createTestItemWithCustomParams($userId, 'Test Item 1', null, 'image1.jpg');
+        $this->createTestItemWithCustomParams($userId, 'Test Item 2', null, null);
     }
 
     /**
-     * Helper method to create a test item
+     * Helper method to create a test item with custom parameters
      */
-    private function createTestItem($userId, $title, $createdAt = null, $image = null)
+    private function createTestItemWithCustomParams($userId, $title, $createdAt = null, $image = null)
     {
         $db = \StorageUnit\Core\Database::getInstance();
         $conn = $db->getConnection();

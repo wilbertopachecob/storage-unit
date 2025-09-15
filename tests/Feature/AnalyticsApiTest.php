@@ -93,9 +93,9 @@ class AnalyticsApiTest extends TestCase
         $this->authenticateUser();
         
         // Create items with different dates
-        $this->createTestItem($userId, 'Item 1', '2024-01-15 10:00:00');
-        $this->createTestItem($userId, 'Item 2', '2024-01-20 14:30:00');
-        $this->createTestItem($userId, 'Item 3', '2024-02-10 09:15:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 1', '2024-01-15 10:00:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 2', '2024-01-20 14:30:00');
+        $this->createTestItemWithCustomParams($userId, 'Item 3', '2024-02-10 09:15:00');
         
         $response = $this->get('/api/analytics.php');
         $data = json_decode($response->getBody(), true);
@@ -118,9 +118,9 @@ class AnalyticsApiTest extends TestCase
         $this->authenticateUser();
         
         // Create items with and without images
-        $this->createTestItem($userId, 'Item with image', null, 'image1.jpg');
-        $this->createTestItem($userId, 'Item without image', null, null);
-        $this->createTestItem($userId, 'Another item without image', null, '');
+        $this->createTestItemWithCustomParams($userId, 'Item with image', null, 'image1.jpg');
+        $this->createTestItemWithCustomParams($userId, 'Item without image', null, null);
+        $this->createTestItemWithCustomParams($userId, 'Another item without image', null, '');
         
         $response = $this->get('/api/analytics.php');
         $data = json_decode($response->getBody(), true);
@@ -154,14 +154,14 @@ class AnalyticsApiTest extends TestCase
      */
     private function createTestItems($userId)
     {
-        $this->createTestItem($userId, 'Test Item 1', null, 'image1.jpg');
-        $this->createTestItem($userId, 'Test Item 2', null, null);
+        $this->createTestItemWithCustomParams($userId, 'Test Item 1', null, 'image1.jpg');
+        $this->createTestItemWithCustomParams($userId, 'Test Item 2', null, null);
     }
 
     /**
-     * Helper method to create a test item
+     * Helper method to create a test item with custom parameters
      */
-    private function createTestItem($userId, $title, $createdAt = null, $image = null)
+    private function createTestItemWithCustomParams($userId, $title, $createdAt = null, $image = null)
     {
         $db = \StorageUnit\Core\Database::getInstance();
         $conn = $db->getConnection();
