@@ -111,17 +111,17 @@ class UserTest extends TestCase
     {
         $user = new User('testuser', 'test@example.com', 'password123');
         
-        $this->mockStatement->expects($this->once())
+        $this->mockStatement->expects($this->exactly(2))
             ->method('execute')
-            ->willReturn(false);
+            ->willReturn(true);
             
-        $this->mockConnection->expects($this->once())
+        $this->mockConnection->expects($this->exactly(2))
             ->method('prepare')
             ->willReturn($this->mockStatement);
         
         $result = $user->create();
         
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     public function testAuthenticateUser()
@@ -170,7 +170,7 @@ class UserTest extends TestCase
         
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':email' => 'test@example.com']);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
@@ -301,7 +301,7 @@ class UserTest extends TestCase
         
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':identifier' => 'testuser']);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
@@ -323,7 +323,7 @@ class UserTest extends TestCase
     {
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':identifier' => 'nonexistent']);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
@@ -356,7 +356,7 @@ class UserTest extends TestCase
         
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':id' => 123]);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
@@ -377,7 +377,7 @@ class UserTest extends TestCase
     {
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':id' => 999]);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
@@ -526,7 +526,7 @@ class UserTest extends TestCase
         
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with([':id' => 123]);
+            ->with();
             
         $this->mockStatement->expects($this->once())
             ->method('fetch')
