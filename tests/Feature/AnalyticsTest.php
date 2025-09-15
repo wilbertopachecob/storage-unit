@@ -18,7 +18,7 @@ class AnalyticsTest extends TestCase
      */
     public function testAnalyticsRedirectsWhenNotLoggedIn()
     {
-        $response = $this->get('/analytics.php');
+        $response = $this->get('/index.php?script=analytics');
         
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertStringContainsString('signin.php', $response->getHeader('Location')[0] ?? '');
@@ -33,7 +33,7 @@ class AnalyticsTest extends TestCase
         $this->createTestUser('test@example.com', 'Test User');
         $this->authenticateUser();
         
-        $response = $this->get('/analytics.php');
+        $response = $this->get('/index.php?script=analytics');
         
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString('Analytics', $response->getBody());
@@ -82,7 +82,7 @@ class AnalyticsTest extends TestCase
         $this->createTestUser('test@example.com', 'Test User');
         $this->authenticateUser();
         
-        $response = $this->get('/analytics.php');
+        $response = $this->get('/index.php?script=analytics');
         
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString('dashboard', $response->getBody());
@@ -116,7 +116,7 @@ class AnalyticsTest extends TestCase
         // Clear any existing session
         $this->clearSession();
         
-        $response = $this->get('/analytics.php');
+        $response = $this->get('/index.php?script=analytics');
         
         // Should redirect to signin
         $this->assertEquals(302, $response->getStatusCode());
@@ -131,7 +131,7 @@ class AnalyticsTest extends TestCase
         $this->createTestUser('test@example.com', 'Test User');
         $this->authenticateUser();
         
-        $response = $this->get('/analytics.php');
+        $response = $this->get('/index.php?script=analytics');
         
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString('text/html', $response->getHeader('Content-Type')[0] ?? '');
