@@ -55,6 +55,8 @@ class Item
     public function setCategoryId($categoryId) { $this->categoryId = $categoryId; }
     public function setLocationId($locationId) { $this->locationId = $locationId; }
     public function setImg($img) { $this->img = $img; }
+    public function setCreatedAt($createdAt) { $this->createdAt = $createdAt; }
+    public function setUpdatedAt($updatedAt) { $this->updatedAt = $updatedAt; }
     public function setDb($db) { $this->db = $db; }
     
     // Database getter
@@ -270,7 +272,7 @@ class Item
     /**
      * Get items with category and location data
      */
-    public static function getAllWithDetails($userId, $limit = null, $offset = 0)
+    public static function getAllWithDetails($userId, $search = '', $categoryId = null, $locationId = null, $sortBy = 'created_at', $sortOrder = 'desc', $limit = null, $offset = 0)
     {
         $db = Database::getInstance();
         $conn = $db->getConnection();
@@ -280,22 +282,47 @@ class Item
                 FROM items i 
                 LEFT JOIN categories c ON i.category_id = c.id 
                 LEFT JOIN locations l ON i.location_id = l.id 
-                WHERE i.user_id = :user_id 
-                ORDER BY i.updated_at DESC";
+                WHERE i.user_id = :user_id";
+        
+        $params = [':user_id' => $userId];
+
+        if (!empty($search)) {
+            $sql .= " AND (i.title LIKE :search OR i.description LIKE :search OR c.name LIKE :search OR l.name LIKE :search)";
+            $searchPattern = '%' . $search . '%';
+            $params[':search'] = $searchPattern;
+        }
+
+        if ($categoryId) {
+            $sql .= " AND i.category_id = :category_id";
+            $params[':category_id'] = $categoryId;
+        }
+
+        if ($locationId) {
+            $sql .= " AND i.location_id = :location_id";
+            $params[':location_id'] = $locationId;
+        }
+
+        // Validate sort parameters
+        $allowedSortFields = ['title', 'created_at', 'updated_at', 'qty'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+        
+        $allowedSortOrders = ['asc', 'desc'];
+        if (!in_array($sortOrder, $allowedSortOrders)) {
+            $sortOrder = 'desc';
+        }
+
+        $sql .= " ORDER BY i.{$sortBy} {$sortOrder}";
         
         if ($limit) {
             $sql .= " LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $limit;
+            $params[':offset'] = $offset;
         }
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':user_id', $userId);
-        
-        if ($limit) {
-            $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-            $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-        }
-
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 
@@ -318,14 +345,84 @@ class Item
     /**
      * Get total count of items for a user
      */
-    public static function getCountForUser($userId)
+    public static function getCountForUser($userId, $search = '', $categoryId = null, $locationId = null)
     {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $sql = "SELECT COUNT(*) FROM items WHERE user_id = :user_id";
+        $sql = "SELECT COUNT(*) FROM items i 
+                LEFT JOIN categories c ON i.category_id = c.id 
+                LEFT JOIN locations l ON i.location_id = l.id 
+                WHERE i.user_id = :user_id";
+        
+        $params = [':user_id' => $userId];
+
+        if (!empty($search)) {
+            $sql .= " AND (i.title LIKE :search OR i.description LIKE :search OR c.name LIKE :search OR l.name LIKE :search)";
+            $searchPattern = '%' . $search . '%';
+            $params[':search'] = $searchPattern;
+        }
+
+        if ($categoryId) {
+            $sql .= " AND i.category_id = :category_id";
+            $params[':category_id'] = $categoryId;
+        }
+
+        if ($locationId) {
+            $sql .= " AND i.location_id = :location_id";
+            $params[':location_id'] = $locationId;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get count of items with images
+     */
+    public static function getCountWithImages($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT COUNT(*) FROM items WHERE user_id = :user_id AND img IS NOT NULL AND img != ''";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get count of items without images
+     */
+    public static function getCountWithoutImages($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT COUNT(*) FROM items WHERE user_id = :user_id AND (img IS NULL OR img = '')";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Get count of recent items (last N days)
+     */
+    public static function getRecentItemsCount($userId, $days = 7)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT COUNT(*) FROM items WHERE user_id = :user_id AND created_at >= DATE_SUB(NOW(), INTERVAL :days DAY)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':days', $days, \PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchColumn();

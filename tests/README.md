@@ -1,273 +1,285 @@
-# Storage Unit Management System - Test Suite
+# Storage Unit API Tests
 
-## Overview
-
-This test suite provides comprehensive coverage for the Storage Unit Management System, including the new features implemented as part of the quick wins initiative.
+This directory contains comprehensive unit and integration tests for the Storage Unit API.
 
 ## Test Structure
 
 ```
 tests/
-├── TestCase.php                    # Base test case with common functionality
 ├── Unit/                          # Unit tests for individual components
 │   ├── Models/                    # Model tests
-│   │   ├── CategoryTest.php       # Category model tests
-│   │   ├── ItemTest.php          # Item model tests (updated)
+│   │   ├── ItemTest.php          # Item model tests
+│   │   ├── CategoryTest.php      # Category model tests
 │   │   ├── LocationTest.php      # Location model tests
 │   │   └── UserTest.php          # User model tests
-│   └── Controllers/              # Controller tests
-│       ├── CategoryControllerTest.php      # Category controller tests
-│       ├── EnhancedItemControllerTest.php  # Enhanced item controller tests
-│       ├── LocationControllerTest.php      # Location controller tests
-│       └── ItemControllerTest.php         # Item controller tests
-├── Feature/                       # Feature tests (end-to-end)
-└── Integration/                   # Integration tests
+│   ├── Controllers/               # Controller tests
+│   │   └── ApiControllerTest.php # API controller base class tests
+│   └── Core/                     # Core functionality tests
+│       └── ApiResponseTest.php   # API response handler tests
+├── Integration/                   # Integration tests
+│   └── ApiEndpointsTest.php      # API endpoint tests
+├── Helpers/                       # Test utilities
+│   └── TestHelper.php            # Common test helper functions
+├── run_api_tests.php             # Test runner script
+└── README.md                     # This file
 ```
-
-## New Features Tested
-
-### 1. Categories System
-- **Model Tests** (`CategoryTest.php`):
-  - CRUD operations (Create, Read, Update, Delete)
-  - Data validation (name, color, icon)
-  - User association and security
-  - Item count tracking
-  - Name uniqueness validation
-
-- **Controller Tests** (`CategoryControllerTest.php`):
-  - HTTP request handling
-  - CSRF protection
-  - Error handling and validation
-  - Authentication requirements
-
-### 2. Locations System
-- **Model Tests** (`LocationTest.php`):
-  - CRUD operations with hierarchical support
-  - Parent-child relationships
-  - Full path generation
-  - Hierarchy building
-  - Item count tracking
-  - Name uniqueness within parent scope
-
-- **Controller Tests** (`LocationControllerTest.php`):
-  - HTTP request handling
-  - Circular reference prevention
-  - Parent validation
-  - Authentication requirements
-
-### 3. Enhanced Item Management
-- **Model Tests** (Updated `ItemTest.php`):
-  - Category and location associations
-  - Enhanced search with filters
-  - Multi-criteria filtering
-  - Detailed item retrieval with relationships
-
-- **Controller Tests** (`EnhancedItemControllerTest.php`):
-  - Advanced search functionality
-  - Category and location filtering
-  - Analytics and reporting
-  - Enhanced CRUD operations
 
 ## Running Tests
 
-### Run All Tests
+### Prerequisites
+
+1. Install PHPUnit:
 ```bash
-composer test
+composer install
 ```
 
-### Run New Feature Tests Only
+2. Ensure your database is set up for testing (optional for unit tests)
+
+### Running All Tests
+
 ```bash
-./scripts/run-new-tests.sh
+# Using PHPUnit directly
+./vendor/bin/phpunit --configuration phpunit-api.xml
+
+# Using the test runner script
+php tests/run_api_tests.php
+
+# Using Composer (if configured)
+composer test:api
 ```
 
-### Run Specific Test Suites
+### Running Specific Test Suites
+
 ```bash
-# Category tests
-vendor/bin/phpunit tests/Unit/Models/CategoryTest.php
-vendor/bin/phpunit tests/Unit/Controllers/CategoryControllerTest.php
+# Unit tests only
+./vendor/bin/phpunit --configuration phpunit-api.xml --testsuite "API Unit Tests"
 
-# Location tests
-vendor/bin/phpunit tests/Unit/Models/LocationTest.php
-vendor/bin/phpunit tests/Unit/Controllers/LocationControllerTest.php
+# Integration tests only
+./vendor/bin/phpunit --configuration phpunit-api.xml --testsuite "API Integration Tests"
 
-# Enhanced Item tests
-vendor/bin/phpunit tests/Unit/Controllers/EnhancedItemControllerTest.php
+# Specific test file
+./vendor/bin/phpunit tests/Unit/Models/ItemTest.php
+
+# Specific test method
+./vendor/bin/phpunit --filter testItemCreation tests/Unit/Models/ItemTest.php
 ```
 
-### Run with Coverage
+### Running with Coverage
+
 ```bash
-composer test-coverage
+# Generate HTML coverage report
+./vendor/bin/phpunit --configuration phpunit-api.xml --coverage-html tests/coverage/html
+
+# Generate text coverage report
+./vendor/bin/phpunit --configuration phpunit-api.xml --coverage-text
 ```
 
-## Test Database Setup
+## Test Categories
 
-The test suite uses a separate test database (`storageunit_test`) with the following setup:
+### Unit Tests
 
-### Test Data Structure
-- **Users**: 2 test users (ID 1 and 2)
-- **Categories**: 3 categories for user 1, 1 category for user 2
-- **Locations**: 3 locations for user 1, 1 location for user 2
-- **Items**: 2 items for user 1, 1 item for user 2
-- **Tags**: 4 tags for user 1
-- **Item Tags**: Relationships between items and tags
+#### Model Tests
+- **ItemTest.php**: Tests for Item model CRUD operations, validation, and data retrieval
+- **CategoryTest.php**: Tests for Category model functionality and item counting
+- **LocationTest.php**: Tests for Location model with coordinates support
+- **UserTest.php**: Tests for User model authentication and profile management
 
-### Database Reset
-Each test method runs with a clean database state, ensuring test isolation and reliability.
+#### Controller Tests
+- **ApiControllerTest.php**: Tests for base API controller functionality
+
+#### Core Tests
+- **ApiResponseTest.php**: Tests for API response formatting and HTTP status codes
+
+### Integration Tests
+
+#### API Endpoint Tests
+- **ApiEndpointsTest.php**: Tests for all API endpoints including:
+  - Items API (GET, POST, PUT, PATCH, DELETE)
+  - Categories API (GET, POST, PUT, PATCH, DELETE)
+  - Locations API (GET, POST, PUT, PATCH, DELETE)
+  - Analytics API (GET)
+  - Users API (GET, PUT, PATCH, POST)
+  - Authentication API (POST)
 
 ## Test Coverage
 
-### Model Tests
-- ✅ Constructor and property initialization
-- ✅ CRUD operations (Create, Read, Update, Delete)
-- ✅ Data validation and sanitization
-- ✅ Relationship management
-- ✅ Security and user isolation
-- ✅ Error handling and exceptions
+The tests aim to achieve high coverage of:
 
-### Controller Tests
-- ✅ HTTP request processing
-- ✅ Authentication and authorization
-- ✅ CSRF protection
-- ✅ Input validation
-- ✅ Error handling and user feedback
-- ✅ Response formatting
+- **Models**: All CRUD operations, validation, and data retrieval methods
+- **Controllers**: Request handling, validation, and response formatting
+- **API Endpoints**: All HTTP methods and response scenarios
+- **Error Handling**: Validation errors, authentication failures, and server errors
+- **Edge Cases**: Invalid input, missing data, and boundary conditions
 
-### Integration Tests
-- ✅ Database operations
-- ✅ Model-controller interactions
-- ✅ Session management
-- ✅ File upload handling
+## Test Data
 
-## Test Patterns
+### Mock Data
+Tests use mock data to avoid database dependencies:
+- **Items**: Test items with various properties
+- **Categories**: Test categories with colors and icons
+- **Locations**: Test locations with coordinates
+- **Users**: Test users with authentication data
+- **Analytics**: Test analytics data with statistics
 
-### 1. Data Validation Tests
+### Test Helper
+The `TestHelper` class provides utilities for:
+- Creating mock database connections
+- Generating test data
+- Mocking HTTP requests
+- Asserting API response structure
+- Managing test sessions
+
+## Writing New Tests
+
+### Unit Test Example
+
 ```php
-public function testCreateWithInvalidData()
-{
-    $item = new Item('', 'Description', 1, 1); // Empty title
-    
-    $this->expectException(\Exception::class);
-    $this->expectExceptionMessage('Invalid item data');
-    $item->create();
-}
-```
+<?php
+namespace Tests\Unit\Models;
 
-### 2. Authentication Tests
-```php
-public function testIndexThrowsExceptionWhenNotAuthenticated()
-{
-    $this->clearSession();
-    
-    $this->expectException(\Exception::class);
-    $this->expectExceptionMessage('User not authenticated');
-    $this->controller->index();
-}
-```
+use PHPUnit\Framework\TestCase;
+use StorageUnit\Models\Item;
 
-### 3. Relationship Tests
-```php
-public function testGetWithItemCount()
+class ItemTest extends TestCase
 {
-    $categories = Category::getWithItemCount(1);
-    
-    $this->assertIsArray($categories);
-    $this->assertCount(3, $categories);
-    
-    foreach ($categories as $category) {
-        $this->assertArrayHasKey('item_count', $category);
+    public function testItemCreation()
+    {
+        $item = new Item('Test Item', 'Description', 1, 1);
+        
+        $this->assertEquals('Test Item', $item->getTitle());
+        $this->assertEquals('Description', $item->getDescription());
+        $this->assertEquals(1, $item->getQty());
     }
 }
 ```
 
-## Mocking and Test Utilities
+### Integration Test Example
 
-### TestCase Base Class
-The `TestCase` class provides:
-- Database setup and teardown
-- Test data creation helpers
-- Session management
-- Authentication simulation
+```php
+<?php
+namespace Tests\Integration;
 
-### Helper Methods
-- `createTestUser()` - Create test users
-- `createTestItem()` - Create test items with relationships
-- `createTestCategory()` - Create test categories
-- `createTestLocation()` - Create test locations
-- `createTestTag()` - Create test tags
-- `authenticateUser()` - Simulate user authentication
-- `clearSession()` - Clear session data
+use PHPUnit\Framework\TestCase;
 
-## Best Practices
+class ApiEndpointsTest extends TestCase
+{
+    public function testItemsApiGetAll()
+    {
+        // Mock database and authentication
+        $this->mockUserAuthentication();
+        
+        // Test API endpoint
+        $response = $this->makeApiRequest('GET', '/items');
+        
+        $this->assertEquals(200, $response['code']);
+        $this->assertTrue($response['data']['success']);
+    }
+}
+```
 
-### 1. Test Isolation
-- Each test runs with a clean database
-- No test depends on another test's data
-- Proper setup and teardown
+## Test Configuration
 
-### 2. Descriptive Test Names
-- Test names clearly describe what is being tested
-- Include expected behavior in the name
-- Group related tests logically
+### PHPUnit Configuration
+The `phpunit-api.xml` file configures:
+- Test suites and directories
+- Coverage reporting
+- Test execution settings
+- Source code inclusion/exclusion
 
-### 3. Comprehensive Coverage
-- Test both success and failure scenarios
-- Test edge cases and boundary conditions
-- Test security and validation
-
-### 4. Maintainable Tests
-- Use helper methods for common operations
-- Keep tests focused and single-purpose
-- Avoid complex test logic
+### Coverage Reports
+Coverage reports are generated in:
+- **HTML**: `tests/coverage/html/`
+- **Text**: `tests/coverage/coverage.txt`
+- **XML**: `tests/coverage/coverage.xml`
 
 ## Continuous Integration
 
-The test suite is designed to run in CI/CD pipelines:
+### GitHub Actions Example
 
-1. **Database Setup**: Tests use a dedicated test database
-2. **Environment Variables**: Proper environment configuration
-3. **Exit Codes**: Tests return proper exit codes for CI
-4. **Coverage Reports**: Generate coverage reports for analysis
+```yaml
+name: API Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Install dependencies
+        run: composer install
+      - name: Run tests
+        run: ./vendor/bin/phpunit --configuration phpunit-api.xml
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: tests/coverage/coverage.xml
+```
+
+## Best Practices
+
+### Test Organization
+- Group related tests in the same file
+- Use descriptive test method names
+- Follow the AAA pattern (Arrange, Act, Assert)
+
+### Mocking
+- Mock external dependencies (database, HTTP requests)
+- Use realistic test data
+- Test both success and failure scenarios
+
+### Assertions
+- Use specific assertions (assertEquals vs assertTrue)
+- Test both positive and negative cases
+- Verify error messages and status codes
+
+### Test Data
+- Use factories or builders for complex test data
+- Keep test data minimal and focused
+- Avoid hardcoded values when possible
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Database Connection Errors**
-   - Ensure test database exists
-   - Check database credentials
-   - Verify database permissions
+   - Ensure database is running
+   - Check connection credentials
+   - Use mock database for unit tests
 
-2. **Test Data Issues**
-   - Check test data setup in `TestCase::resetDatabase()`
-   - Verify foreign key constraints
-   - Ensure proper test isolation
+2. **Session Issues**
+   - Clear session data between tests
+   - Mock session data when needed
 
-3. **Authentication Errors**
-   - Check session management in tests
-   - Verify user authentication simulation
-   - Ensure proper session clearing
+3. **File Permission Errors**
+   - Ensure test directories are writable
+   - Check coverage report directory permissions
 
-### Debug Mode
-Run tests with verbose output for debugging:
+4. **Memory Issues**
+   - Increase memory limit in phpunit.xml
+   - Use data providers for large datasets
+
+### Debugging Tests
+
 ```bash
-vendor/bin/phpunit --verbose tests/Unit/Models/CategoryTest.php
+# Run with verbose output
+./vendor/bin/phpunit --configuration phpunit-api.xml --verbose
+
+# Stop on first failure
+./vendor/bin/phpunit --configuration phpunit-api.xml --stop-on-failure
+
+# Run specific test with debug output
+./vendor/bin/phpunit --configuration phpunit-api.xml --filter testItemCreation --verbose
 ```
 
-## Future Enhancements
+## Contributing
 
-### Planned Test Improvements
-- [ ] API endpoint testing
-- [ ] Performance testing
-- [ ] Security testing
-- [ ] Mobile app testing
-- [ ] Integration with external services
+When adding new tests:
 
-### Test Coverage Goals
-- [ ] 90%+ code coverage
-- [ ] 100% critical path coverage
-- [ ] Full API coverage
-- [ ] Complete user workflow coverage
-
----
-
-**Note**: This test suite is continuously updated as new features are added to the system. Always run tests before deploying changes to ensure system stability.
+1. Follow the existing naming conventions
+2. Add tests for both success and failure scenarios
+3. Update this README if adding new test categories
+4. Ensure tests are isolated and don't depend on each other
+5. Add appropriate documentation for complex test scenarios

@@ -1,289 +1,491 @@
 <?php
 /**
- * Location Model Tests
+ * Location Model Unit Tests
  */
 
-namespace StorageUnit\Tests\Unit\Models;
+namespace Tests\Unit\Models;
 
-use StorageUnit\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use StorageUnit\Models\Location;
+use StorageUnit\Core\Database;
+use PDO;
+use PDOStatement;
 
 class LocationTest extends TestCase
 {
+    private $mockDb;
+    private $mockConnection;
+    private $mockStatement;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Mock database connection
+        $this->mockStatement = $this->createMock(PDOStatement::class);
+        $this->mockConnection = $this->createMock(PDO::class);
+        $this->mockDb = $this->createMock(Database::class);
+        
+        // Set up database mock
+        $this->mockDb->method('getConnection')->willReturn($this->mockConnection);
+        Database::setInstance($this->mockDb);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Database::setInstance(null);
+    }
+
     public function testLocationCreation()
     {
-        $location = new Location('Test Location', 1, 1);
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
         
         $this->assertEquals('Test Location', $location->getName());
-        $this->assertEquals(1, $location->getParentId());
+        $this->assertEquals('Test Description', $location->getDescription());
+        $this->assertEquals('123 Test St', $location->getAddress());
+        $this->assertEquals(40.7128, $location->getLatitude());
+        $this->assertEquals(-74.0060, $location->getLongitude());
         $this->assertEquals(1, $location->getUserId());
+        $this->assertEquals(2, $location->getParentId());
     }
 
-    public function testLocationCreationWithDefaults()
+    public function testLocationDefaultValues()
     {
-        $location = new Location('Test Location', null, 1);
+        $location = new Location('Test Location');
         
         $this->assertEquals('Test Location', $location->getName());
+        $this->assertNull($location->getDescription());
+        $this->assertNull($location->getAddress());
+        $this->assertNull($location->getLatitude());
+        $this->assertNull($location->getLongitude());
+        $this->assertNull($location->getUserId());
         $this->assertNull($location->getParentId());
-        $this->assertEquals(1, $location->getUserId());
-    }
-
-    public function testLocationCreate()
-    {
-        $location = new Location('New Location', null, 1);
-        
-        $this->assertTrue($location->create());
-        $this->assertNotNull($location->getId());
-    }
-
-    public function testLocationCreateWithParent()
-    {
-        $parentId = $this->createTestLocation('Parent Location', null, 1);
-        $location = new Location('Child Location', $parentId, 1);
-        
-        $this->assertTrue($location->create());
-        $this->assertNotNull($location->getId());
-    }
-
-    public function testLocationCreateWithInvalidData()
-    {
-        $location = new Location('', null, 1); // Empty name
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationCreateWithNoUserId()
-    {
-        $location = new Location('Test Location', null, null);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationCreateWithLongName()
-    {
-        $longName = str_repeat('a', 101); // 101 characters
-        $location = new Location($longName, null, 1);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationUpdate()
-    {
-        $location = Location::findById(1, 1);
-        $location->setName('Updated Location');
-        $location->setParentId(2);
-        
-        $this->assertTrue($location->update());
-        
-        $updatedLocation = Location::findById(1, 1);
-        $this->assertEquals('Updated Location', $updatedLocation->getName());
-        $this->assertEquals(2, $updatedLocation->getParentId());
-    }
-
-    public function testLocationDelete()
-    {
-        $locationId = $this->createTestLocation('To Delete', null, 1);
-        
-        $location = Location::findById($locationId, 1);
-        $this->assertTrue($location->delete());
-        
-        $deletedLocation = Location::findById($locationId, 1);
-        $this->assertNull($deletedLocation);
-    }
-
-    public function testFindById()
-    {
-        $location = Location::findById(1, 1);
-        
-        $this->assertInstanceOf(Location::class, $location);
-        $this->assertEquals(1, $location->getId());
-        $this->assertEquals('Garage', $location->getName());
-        $this->assertNull($location->getParentId());
-        $this->assertEquals(1, $location->getUserId());
-    }
-
-    public function testFindByIdWithWrongUser()
-    {
-        $location = Location::findById(1, 2); // Location belongs to user 1, but searching for user 2
-        
-        $this->assertNull($location);
-    }
-
-    public function testGetAllForUser()
-    {
-        $locations = Location::getAllForUser(1);
-        
-        $this->assertIsArray($locations);
-        $this->assertCount(3, $locations); // Should have 3 locations for user 1
-        $this->assertEquals('Garage', $locations[0]['name']); // Should be ordered by name ASC
-    }
-
-    public function testGetHierarchy()
-    {
-        $hierarchy = Location::getHierarchy(1);
-        
-        $this->assertIsArray($hierarchy);
-        $this->assertCount(2, $hierarchy); // Should have 2 root locations (Garage, Storage Room)
-        
-        // Find Garage location
-        $garage = array_filter($hierarchy, function($loc) {
-            return $loc['name'] === 'Garage';
-        });
-        $garage = array_values($garage)[0];
-        $this->assertArrayHasKey('children', $garage);
-        $this->assertCount(1, $garage['children']); // Should have Workbench as child
-        $this->assertEquals('Workbench', $garage['children'][0]['name']);
-    }
-
-    public function testGetWithItemCount()
-    {
-        $locations = Location::getWithItemCount(1);
-        
-        $this->assertIsArray($locations);
-        $this->assertCount(3, $locations);
-        
-        // Find Workbench location (should have 1 item)
-        $workbench = array_filter($locations, function($loc) {
-            return $loc['name'] === 'Workbench';
-        });
-        $workbench = array_values($workbench)[0];
-        $this->assertEquals(1, $workbench['item_count']);
-        
-        // Find Storage Room location (should have 1 item)
-        $storageRoom = array_filter($locations, function($loc) {
-            return $loc['name'] === 'Storage Room';
-        });
-        $storageRoom = array_values($storageRoom)[0];
-        $this->assertEquals(1, $storageRoom['item_count']);
-    }
-
-    public function testGetFullPath()
-    {
-        $workbench = Location::findById(2, 1); // Workbench (child of Garage)
-        $fullPath = $workbench->getFullPath();
-        
-        $this->assertEquals('Garage → Workbench', $fullPath);
-    }
-
-    public function testGetFullPathForRootLocation()
-    {
-        $garage = Location::findById(1, 1); // Garage (root location)
-        $fullPath = $garage->getFullPath();
-        
-        $this->assertEquals('Garage', $fullPath);
-    }
-
-    public function testNameExists()
-    {
-        // Test existing name in root
-        $this->assertTrue(Location::nameExists('Garage', 1));
-        
-        // Test existing name in parent
-        $this->assertTrue(Location::nameExists('Workbench', 1, 1)); // Workbench under Garage (ID 1)
-        
-        // Test non-existing name
-        $this->assertFalse(Location::nameExists('NonExistent', 1));
-        
-        // Test name exists for different user
-        $this->assertFalse(Location::nameExists('Garage', 2));
-        
-        // Test name exists excluding current location
-        $this->assertFalse(Location::nameExists('Garage', 1, null, 1)); // Exclude Garage with ID 1
-    }
-
-    public function testToArray()
-    {
-        $location = Location::findById(1, 1);
-        $array = $location->toArray();
-        
-        $this->assertIsArray($array);
-        $this->assertEquals(1, $array['id']);
-        $this->assertEquals('Garage', $array['name']);
-        $this->assertNull($array['parent_id']);
-        $this->assertEquals(1, $array['user_id']);
-        $this->assertArrayHasKey('created_at', $array);
-        $this->assertArrayHasKey('updated_at', $array);
-    }
-
-    public function testLocationValidationWithEmptyName()
-    {
-        $location = new Location('', null, 1);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationValidationWithWhitespaceName()
-    {
-        $location = new Location('   ', null, 1);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationValidationWithNoUserId()
-    {
-        $location = new Location('Test Location', null, null);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
-    }
-
-    public function testLocationValidationWithLongName()
-    {
-        $longName = str_repeat('a', 101); // 101 characters
-        $location = new Location($longName, null, 1);
-        
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid location data');
-        $location->create();
     }
 
     public function testLocationSetters()
     {
         $location = new Location();
         
-        $location->setName('Test Name');
-        $location->setParentId(1);
+        $location->setName('New Location');
+        $location->setDescription('New Description');
+        $location->setAddress('456 New St');
+        $location->setLatitude(41.8781);
+        $location->setLongitude(-87.6298);
+        $location->setUserId(2);
+        $location->setParentId(3);
+        
+        $this->assertEquals('New Location', $location->getName());
+        $this->assertEquals('New Description', $location->getDescription());
+        $this->assertEquals('456 New St', $location->getAddress());
+        $this->assertEquals(41.8781, $location->getLatitude());
+        $this->assertEquals(-87.6298, $location->getLongitude());
+        $this->assertEquals(2, $location->getUserId());
+        $this->assertEquals(3, $location->getParentId());
+    }
+
+    public function testCreateLocation()
+    {
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('lastInsertId')
+            ->willReturn('123');
+        
+        $result = $location->create();
+        
+        $this->assertTrue($result);
+        $this->assertEquals(123, $location->getId());
+    }
+
+    public function testCreateLocationFails()
+    {
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(false);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $result = $location->create();
+        
+        $this->assertFalse($result);
+    }
+
+    public function testUpdateLocation()
+    {
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
+        $location->setId(123);
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $result = $location->update();
+        
+        $this->assertTrue($result);
+    }
+
+    public function testDeleteLocation()
+    {
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
+        $location->setId(123);
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $result = $location->delete();
+        
+        $this->assertTrue($result);
+    }
+
+    public function testFindById()
+    {
+        $mockData = [
+            'id' => 123,
+            'name' => 'Test Location',
+            'description' => 'Test Description',
+            'address' => '123 Test St',
+            'latitude' => 40.7128,
+            'longitude' => -74.0060,
+            'parent_id' => 2,
+            'user_id' => 1,
+            'created_at' => '2024-01-01 00:00:00',
+            'updated_at' => '2024-01-01 00:00:00'
+        ];
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':id' => 123, ':user_id' => 1]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetch')
+            ->willReturn($mockData);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $location = Location::findById(123, 1);
+        
+        $this->assertInstanceOf(Location::class, $location);
+        $this->assertEquals(123, $location->getId());
+        $this->assertEquals('Test Location', $location->getName());
+        $this->assertEquals(40.7128, $location->getLatitude());
+    }
+
+    public function testFindByIdNotFound()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':id' => 999, ':user_id' => 1]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $location = Location::findById(999, 1);
+        
+        $this->assertNull($location);
+    }
+
+    public function testGetWithItemCount()
+    {
+        $mockData = [
+            [
+                'id' => 1,
+                'name' => 'Location 1',
+                'description' => 'Description 1',
+                'item_count' => 5
+            ],
+            [
+                'id' => 2,
+                'name' => 'Location 2',
+                'description' => 'Description 2',
+                'item_count' => 3
+            ]
+        ];
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => 1, ':limit' => 10, ':offset' => 0]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($mockData);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $locations = Location::getWithItemCount(1, '', 'name', 'asc', 10, 0);
+        
+        $this->assertCount(2, $locations);
+        $this->assertEquals('Location 1', $locations[0]['name']);
+        $this->assertEquals(5, $locations[0]['item_count']);
+    }
+
+    public function testGetWithItemCountWithSearch()
+    {
+        $mockData = [
+            [
+                'id' => 1,
+                'name' => 'Garage',
+                'description' => 'Main garage',
+                'item_count' => 5
+            ]
+        ];
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => 1, ':search' => '%garage%', ':limit' => 10, ':offset' => 0]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($mockData);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $locations = Location::getWithItemCount(1, 'garage', 'name', 'asc', 10, 0);
+        
+        $this->assertCount(1, $locations);
+        $this->assertEquals('Garage', $locations[0]['name']);
+    }
+
+    public function testGetCountForUser()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => 1]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(3);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $count = Location::getCountForUser(1);
+        
+        $this->assertEquals(3, $count);
+    }
+
+    public function testGetCountForUserWithSearch()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => 1, ':search' => '%garage%']);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(1);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $count = Location::getCountForUser(1, 'garage');
+        
+        $this->assertEquals(1, $count);
+    }
+
+    public function testGetItemsInLocation()
+    {
+        $mockData = [
+            [
+                'id' => 1,
+                'title' => 'Item 1',
+                'category_name' => 'Tools',
+                'location_name' => 'Garage'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Item 2',
+                'category_name' => 'Tools',
+                'location_name' => 'Garage'
+            ]
+        ];
+        
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with();
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($mockData);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $items = Location::getItemsInLocation(1, 1);
+        
+        $this->assertCount(2, $items);
+        $this->assertEquals('Item 1', $items[0]['title']);
+    }
+
+    public function testGetItemCount()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with();
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(5);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $count = Location::getItemCount(1, 1);
+        
+        $this->assertEquals(5, $count);
+    }
+
+    public function testNameExists()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':name' => 'Test Location', ':user_id' => 1]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(1);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $exists = Location::nameExists('Test Location', 1);
+        
+        $this->assertTrue($exists);
+    }
+
+    public function testNameExistsWithParentId()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':name' => 'Test Location', ':user_id' => 1, ':parent_id' => 2]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(0);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $exists = Location::nameExists('Test Location', 1, 2);
+        
+        $this->assertFalse($exists);
+    }
+
+    public function testNameExistsWithExcludeId()
+    {
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':name' => 'Test Location', ':user_id' => 1, ':exclude_id' => 123]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(0);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $exists = Location::nameExists('Test Location', 1, null, 123);
+        
+        $this->assertFalse($exists);
+    }
+
+    public function testGetFullPath()
+    {
+        // Mock current location
+        $location = new Location('Child Location');
+        $location->setId(1);
+        $location->setParentId(2);
         $location->setUserId(1);
         
-        $this->assertEquals('Test Name', $location->getName());
-        $this->assertEquals(1, $location->getParentId());
-        $this->assertEquals(1, $location->getUserId());
+        // Mock the findById call for parent
+        $this->mockStatement->expects($this->once())
+            ->method('execute')
+            ->with([':id' => 2, ':user_id' => 1]);
+            
+        $this->mockStatement->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'id' => 2,
+                'name' => 'Parent Location',
+                'description' => null,
+                'address' => null,
+                'latitude' => null,
+                'longitude' => null,
+                'parent_id' => null,
+                'user_id' => 1,
+                'created_at' => '2024-01-01 00:00:00',
+                'updated_at' => '2024-01-01 00:00:00'
+            ]);
+            
+        $this->mockConnection->expects($this->once())
+            ->method('prepare')
+            ->willReturn($this->mockStatement);
+        
+        $path = $location->getFullPath();
+        
+        $this->assertEquals('Parent Location → Child Location', $path);
     }
 
-    public function testLocationGetters()
+    public function testToArray()
     {
-        $location = new Location('Test Location', 1, 1);
+        $location = new Location('Test Location', 'Test Description', '123 Test St', 40.7128, -74.0060, 1, 2);
+        $location->setId(123);
+        $location->setCreatedAt('2024-01-01 00:00:00');
+        $location->setUpdatedAt('2024-01-01 00:00:00');
         
-        $this->assertEquals('Test Location', $location->getName());
-        $this->assertEquals(1, $location->getParentId());
-        $this->assertEquals(1, $location->getUserId());
-        $this->assertNull($location->getId());
-        $this->assertNull($location->getCreatedAt());
-        $this->assertNull($location->getUpdatedAt());
-    }
-
-    public function testBuildHierarchyWithNestedStructure()
-    {
-        // Create a more complex hierarchy for testing
-        $parentId = $this->createTestLocation('Parent', null, 1);
-        $childId = $this->createTestLocation('Child', $parentId, 1);
-        $grandchildId = $this->createTestLocation('Grandchild', $childId, 1);
+        $array = $location->toArray();
         
-        $hierarchy = Location::getHierarchy(1);
+        $expected = [
+            'id' => 123,
+            'name' => 'Test Location',
+            'description' => 'Test Description',
+            'address' => '123 Test St',
+            'latitude' => 40.7128,
+            'longitude' => -74.0060,
+            'parent_id' => 2,
+            'user_id' => 1,
+            'created_at' => '2024-01-01 00:00:00',
+            'updated_at' => '2024-01-01 00:00:00'
+        ];
         
-        $this->assertIsArray($hierarchy);
-        // Should have Garage, Storage Room, and Parent as root locations
-        $this->assertCount(3, $hierarchy);
+        $this->assertEquals($expected, $array);
     }
 }

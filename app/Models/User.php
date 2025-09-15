@@ -24,11 +24,11 @@ class User
     private $createdAt;
     private $updatedAt;
 
-    public function __construct($email = null, $password = null, $name = null)
+    public function __construct($name = null, $email = null, $password = null)
     {
+        $this->name = $name;
         $this->email = $email;
         $this->password = $password;
-        $this->name = $name;
     }
 
     // Getters
@@ -45,6 +45,7 @@ class User
     public function getUpdatedAt() { return $this->updatedAt; }
 
     // Setters
+    public function setId($id) { $this->id = $id; }
     public function setEmail($email) { $this->email = $email; }
     public function setName($name) { $this->name = $name; }
     public function setPassword($password) { $this->password = $password; }
@@ -53,6 +54,8 @@ class User
     public function setStorageUnitLatitude($latitude) { $this->storageUnitLatitude = $latitude; }
     public function setStorageUnitLongitude($longitude) { $this->storageUnitLongitude = $longitude; }
     public function setProfilePicture($picture) { $this->profilePicture = $picture; }
+    public function setCreatedAt($createdAt) { $this->createdAt = $createdAt; }
+    public function setUpdatedAt($updatedAt) { $this->updatedAt = $updatedAt; }
 
     /**
      * Create new user
@@ -68,18 +71,18 @@ class User
         }
 
         // Check if email already exists
-        if ($this->emailExists($this->email)) {
+        if (self::emailExists($this->email)) {
             throw new \Exception('Email already exists');
         }
 
-        $sql = "INSERT INTO users (email, password, name) VALUES (:email, :password, :name)";
+        $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
         $stmt = $conn->prepare($sql);
         
         $hashedPassword = Security::hashPassword($this->password);
         
+        $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $hashedPassword);
-        $stmt->bindParam(':name', $this->name);
 
         if ($stmt->execute()) {
             $this->id = $conn->lastInsertId();
@@ -134,19 +137,105 @@ class User
     }
 
     /**
-     * Check if email exists
+     * Check if email exists (static method)
      */
-    public function emailExists($email)
+    public static function emailExists($email, $excludeId = null)
     {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
         $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
+        $params = [':email' => $email];
+
+        if ($excludeId) {
+            $sql .= " AND id != :exclude_id";
+            $params[':exclude_id'] = $excludeId;
+        }
+
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
+        $stmt->execute($params);
 
         return $stmt->fetchColumn() > 0;
+    }
+
+    /**
+     * Check if username exists
+     */
+    public static function usernameExists($username, $excludeId = null)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT COUNT(*) FROM users WHERE name = :username";
+        $params = [':username' => $username];
+
+        if ($excludeId) {
+            $sql .= " AND id != :exclude_id";
+            $params[':exclude_id'] = $excludeId;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchColumn() > 0;
+    }
+
+    /**
+     * Find user by username or email
+     */
+    public static function findByUsernameOrEmail($identifier)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT * FROM users WHERE email = :identifier OR name = :identifier";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':identifier', $identifier);
+        $stmt->execute();
+
+        $userData = $stmt->fetch();
+        if ($userData) {
+            $user = new self();
+            $user->id = $userData['id'];
+            $user->email = $userData['email'];
+            $user->name = $userData['name'];
+            $user->password = $userData['password'];
+            $user->storageUnitName = $userData['storage_unit_name'] ?? null;
+            $user->storageUnitAddress = $userData['storage_unit_address'] ?? null;
+            $user->storageUnitLatitude = $userData['storage_unit_latitude'] ?? null;
+            $user->storageUnitLongitude = $userData['storage_unit_longitude'] ?? null;
+            $user->storageUnitUpdatedAt = $userData['storage_unit_updated_at'] ?? null;
+            $user->profilePicture = $userData['profile_picture'] ?? null;
+            $user->createdAt = $userData['created_at'];
+            $user->updatedAt = $userData['updated_at'];
+            return $user;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get username (alias for name)
+     */
+    public function getUsername()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set username (alias for name)
+     */
+    public function setUsername($username)
+    {
+        $this->name = $username;
+    }
+
+    /**
+     * Get password (for authentication)
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     /**
@@ -190,8 +279,13 @@ class User
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $sql = "UPDATE users SET name = :name, email = :email";
-        $params = [':name' => $this->name, ':email' => $this->email];
+        $sql = "UPDATE users SET name = :name, email = :email, storage_unit_name = :storage_unit_name, profile_picture = :profile_picture";
+        $params = [
+            ':name' => $this->name, 
+            ':email' => $this->email,
+            ':storage_unit_name' => $this->storageUnitName,
+            ':profile_picture' => $this->profilePicture
+        ];
 
         if ($this->password) {
             $sql .= ", password = :password";

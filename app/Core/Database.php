@@ -29,6 +29,11 @@ class Database
         return self::$instance;
     }
 
+    public static function setInstance($instance)
+    {
+        self::$instance = $instance;
+    }
+
     private function connect()
     {
         try {
